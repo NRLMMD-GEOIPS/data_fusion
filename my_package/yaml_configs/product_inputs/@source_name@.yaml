@@ -1,0 +1,34 @@
+# Replace all instances of @ within this template with appropriate values for your particular use case.
+
+# "product_inputs" YAML files are used to specify which products are valid for a given source within GeoIPS,
+#                  and specify additional parameters required to generate a particular product for a given source
+#                  (ie, variables, data ranges, etc)
+#                  Any fields that are specified within "product_inputs" will override those within "product_params"
+
+# @source_name@: Must match @source_name@.yaml found in this file name,
+#                AND must match @source_name@ found in reader for this data type!
+#                Reader can be specified in any repository!  Does not have to be this repo!
+# @Product-Name@: Must match a product specified in yaml_configs/product_params/@Product-Name@.yaml
+#                 @Product-Name@ can be contained in ANY repo!  Does not have to be this repo!
+#                 NOTE: Please use '-' as a delimeter in product names by GeoIPS convention.
+#                       This allows using either '_' or '.' as a delimiter in filenames,
+#                       another GeoIPS convention.
+#                       Capitalization of each word in Product-Name can aid in human readability,
+#                       but is not strictly required.
+# @variable_name@: Must match a variable name found in the reader for this data type!
+
+# NOTE: If you use the "product_template" field for a product (ie, My-New-Product below), it allows you to
+#       specify a new product directly from this product_inputs/@source_name@.yaml file, without having
+#       a completely separate product_params/@Product-Name@.yaml file for every product.
+#       This can be useful for things like passive microwave products, where there may be many nearly
+#       identical products, the only difference being the wavelength / variable name.  This construct
+#       allows you to create many similar products from a template, specifying them directly within
+#       product_inputs. Any fields included within product_inputs specification will override those
+#       found in the "product_template".
+
+@source_name@:
+  @Product-Name@::
+    variables: ['@variable_name@']
+  My-New-Product:
+    product_template: "@Product-Name@"
+    variables: ['@variable_name@']

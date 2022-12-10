@@ -1,0 +1,52 @@
+# Identify and update all instances of @ found within this script appropriately.
+#   @package@ should be the name of this repository
+#   @datatype@ should reference the datatype you are interested in processing (and will reference the test data
+#              repository you set up through https://github.com/NRLMMD-GEOIPS/template_test_data
+#   @datafile@ is the appropriate path to your data files within the test data repo.
+#   @readername@ is the appropriate reader associated with your testdataset
+#   @productN@ are the products you would like to test.
+#   NOTE: imagery_clean preferred to avoid dependencies on external plotting packages for image consistency,
+#           though you may change the output format if required for your package testing.
+#   NOTE: You can include a TC test case, a global test case, or both.  Just remove the one you don't want,
+#           if you only need one or the other.
+
+# Note you may update other parameters within this YAML config as appropriate, or add additional parameters.
+# Also - the first time you run your test script using this YAML config, it will prompt you to update your
+# test outputs - at that point you can populate the "tests/outputs" directory, and your next run will result
+# in a 0 return value.
+
+reader_name: @readername@
+sectored_read: @False       # Almost always False, except for ABI or AHI
+
+available_sectors:
+  tcweb_bdeck:
+    trackfile_parser: bdeck_parser
+    trackfiles:
+      - !ENV ${GEOIPS_PACKAGES_DIR}/geoips/tests/sectors/tc_bdecks/@bio012020.dat@      # Identify appropriate TC case
+    tc_template_yaml: !ENV ${GEOIPS_PACKAGES_DIR}/geoips/geoips/yaml_configs/sectors_dynamic/tc_web_template.yaml
+
+  global:
+    sectorfiles:
+      - !ENV ${GEOIPS_PACKAGES_DIR}/geoips/tests/sectors/static/global.yaml
+    sector_list:
+      - global
+
+outputs:
+  tc_clean:
+    requested_sector_type: tcweb_bdeck
+    output_format: imagery_clean
+    filename_formats: ['tc_clean_fname']
+    product_names:
+      - @product1@
+      - @product2@
+    compare_path: !ENV ${GEOIPS_PACKAGES_DIR}/@package@/tests/outputs/@datatype@.<output>.<product>
+
+  global_clean:
+    requested_sector_type: global
+    minimum_coverage: 1
+    output_format: imagery_clean
+    filename_formats: ['geoips_fname']
+    compare_path: !ENV ${GEOIPS_PACKAGES_DIR}/@package@/tests/outputs/@datatype@.<output>.<product>
+    product_names:
+      - @product1@
+      - @product2@
