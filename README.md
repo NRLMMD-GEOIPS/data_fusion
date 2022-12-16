@@ -35,6 +35,8 @@ System Requirements
 
 * geoips >= 1.5.3
 * Test data repos contained in $GEOIPS_TESTDATA_DIR for tests to pass.
+  * NOTE: Must obtain appropriate ABI, AHI test datasets via NOAA AWS
+  * NOTE: Must obtain appropriate SEVIRI test datasets via EUMETSAT
 
 IF REQUIRED: Install base geoips package
 ------------------------------------------------------------
