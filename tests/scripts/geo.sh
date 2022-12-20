@@ -20,7 +20,7 @@ data_fusion_procflow \
       --procflow data_fusion \
       --compare_path $GEOIPS_BASEDIR/geoips_packages/data_fusion/tests/outputs/${curr_product}_image \
       --filename_format geoips_fname \
-      --sectorfiles $GEOIPS_BASEDIR/test_data/test_data_fusion/sectors/global.yaml \
+      --sectorfiles $GEOIPS_PACKAGES_DIR/geoips/geoips/yaml_configs/sectors_static/global.yaml \
       -s global \
       --fusion_final_output_format imagery_annotated \
       --fusion_final_product_name Blended-Infrared-Gray \
