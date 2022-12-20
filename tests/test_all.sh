@@ -26,7 +26,8 @@
 echo ""
 # "call" used in test_all_run.sh
 for call in \
-            "$GEOIPS_PACKAGES_DIR/data_fusion/tests/scripts/geo.sh Infrared-Gray"
+            "$GEOIPS_PACKAGES_DIR/data_fusion/tests/scripts/geo.sh Infrared-Gray" \
+            "$GEOIPS_PACKAGES_DIR/data_fusion/tests/scripts/layered.sh"
 do
     . $GEOIPS/tests/utils/test_all_run.sh
 done
