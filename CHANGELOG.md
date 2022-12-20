@@ -11,7 +11,7 @@
     # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
 
-# v1.5.4: 2022-11-28, open source release updates
+# v1.6.0: 2022-11-28, open source release updates
 ## GEOIPS#119: 2022-11-17, standardize README
 ### Documentation
 #### Standardize README
