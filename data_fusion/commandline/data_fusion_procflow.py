@@ -1,8 +1,8 @@
 # # # Distribution Statement A. Approved for public release. Distribution unlimited.
-# # # 
+# # #
 # # # Author:
 # # # Naval Research Laboratory, Marine Meteorology Division
-# # # 
+# # #
 # # # This program is free software: you can redistribute it and/or modify it under
 # # # the terms of the NRLMMD License included with this program. This program is
 # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,12 +10,16 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-#!/bin/bash
+''' Command line script for kicking off geoips based procflows. MUST call with --procflow'''
 
-currdir=`dirname $0`
+from geoips.commandline.run_procflow import main as geoips_main
+from data_fusion.commandline.args import get_command_line_args
 
-run_procflow --procflow config_based \
-             --output_config $currdir/test_config.yaml
-config_retval=$?
 
-exit $((config_retval))
+def main():
+    ''' Script to kick off processing based on command line args '''
+    geoips_main(get_command_line_args)
+
+
+if __name__ == '__main__':
+    main()

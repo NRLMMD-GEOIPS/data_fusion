@@ -1,0 +1,7 @@
+stitched:
+    Blended-Infrared-Gray:
+        display_name: Infrared-Gray
+        product_template: Infrared-Gray
+        product_type: alg
+        alg_func: stitched
+        alg_args: {}

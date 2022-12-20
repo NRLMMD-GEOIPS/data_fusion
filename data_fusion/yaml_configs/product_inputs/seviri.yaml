@@ -1,0 +1,4 @@
+seviri:
+  Blended-Infrared-Gray:
+    product_template: Infrared-Gray
+    variables: ['SatZenith', 'latitude', 'longitude']  # Include lat/lon for MSG-1 parallax corrections
