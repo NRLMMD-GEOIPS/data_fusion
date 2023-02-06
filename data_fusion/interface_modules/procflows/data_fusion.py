@@ -19,18 +19,10 @@ import xarray
 # New class-based interfaces
 from geoips.interfaces import algorithms
 from geoips.interfaces import readers
-# from geoips.dev.alg import get_alg, get_alg_type
-# # from geoips.dev.output import get_outputter, get_outputter_type  # not used
-# # from geoips.dev.interp import get_interp  # not actually used
-# from geoips.stable.reader import get_reader
 
 # Old interfaces (YAML, not updated to classes yet!)
 from geoips.dev.product import get_alg_name, get_required_variables, get_alg_args
 from geoips.dev.product import get_product, get_product_type
-# from geoips.dev.product import get_interp_name, get_interp_args  # unused
-# from geoips.dev.gridlines import get_gridlines, set_lonlat_spacing  # unused
-# from geoips.dev.boundaries import get_boundaries  # unused
-
 
 # Direct imports from single_source
 from geoips.interface_modules.procflows.single_source import pad_area_definition, get_alg_xarray
