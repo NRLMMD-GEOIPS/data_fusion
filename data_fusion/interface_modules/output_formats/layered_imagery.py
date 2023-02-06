@@ -23,7 +23,6 @@ from geoips.interface_modules.procflows.single_source import plot_data
 
 # New geoips interface classes
 from geoips.interfaces import colormaps
-# from geoips.dev.cmap import get_cmap
 
 # Old geoips YAML based plugins not yet implemented as class-based plugins
 from geoips.dev.product import get_cmap_name, get_cmap_args
