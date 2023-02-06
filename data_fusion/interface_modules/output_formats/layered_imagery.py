@@ -20,8 +20,13 @@ from geoips.image_utils.mpl_utils import create_figure_and_main_ax_and_mapobj
 from geoips.image_utils.mpl_utils import save_image, plot_overlays
 from geoips.image_utils.mpl_utils import set_title, create_colorbar
 from geoips.interface_modules.procflows.single_source import plot_data
+
+# New geoips interface classes
+from geoips.interfaces import colormaps
+# from geoips.dev.cmap import get_cmap
+
+# Old geoips YAML based plugins not yet implemented as class-based plugins
 from geoips.dev.product import get_cmap_name, get_cmap_args
-from geoips.dev.cmap import get_cmap
 from geoips.sector_utils.utils import is_sector_type
 
 LOG = logging.getLogger(__name__)
@@ -80,7 +85,7 @@ def get_arg(xobj, arg_type, dataset_name, arg_name):
 def get_final_mpl_colors_info(xobj, dataset_name, product_name, source_name):
 
     cmap_func_name = get_cmap_name(product_name, source_name)
-    cmap_func = get_cmap(cmap_func_name)
+    cmap_func = colormaps.get_plugin(cmap_func_name)
     cmap_args = get_cmap_args(product_name, source_name)
     mpl_colors_info = cmap_func(**cmap_args)
 

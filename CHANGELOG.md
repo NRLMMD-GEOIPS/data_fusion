@@ -10,6 +10,17 @@
     # # # for more details. If you did not receive the license, for more information see:
     # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
+## NRLMMD-GEOIPS/geoips#69: 2023-02-06, update for interface class module plugins
+### Refactor
+* Replace reader and algorithm functions with geoips.interfaces calls
+* Remove unused imports
+```
+modified: data_fusion/interface_modules/procflows/data_fusion.py
+```
+* Replace colormap functions with geoips.interfaces calls
+```
+modified: data_fusion/interface_modules/output_formats/layered_imagery.py
+```
 
 # v1.6.0: 2022-11-28, open source release updates
 ## GEOIPS#119: 2022-11-17, standardize README
