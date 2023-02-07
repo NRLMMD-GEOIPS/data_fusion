@@ -16,11 +16,15 @@ import logging
 
 import xarray
 
-from geoips.dev.alg import get_alg, get_alg_type
-from geoips.dev.product import get_alg_name, get_required_variables, get_alg_args, get_product_type
-from geoips.dev.product import get_interp_name, get_interp_args, get_product
-from geoips.dev.output import get_outputter, get_outputter_type
-from geoips.dev.interp import get_interp
+# New class-based interfaces
+from geoips.interfaces import algorithms
+from geoips.interfaces import readers
+
+# Old interfaces (YAML, not updated to classes yet!)
+from geoips.dev.product import get_alg_name, get_required_variables, get_alg_args
+from geoips.dev.product import get_product, get_product_type
+
+# Direct imports from single_source
 from geoips.interface_modules.procflows.single_source import pad_area_definition, get_alg_xarray
 from geoips.geoips_utils import copy_standard_metadata
 from data_fusion.commandline.args import check_command_line_args
@@ -63,8 +67,6 @@ def get_overall_end_datetime(fuse_dict):
 
 def unpack_fusion_arguments(argdict):
 
-    from geoips.stable.reader import get_reader
-
     fusion_files = argdict['fuse_files']
     fusion_readers = argdict['fuse_reader_name']
     fusion_products = argdict['fuse_product_name']
@@ -85,7 +87,7 @@ def unpack_fusion_arguments(argdict):
         fusion_reader_name = fusion_readers[curr_num]
         fusion_product_name = fusion_products[curr_num]
         fusion_dataset_name = fusion_dataset_names[curr_num]
-        reader_func = get_reader(fusion_reader_name)
+        reader_func = readers.get_plugin(fusion_reader_name)
         meta = reader_func(fusion_file_list, metadata_only=True)
         source_name = meta['METADATA'].attrs['source_name']
 
@@ -270,8 +272,8 @@ def get_fused_xarray(area_def, fuse_data):
 
 
 def run_fuse_alg(fuse_xarrays, fuse_product_name, fuse_source_name):
-    alg_func = get_alg(get_alg_name(fuse_product_name, fuse_source_name))
-    alg_func_type = get_alg_type(get_alg_name(fuse_product_name, fuse_source_name))
+    alg_func = algorithms.get_plugin(get_alg_name(fuse_product_name, fuse_source_name))
+    alg_func_type = alg_func.family
     alg_args = get_alg_args(fuse_product_name, fuse_source_name)
 
     # alg_xarray will either be a single xarray Dataset, or a dictionary of xarray Datasets.
@@ -318,11 +320,6 @@ def data_fusion(fnames, command_line_args=None):
 
     compare_path = command_line_args['compare_path']
 
-    from geoips.dev.gridlines import get_gridlines, set_lonlat_spacing
-    from geoips.dev.boundaries import get_boundaries
-
-    from geoips.stable.reader import get_reader
-    from geoips.dev.product import get_required_variables
     fuse_data = unpack_fusion_arguments(command_line_args)
     final_product_name = fuse_data['final']['product_name']
     final_source_name = fuse_data['final']['source_name']
