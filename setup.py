@@ -31,13 +31,13 @@ setuptools.setup(
             'data_fusion_procflow=data_fusion.commandline.data_fusion_procflow:main',
         ],
         'geoips.procflows': [
-            'data_fusion=data_fusion.interface_modules.procflows.data_fusion:data_fusion'
+            'data_fusion=data_fusion.plugins.modules.procflows.data_fusion:data_fusion'
         ],
         'geoips.algorithms': [
-            'stitched=data_fusion.interface_modules.algorithms.stitched:stitched'
+            'stitched=data_fusion.plugins.modules.algorithms.stitched:stitched'
         ],
-        'geoips.output_formats': [
-            'layered_imagery=data_fusion.interface_modules.output_formats.layered_imagery:layered_imagery'
+        'geoips.output_formatters': [
+            'layered_imagery=data_fusion.plugins.modules.output_formatters.layered_imagery:layered_imagery'
         ],
     }
 )

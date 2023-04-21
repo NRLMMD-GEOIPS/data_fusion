@@ -25,12 +25,12 @@ from geoips.dev.product import get_alg_name, get_required_variables, get_alg_arg
 from geoips.dev.product import get_product, get_product_type
 
 # Direct imports from single_source
-from geoips.interface_modules.procflows.single_source import pad_area_definition, get_alg_xarray
+from geoips.plugins.modules.procflows.single_source import pad_area_definition, get_alg_xarray
 from geoips.geoips_utils import copy_standard_metadata
 from data_fusion.commandline.args import check_command_line_args
-from geoips.interface_modules.procflows.single_source import get_filename, plot_data
-from geoips.interface_modules.procflows.single_source import get_area_defs_from_command_line_args
-from geoips.interface_modules.procflows.single_source import get_output_format_kwargs
+from geoips.plugins.modules.procflows.single_source import get_filename, plot_data
+from geoips.plugins.modules.procflows.single_source import get_area_defs_from_command_line_args
+from geoips.plugins.modules.procflows.single_source import get_output_formatter_kwargs
 
 
 PMW_NUM_PIXELS_X = 1400
@@ -103,7 +103,7 @@ def unpack_fusion_arguments(argdict):
         # All other "fuse_*" arguments are optional - but if included, must be included for each dataset.
         # If number arguments equals number of fusion datasets, include in dictionary
         if fusion_outputs:
-            curr_fuse_dict['output_format'] = fusion_outputs[curr_num]
+            curr_fuse_dict['output_formatter'] = fusion_outputs[curr_num]
         if fusion_orders:
             curr_fuse_dict['order'] = fusion_orders[curr_num]
         if fusion_self_register_sources:
@@ -126,7 +126,7 @@ def unpack_fusion_arguments(argdict):
     requested_fusion['final'] = {'product_name': argdict['fusion_final_product_name'],
                                  'source_name': argdict['fusion_final_source_name'],
                                  'platform_name': argdict['fusion_final_platform_name'],
-                                 'output_format': argdict['fusion_final_output_format'],
+                                 'output_format': argdict['fusion_final_output_formatter'],
                                  'start_datetime': overall_start_datetime,
                                  'end_datetime': overall_end_datetime}
     final_metadata_xobj = xarray.Dataset()
@@ -326,7 +326,7 @@ def data_fusion(fnames, command_line_args=None):
     final_product_type = get_product_type(final_product_name, final_source_name)
 
 	# Set output_format and product_name in the command_line_args dict, used throughout single_source code.
-    command_line_args['output_format'] = fuse_data['final']['output_format']
+    command_line_args['output_formatter'] = fuse_data['final']['output_format']
     command_line_args['product_name'] = fuse_data['final']['product_name']
 
     # "final" dataset is pre-populated with an intermediate METADATA dataset, with the best-available information.
@@ -359,7 +359,7 @@ def data_fusion(fnames, command_line_args=None):
 
             # xarray_obj not actually used in output_format_kwargs...
             # This determines what keyword arguments were specified within the product YAML for the output
-            output_format_kwargs = get_output_format_kwargs(command_line_args,
+            output_format_kwargs = get_output_formatter_kwargs(command_line_args,
                                                             xarray_obj=alg_xarray,
                                                             area_def=area_def)
 

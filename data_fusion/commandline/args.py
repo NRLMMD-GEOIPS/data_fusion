@@ -80,8 +80,8 @@ def check_command_line_args(arglist, argdict):
         raise ValueError('Must specify --fusion_final_source_name at the command line')
     if not argdict['fusion_final_platform_name']:
         raise ValueError('Must specify --fusion_final_platform_name at the command line')
-    if not argdict['fusion_final_output_format']:
-        raise ValueError('Must specify --fusion_final_output_format at the command line')
+    if not argdict['fusion_final_output_formatter']:
+        raise ValueError('Must specify --fusion_final_output_formatter at the command line')
     if not argdict['fusion_final_product_name']:
         raise ValueError('Must specify --fusion_final_product_name at the command line')
 
@@ -90,8 +90,8 @@ def check_command_line_args(arglist, argdict):
         raise ValueError('--reader_name not supported, need to pass --fuse_files and --fuse_reader at the command line')
     if argdict['product_name']:
         raise ValueError('--product_name not supported, need to pass --fusion_final_product_name at the command line')
-    if argdict['output_format']:
-        raise ValueError('--output_format not supported, need to pass --fusion_final_output_format at the command line')
+    if argdict['output_formatter']:
+        raise ValueError('--output_formatter not supported, need to pass --fusion_final_output_formatter at the command line')
 
     return geoips_check
 
@@ -176,7 +176,7 @@ def add_args(parser, arglist=None):
         fusion_group.add_argument('--fusion_final_product_name', nargs='?', default=None,
                                   help='''Identify the name of the final product (which includes all fusion datasets)
                                        ''')
-        fusion_group.add_argument('--fusion_final_output_format', nargs='?', default=None,
+        fusion_group.add_argument('--fusion_final_output_formatter', nargs='?', default=None,
                                   help='''Identify the output_format for the final product (using all fusion datasets)
                                        ''')
         fusion_group.add_argument('--fusion_final_source_name', nargs='?', default=None,
