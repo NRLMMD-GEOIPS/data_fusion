@@ -10,34 +10,36 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-'''Setup for data_fusion package'''
+"""Setup for data_fusion package"""
 
 from os.path import realpath, join, dirname
 
 import setuptools
 
-with open(join(dirname(realpath(__file__)), 'VERSION'), encoding='utf-8') as version_file:
+with open(
+    join(dirname(realpath(__file__)), "VERSION"), encoding="utf-8"
+) as version_file:
     version = version_file.read().strip()
 
 setuptools.setup(
-    name='data_fusion',
+    name="data_fusion",
     version=version,
     packages=setuptools.find_packages(),
     install_requires=[
-                      'geoips>=1.5.3',
-                      ],
+        "geoips>=1.5.3",
+    ],
     entry_points={
-        'console_scripts': [
-            'data_fusion_procflow=data_fusion.commandline.data_fusion_procflow:main',
+        "console_scripts": [
+            "data_fusion_procflow=data_fusion.commandline.data_fusion_procflow:main",
         ],
-        'geoips.procflows': [
-            'data_fusion=data_fusion.plugins.modules.procflows.data_fusion:data_fusion'
+        "geoips.procflows": [
+            "data_fusion=data_fusion.plugins.modules.procflows.data_fusion:data_fusion"
         ],
-        'geoips.algorithms': [
-            'stitched=data_fusion.plugins.modules.algorithms.stitched:stitched'
+        "geoips.algorithms": [
+            "stitched=data_fusion.plugins.modules.algorithms.stitched:stitched"
         ],
-        'geoips.output_formatters': [
-            'layered_imagery=data_fusion.plugins.modules.output_formatters.layered_imagery:layered_imagery'
+        "geoips.output_formatters": [
+            "layered_imagery=data_fusion.plugins.modules.output_formatters.layered_imagery:layered_imagery"
         ],
-    }
+    },
 )

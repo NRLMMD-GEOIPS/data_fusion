@@ -10,8 +10,8 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-''' Data manipulation steps for "stitched" algorithm.
-'''
+""" Data manipulation steps for "stitched" algorithm.
+"""
 
 # Installed Libraries
 from datetime import timedelta
@@ -24,11 +24,11 @@ import xarray
 
 LOG = logging.getLogger(__name__)
 
-alg_func_type = 'xarray_dict_to_xarray'
+alg_func_type = "xarray_dict_to_xarray"
 
 
 def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
-    ''' Algorithm for stitching multiple datasets into a single combined product
+    """Algorithm for stitching multiple datasets into a single combined product
 
     Args:
         xobj (xarray.dataset) :
@@ -38,22 +38,22 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
     Returns:
         numpy.ndarray : dstacked numpy.ndarrays or numpy.MaskedArrays containing:
                            np.ma.dstack((pcb_mask, mod_mask, bt110, bt110_night)).squeeze()
-    '''
+    """
 
     # This will change when blending polar!!
-    metadata_xobj = xarray_dict.pop('METADATA')
-    primary_area_definition = metadata_xobj.attrs['area_definition']
+    metadata_xobj = xarray_dict.pop("METADATA")
+    primary_area_definition = metadata_xobj.attrs["area_definition"]
     primary_sector_shape = primary_area_definition.shape
     merged_data_array = np.ma.masked_all(primary_sector_shape)
     partial_data_array = np.ma.masked_all(primary_sector_shape)
     satzen_array = np.ma.masked_all(primary_sector_shape)
-    start_datetime = metadata_xobj.attrs['start_datetime']
-    end_datetime = metadata_xobj.attrs['end_datetime']
-    final_product_name = metadata_xobj.attrs['product_name']
-    final_source_name = metadata_xobj.attrs['source_name']
-    final_platform_name = metadata_xobj.attrs['platform_name']
-    final_data_provider = metadata_xobj.attrs['data_provider']
-    final_product_definition = metadata_xobj.attrs['product_definition']
+    start_datetime = metadata_xobj.attrs["start_datetime"]
+    end_datetime = metadata_xobj.attrs["end_datetime"]
+    final_product_name = metadata_xobj.attrs["product_name"]
+    final_source_name = metadata_xobj.attrs["source_name"]
+    final_platform_name = metadata_xobj.attrs["platform_name"]
+    final_data_provider = metadata_xobj.attrs["data_provider"]
+    final_product_definition = metadata_xobj.attrs["product_definition"]
 
     source_names = []
     platform_names = []
@@ -78,13 +78,20 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
         max_sample = curr_sector_shape[1]
         max_line = curr_sector_shape[0]
         # Put the subsector data in the appropriate location in the primary sector
-        currdata[min_line:max_line, min_sample:max_sample] = np.ma.masked_invalid(curr_xarray[varname])
+        currdata[min_line:max_line, min_sample:max_sample] = np.ma.masked_invalid(
+            curr_xarray[varname]
+        )
         # Major parallax issues between msg-1 and himawari-8, but this needs a more intelligent fix than this.
         # Maybe blend into this box using logic similar to below ?
-        if curr_xarray.platform_name == 'msg-1' and parallax_correction:
-            currdata = np.ma.masked_where(((curr_xarray['longitude'] > 70)\
-                                            & (curr_xarray['latitude'] < 30)\
-                                            & (curr_xarray['latitude'] > -30)), currdata)
+        if curr_xarray.platform_name == "msg-1" and parallax_correction:
+            currdata = np.ma.masked_where(
+                (
+                    (curr_xarray["longitude"] > 70)
+                    & (curr_xarray["latitude"] < 30)
+                    & (curr_xarray["latitude"] > -30)
+                ),
+                currdata,
+            )
 
         # Once we have an existing merged data array for the current channel, merge the current subsector
         # data into the existing final data array.  Note this puts the first image we find on top, and
@@ -95,82 +102,98 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
         # replaced with "blended_data_array" in the np.ma.where call below. Or, use the same line below,
         # and update merged_data_array[channame] with the blended values prior to calling np.ma.where
 
-        LOG.info(' Adding %s %s %s %s %s data, %0.2f coverage ... ',
-                 curr_xarray.source_name, curr_xarray.platform_name,
-                 curr_xarray.product_name,
-                 curr_xarray.start_datetime,
-                 varname,
-                 np.ma.count(currdata)*1.0 / currdata.size)
+        LOG.info(
+            " Adding %s %s %s %s %s data, %0.2f coverage ... ",
+            curr_xarray.source_name,
+            curr_xarray.platform_name,
+            curr_xarray.product_name,
+            curr_xarray.start_datetime,
+            varname,
+            np.ma.count(currdata) * 1.0 / currdata.size,
+        )
 
         if curr_xarray[varname].to_masked_array().shape != currdata.shape:
-            LOG.info('     Merging partial array, no satzen correction')
-            partial_data_array = np.ma.where(currdata.mask==False,
-                                             currdata,
-                                             partial_data_array)
-        elif satzen_correction and 'SatZenith' in curr_xarray.variables:
+            LOG.info("     Merging partial array, no satzen correction")
+            partial_data_array = np.ma.where(
+                currdata.mask == False, currdata, partial_data_array
+            )
+        elif satzen_correction and "SatZenith" in curr_xarray.variables:
             overlap_inds = np.ma.where(~currdata.mask & ~merged_data_array.mask)
             currdata_inds = np.ma.where(~currdata.mask & merged_data_array.mask)
             merged_data_array[currdata_inds] = currdata[currdata_inds]
             if overlap_inds[0].size > 0:
-                LOG.info('     Applying SatZenith correction to overlapping data')
-                satzen_overlap = np.radians(curr_xarray['SatZenith'].to_masked_array()[overlap_inds])
-                merged_data_array[overlap_inds] = np.cos(satzen_overlap) * currdata[overlap_inds] \
-                                                  + (1 - np.cos(satzen_overlap)) * merged_data_array[overlap_inds]
-                LOG.info('        Num overlap points: %s', len(overlap_inds[0]))
+                LOG.info("     Applying SatZenith correction to overlapping data")
+                satzen_overlap = np.radians(
+                    curr_xarray["SatZenith"].to_masked_array()[overlap_inds]
+                )
+                merged_data_array[overlap_inds] = (
+                    np.cos(satzen_overlap) * currdata[overlap_inds]
+                    + (1 - np.cos(satzen_overlap)) * merged_data_array[overlap_inds]
+                )
+                LOG.info("        Num overlap points: %s", len(overlap_inds[0]))
             else:
-                LOG.info('     No overlapping data, not applying SatZenith correction')
-            LOG.info('        Num points: %s', len(currdata_inds[0]))
+                LOG.info("     No overlapping data, not applying SatZenith correction")
+            LOG.info("        Num points: %s", len(currdata_inds[0]))
             # satzen_array[currdata_inds] = np.radians(curr_xarray['SatZenith'].to_masked_array()[currdata_inds])
             # satzen_array[overlap_inds] = np.radians(curr_xarray['SatZenith'].to_masked_array()[overlap_inds])
 
         else:
-            LOG.info('     SatZenith array not defined or satzen_correction %s not requested', satzen_correction)
-            merged_data_array = np.ma.where(currdata.mask==False,
-                                            currdata,
-                                            merged_data_array)
+            LOG.info(
+                "     SatZenith array not defined or satzen_correction %s not requested",
+                satzen_correction,
+            )
+            merged_data_array = np.ma.where(
+                currdata.mask == False, currdata, merged_data_array
+            )
 
         # Tell the user what source, platform, time, channel was just merged.
         # Include the current subsector's percent coverage, as well as the new fully merged array percent
         # coverage.
-        LOG.info('     Added %s %s %s %s %s data, %0.2f coverage, partial coverage now %0.2f, total coverage %0.2f',
-                 curr_xarray.source_name, curr_xarray.platform_name,
-                 curr_xarray.product_name,
-                 curr_xarray.start_datetime,
-                 varname,
-                 np.ma.count(currdata)*1.0 / currdata.size,
-                 np.ma.count(partial_data_array)*1.0 / partial_data_array.size,
-                 np.ma.count(merged_data_array)*1.0 / merged_data_array.size)
+        LOG.info(
+            "     Added %s %s %s %s %s data, %0.2f coverage, partial coverage now %0.2f, total coverage %0.2f",
+            curr_xarray.source_name,
+            curr_xarray.platform_name,
+            curr_xarray.product_name,
+            curr_xarray.start_datetime,
+            varname,
+            np.ma.count(currdata) * 1.0 / currdata.size,
+            np.ma.count(partial_data_array) * 1.0 / partial_data_array.size,
+            np.ma.count(merged_data_array) * 1.0 / merged_data_array.size,
+        )
 
-    LOG.info('Merging partial array with full array')
+    LOG.info("Merging partial array with full array")
     # overlap_inds = np.ma.where(~satzen_array.mask & ~partial_data_array.mask)
     # if overlap_inds[0].size > 0:
     #     satzen_overlap = np.radians(curr_xarray['SatZenith'].to_masked_array()[overlap_inds])
     #     merged_data_array[overlap_inds] = np.cos(satzen_overlap) * merged_data_array[overlap_inds] \
     #                                       + (1 - np.cos(satzen_overlap)) * partial_data_array[overlap_inds]
-    merged_data_array = np.ma.where(merged_data_array.mask==False,
-                                    merged_data_array,
-                                    partial_data_array)
+    merged_data_array = np.ma.where(
+        merged_data_array.mask == False, merged_data_array, partial_data_array
+    )
 
-    LOG.info('     Final coverage %0.2f', np.ma.count(merged_data_array)*1.0 / merged_data_array.size)
+    LOG.info(
+        "     Final coverage %0.2f",
+        np.ma.count(merged_data_array) * 1.0 / merged_data_array.size,
+    )
 
     final_xarray = xarray.Dataset()
     final_xarray[final_product_name] = xarray.DataArray(merged_data_array)
-    final_xarray.attrs['product_name'] = final_product_name
-    final_xarray.attrs['area_definition'] = primary_area_definition
-    final_xarray.attrs['source_names'] = source_names
-    final_xarray.attrs['platform_names'] = platform_names
-    final_xarray.attrs['source_name'] = final_source_name
-    final_xarray.attrs['platform_name'] = final_platform_name
-    final_xarray.attrs['start_datetime'] = start_datetime
-    final_xarray.attrs['end_datetime'] = end_datetime
-    final_xarray.attrs['data_provider'] = final_data_provider
-    final_xarray.attrs['product_definition'] = final_product_definition
+    final_xarray.attrs["product_name"] = final_product_name
+    final_xarray.attrs["area_definition"] = primary_area_definition
+    final_xarray.attrs["source_names"] = source_names
+    final_xarray.attrs["platform_names"] = platform_names
+    final_xarray.attrs["source_name"] = final_source_name
+    final_xarray.attrs["platform_name"] = final_platform_name
+    final_xarray.attrs["start_datetime"] = start_datetime
+    final_xarray.attrs["end_datetime"] = end_datetime
+    final_xarray.attrs["data_provider"] = final_data_provider
+    final_xarray.attrs["product_definition"] = final_product_definition
     lons, lats = final_xarray.area_definition.get_lonlats()
-    final_xarray['latitude'] = xarray.DataArray(lats)
-    final_xarray['longitude'] = xarray.DataArray(lons)
+    final_xarray["latitude"] = xarray.DataArray(lats)
+    final_xarray["longitude"] = xarray.DataArray(lons)
 
     # Put xarray_dict back the way we found it.  We popped it off earlier in order to ensure we had just the
     # data xarray objects when looping through.
-    xarray_dict['METADATA'] = metadata_xobj
+    xarray_dict["METADATA"] = metadata_xobj
 
     return final_xarray
