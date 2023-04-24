@@ -1,4 +1,6 @@
 layered:
+  Layered:
+    product_template: "Layered"
   Layered-Winds-Default:
     product_template: "Layered"
     coverage_dataset: 'windspeed'
