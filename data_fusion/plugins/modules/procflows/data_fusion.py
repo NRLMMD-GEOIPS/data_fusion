@@ -35,10 +35,11 @@ from geoips.plugins.modules.procflows.single_source import (
     get_alg_xarray,
     get_area_defs_from_command_line_args,
     plot_data,
-    get_output_formatters_kwargs,
+    get_output_formatter_kwargs,
 )
 
 from data_fusion.commandline.args import check_command_line_args
+
 try:
     from geoips_db.utils.database_writes import (
         write_stats_to_database,
