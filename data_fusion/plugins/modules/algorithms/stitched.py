@@ -10,7 +10,8 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-""" Data manipulation steps for "stitched" algorithm."""
+""" Data manipulation steps for "stitched" algorithm.
+"""
 
 # Installed Libraries
 from datetime import timedelta
@@ -57,7 +58,7 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
     source_names = []
     platform_names = []
 
-    for curr_xarray in sorted(xarray_dict.values(), key=lambda xobj: (xobj.fuse_order)):
+    for curr_xarray in sorted(xarray_dict.values(), key=lambda xobj: (xobj.order)):
         source_names += [curr_xarray.source_name]
         platform_names += [curr_xarray.platform_name]
         if curr_xarray.start_datetime < start_datetime:
