@@ -1,0 +1,73 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.8.0 (2023-03-12)
+**************************************
+
+Regression Fixes
+================
+
+Add missing print_mem_usage import
+----------------------------------
+
+*From issue GEOIPS#188: 2023-03-07, github.com merge, plugin interface updates*
+
+::
+
+    data_fusion/interface_modules/procflows/data_fusion.py
+
+Installation
+============
+
+Use setuptools_scm for versioning
+---------------------------------
+
+*From issue GEOIPS#192: 2023-03-07, Update version process*
+
+Replace VERSION file based versioning with setuptools_scm git tag based versioning.
+
+::
+
+    modified: setup.py
+    modified: data_fusion/__init__.py
+    removed: VERSION
+
+Code Formatting and Style Updates
+=================================
+
+Apply black defaults to Python files
+------------------------------------
+
+*From issue GEOIPS#126: 2023-03-07, apply black defaults*
+
+::
+
+    modified: data_fusion/commandline/args.py
+    modified: data_fusion/commandline/data_fusion_procflow.py
+    modified: data_fusion/interface_modules/algorithms/stitched.py
+    modified: data_fusion/interface_modules/output_formats/layered_imagery.py
+    modified: data_fusion/interface_modules/procflows/data_fusion.py
+    modified: setup.py
+
+Release Updates
+===============
+
+Add 1.8.0 release note
+----------------------
+
+*From issue GEOIPS#188: 2023-03-12, version update*
+
+::
+
+    modified: CHANGELOG.rst
+    new file: docs/source/releases/v1_8_0.rst
+    modified: docs/source/releases/index.rst

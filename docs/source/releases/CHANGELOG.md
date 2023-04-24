@@ -45,6 +45,52 @@ modified: data_fusion/interface_modules/procflows/data_fusion.py
 modified: data_fusion/interface_modules/output_formats/layered_imagery.py
 ```
 
+
+# v1.6.3: 2023-02-02, marker overlay, bug fixes
+## GEOIPS#170: 2023-02-02, update during release
+### Release Updates
+* Update VERSION to 1.6.3, add CHANGELOG 1.6.3 line
+## GEOIPS#2: 2022-12-06, overlay marker on image
+### Testing
+* Add layered.sh call to test_all.sh
+### Major New Functionality
+#### data_fusion/yaml_configs/product_inputs/layered.yaml
+* Add Layered product template (does nothing)
+#### data_fusion/interface_modules/output_formats/layered_imagery.py
+* title construction
+    * include_end_datetime option for title output specification
+    * Support dictionary of dictionary of xarray objects for metadata
+* get_final_mpl_colors_info
+    * Allow no colormap specification!
+    * Handle looping through xarrays, or dictionaries of xarrays (find order appropriately for sorting)
+    * Pass fused_xarray_dict to plot_data
+#### data_fusion/interface_modules/procflows/data_fusion.py
+* Explicitly list "unsectored" product types
+    * unsectored_xarray_dict_to_output_format
+    * unsectored_xarray_dict_area_to_output_format
+    * unmodified
+* Do not pad or sector unsectored product types
+* Additional noalg_product_types
+    * sectored_xarray_dict_area_to_output_format
+    * unsectored_xarray_dict_area_to_output_format
+    * unmodified
+* Rename "order" attribute on xarray to "fuse_order"
+### Bug fixes
+#### Ensure appending list of curr_products to final_products
+* If curr_products is dict, append curr_products.keys() vs curr_products
+```
+data_fusion/interface_modules/procflows/data_fusion.py
+```
+## GEOIPS#4: 2022-12-09, Procflow resource usage statistics
+### Major New Functionality
+#### Add procflow overall resource usage statistics
+* Add check for product_db, which controls if procflow writes to database
+* Add call to write_stats_to_database function that adds resource usage stats to databse
+    * Only called when product_db is True
+```
+modified: data_fusion/interface_modules/procflows/data_fusion.py
+```
+
 # v1.6.0: 2022-11-28, open source release updates
 ## GEOIPS#119: 2022-11-17, standardize README
 ### Documentation

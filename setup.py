@@ -10,20 +10,20 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-"""Setup for data_fusion package"""
-
-from os.path import realpath, join, dirname
+"""Setup for data_fusion package."""
 
 import setuptools
 
-with open(
-    join(dirname(realpath(__file__)), "VERSION"), encoding="utf-8"
-) as version_file:
-    version = version_file.read().strip()
+package_name = "data_fusion"
 
 setuptools.setup(
-    name="data_fusion",
-    version=version,
+    name=package_name,
+    use_scm_version={
+        "write_to": f"{package_name}/version.py",  # Writes hard coded version to file
+        "version_scheme": "post-release",  # Use current version .postN vs incrementing
+        "local_scheme": "no-local-version",
+    },  # Does not include extra hash info
+    setup_requires=["setuptools_scm"],
     packages=setuptools.find_packages(),
     install_requires=[
         "geoips>=1.5.3",
