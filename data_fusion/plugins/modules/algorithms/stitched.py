@@ -10,7 +10,7 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-""" Data manipulation steps for "stitched" algorithm."""
+"""Data manipulation steps for "stitched" algorithm."""
 
 # Installed Libraries
 from datetime import timedelta

@@ -20,7 +20,7 @@ rc_params = matplotlib.rcParams
 from geoips.image_utils.mpl_utils import create_figure_and_main_ax_and_mapobj
 from geoips.image_utils.mpl_utils import save_image, plot_overlays
 from geoips.image_utils.mpl_utils import set_title, create_colorbar
-from geoips.interface_modules.procflows.single_source import plot_data
+from geoips.plugins.modules.procflows.single_source import plot_data
 
 # New geoips interface classes
 from geoips.interfaces import colormaps
