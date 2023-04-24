@@ -1,0 +1,43 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.10.0.dev0 (2023-04-24)
+********************************
+
+* Update interface naming
+* Move interface_modules to plugins/modules
+* Move yaml_configs to plugins/yaml
+
+Refactoring Updates
+===================
+
+Update interface naming
+-----------------------
+
+*From GEOIPS/data_fusion#5: 2023-04-21, Update interface naming, move to plugins dir*
+
+* Moved interface_modules and yaml_configs to plugins directory.
+* Updated references to filename_format and output_format to filename_formatter
+  and output_formatter, respectively.
+
+::
+
+    modified: setup.py
+    modified: data_fusion/commandline/args.py
+    modified: data_fusion/plugins/modules/output_formatters/layered_imagery.py
+    modified: data_fusion/plugins/modules/procflows/data_fusion.py
+    modified: tests/scripts/layered.sh
+    modified: tests/scripts/geo.sh
+    moved: data_fusion/interface_modules -> data_fusion/plugins/modules
+    moved: data_fusion/yaml_configs -> data_fusion/plugins/yaml
+
+

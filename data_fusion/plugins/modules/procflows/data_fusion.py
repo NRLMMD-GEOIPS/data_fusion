@@ -21,22 +21,32 @@ from geoips.interfaces import algorithms
 from geoips.interfaces import readers
 
 # Old interfaces (YAML, not updated to classes yet!)
-from geoips.dev.product import get_alg_name, get_required_variables, get_alg_args
-from geoips.dev.product import get_product, get_product_type
+from geoips.dev.product import (
+    get_alg_name,
+    get_required_variables,
+    get_alg_args,
+    get_product_type,
+    get_product,
+)
 
 # Direct imports from single_source
 from geoips.plugins.modules.procflows.single_source import (
     pad_area_definition,
     get_alg_xarray,
-)
-from geoips.geoips_utils import copy_standard_metadata
-from data_fusion.commandline.args import check_command_line_args
-from geoips.plugins.modules.procflows.single_source import get_filename, plot_data
-from geoips.plugins.modules.procflows.single_source import (
     get_area_defs_from_command_line_args,
+    plot_data,
+    get_output_formatter_kwargs,
 )
-from geoips.plugins.modules.procflows.single_source import get_output_formatter_kwargs
 
+from data_fusion.commandline.args import check_command_line_args
+
+try:
+    from geoips_db.utils.database_writes import (
+        write_stats_to_database,
+    )
+except ImportError:
+    print("Please install geoips_db package if required")
+from geoips.utils.memusg import print_mem_usage
 
 PMW_NUM_PIXELS_X = 1400
 PMW_NUM_PIXELS_Y = 1400
@@ -85,6 +95,7 @@ def get_overall_end_datetime(fuse_dict):
 
 
 def unpack_fusion_arguments(argdict):
+    """Unpack fusion arguments."""
     fusion_files = argdict["fuse_files"]
     fusion_readers = argdict["fuse_reader_name"]
     fusion_products = argdict["fuse_product_name"]
@@ -124,7 +135,7 @@ def unpack_fusion_arguments(argdict):
         if fusion_outputs:
             curr_fuse_dict["output_formatter"] = fusion_outputs[curr_num]
         if fusion_orders:
-            curr_fuse_dict["order"] = fusion_orders[curr_num]
+            curr_fuse_dict["fuse_order"] = fusion_orders[curr_num]
         if fusion_self_register_sources:
             curr_fuse_dict["self_register_source"] = fusion_self_register_sources[
                 curr_num
@@ -231,8 +242,15 @@ def get_fused_xarray(area_def, fuse_data):
         # data after reprojecting, you may need to pad.
         product = get_product(product_name, source_name)
         product_type = product["product_type"]
+
+        unsectored_product_types = [
+            "unsectored_xarray_dict_to_output_format",
+            "unsectored_xarray_dict_area_to_output_format",
+            "unmodified",
+        ]
+
         if (
-            product_type != "unmodified"
+            product_type not in unsectored_product_types
             and "pad_area_definition" in product
             and product["pad_area_definition"]
         ):
@@ -247,7 +265,7 @@ def get_fused_xarray(area_def, fuse_data):
             files, metadata_only=False, chans=required_variables, area_def=pad_area_def
         )
 
-        if product_type != "unmodified":
+        if product_type not in unsectored_product_types:
             pad_sect_xarrays = sector_xarrays(
                 reader_out, pad_area_def, required_variables
             )
@@ -270,8 +288,11 @@ def get_fused_xarray(area_def, fuse_data):
         interp_only_product_types = ["interp"]
         noalg_product_types = [
             "sectored_xarray_dict_to_output_format",
+            "sectored_xarray_dict_area_to_output_format",
             "unsectored_xarray_dict_to_output_format",
             "xarray_dict_to_output_format",
+            "unsectored_xarray_dict_area_to_output_format",
+            "unmodified",
         ]
         # If we need interpolation or an algorithm applied, call get_alg_xarray from single_source procflow
         if product_type in alg_product_types + interp_only_product_types:
@@ -292,7 +313,7 @@ def get_fused_xarray(area_def, fuse_data):
                     attrname
                 ]
         # If no modification required to data, just set pad_sect_xarrays to interp_xarrays[dataset_name]
-        elif product_type in noalg_product_type:
+        elif product_type in noalg_product_types:
             interp_xarrays[dataset_name] = pad_sect_xarrays
             interp_xarrays[dataset_name]["METADATA"].attrs[
                 "product_definition"
@@ -306,7 +327,7 @@ def get_fused_xarray(area_def, fuse_data):
                 ][attrname]
         else:
             raise ValueError(
-                "Product type {product_type} must be one of {alg_product_type}, {interp_only_product_type}, or {noalg_product_type}"
+                f"Product type {product_type} must be one of {alg_product_type}, {interp_only_product_type}, or {noalg_product_type}"
             )
         if (
             "coverage_dataset" in final_product
@@ -337,8 +358,11 @@ def get_fused_xarray(area_def, fuse_data):
 
     no_alg_product_types = [
         "sectored_xarray_dict_to_output_format",
+        "sectored_xarray_dict_area_to_output_format",
         "unsectored_xarray_dict_to_output_format",
+        "unsectored_xarray_dict_area_to_output_format",
         "xarray_dict_to_output_format",
+        "unmodified",
     ]
 
     # If no algorithm is required for the final output product, just return interp_xarrays
@@ -407,11 +431,23 @@ def data_fusion(fnames, command_line_args=None):
         "fuse_files",
         "fuse_reader_name",
         "fuse_product_name",
+        "product_db",
     ]
 
     check_command_line_args(check_args, command_line_args)
 
     compare_path = command_line_args["compare_path"]
+
+    if "product_db" in command_line_args and command_line_args["product_db"]:
+        product_db = command_line_args["product_db"]
+    else:
+        product_db = False
+
+    if product_db:
+        from os import getenv
+
+        if not getenv("GEOIPS_DB_USER") or not getenv("GEOIPS_DB_PASS"):
+            raise ValueError("Need to set both $GEOIPS_DB_USER and $GEOIPS_DB_PASS")
 
     fuse_data = unpack_fusion_arguments(command_line_args)
     final_product_name = fuse_data["final"]["product_name"]
@@ -467,7 +503,10 @@ def data_fusion(fnames, command_line_args=None):
                 fused_xarray_dict=fused_xarray_dict,
             )
 
-            final_products += curr_products
+            if isinstance(curr_products, dict):
+                final_products += curr_products.keys()
+            else:
+                final_products += curr_products
 
             curr_removed_products, curr_saved_products = remove_duplicates(
                 curr_products, remove_files=True
@@ -490,6 +529,28 @@ def data_fusion(fnames, command_line_args=None):
     from geoips.dev.utils import output_process_times
 
     output_process_times(process_datetimes, num_jobs)
+
+    mem_usage_stats = print_mem_usage("MEMUSG", verbose=True)
+    if product_db:
+        if command_line_args.get("sectorfiles") and (
+            command_line_args.get("tcdb") or command_line_args.get("trackfiles")
+        ):
+            sector_type = "static_and_dynamic_tc"
+        elif command_line_args.get("tcdb") or command_line_args.get("trackfiles"):
+            sector_type = "dynamic_tc"
+        else:
+            sector_type = "static"
+        write_stats_to_database(
+            procflow_name="data_fusion",
+            platform=fuse_data["final"]["platform_name"],
+            source=fuse_data["final"]["source_name"],
+            product=final_product_name,
+            sector_type=sector_type,
+            process_times=process_datetimes,
+            num_products_created=len(final_products),
+            num_products_deleted=len(removed_products),
+            resource_usage_dict=mem_usage_stats,
+        )
 
     retval = 0
     from geoips.compare_outputs import compare_outputs

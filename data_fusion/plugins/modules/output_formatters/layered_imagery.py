@@ -34,7 +34,7 @@ LOG = logging.getLogger(__name__)
 output_type = "xrdict_area_product_outfnames_to_outlist"
 
 
-def layered_title(area_def, xrdict):
+def layered_title(area_def, xrdict, include_end_datetime=False, dataset_dict=None):
     LOG.info("Setting dynamic title")
 
     title_lines = []
@@ -60,15 +60,36 @@ def layered_title(area_def, xrdict):
         if dataset_name == "METADATA":
             continue
         xarray_obj = xrdict[dataset_name]
+        if isinstance(xarray_obj, dict):
+            if (
+                dataset_dict
+                and dataset_name in dataset_dict.keys()
+                and dataset_dict[dataset_name] in xarray_obj
+            ):
+                xarray_obj = xarray_obj[dataset_dict[dataset_name]]
+            else:
+                xarray_obj = xarray_obj["METADATA"]
         # data_time = xarray_obj.start_datetime + (xarray_obj.end_datetime - xarray_obj.start_datetime)/2
         data_time = xarray_obj.start_datetime
+        end_time = xarray_obj.end_datetime
+        if include_end_datetime:
+            dtstr = "from {0} to {1}".format(
+                data_time.strftime("%Y-%m-%d %H:%M:%S"),
+                end_time.strftime("%Y-%m-%d %H:%M:%S"),
+            )
+        else:
+            dtstr = "at {0}".format(data_time.strftime("%Y-%m-%d %H:%M:%S"))
+        if hasattr(xarray_obj, "product_name"):
+            product_name = " " + xarray_obj.product_name.upper()
+        else:
+            product_name = ""
         # pandas dataframes seem to handle time objects much better than xarray.
         title_lines += [
-            "{0} {1} {2} at {3}".format(
+            "{0} {1}{2} {3}".format(
                 xarray_obj.platform_name.upper(),
                 xarray_obj.source_name.upper(),
-                xarray_obj.product_name.upper(),
-                data_time.strftime("%Y-%m-%d %H:%M:%S"),
+                product_name,
+                dtstr,
             )
         ]
 
@@ -93,9 +114,12 @@ def get_arg(xobj, arg_type, dataset_name, arg_name):
 
 def get_final_mpl_colors_info(xobj, dataset_name, product_name, source_name):
     cmap_func_name = get_cmap_name(product_name, source_name)
-    cmap_func = colormaps.get_plugin(cmap_func_name)
-    cmap_args = get_cmap_args(product_name, source_name)
-    mpl_colors_info = cmap_func(**cmap_args)
+    if not cmap_func_name:
+        mpl_colors_info = {}
+    else:
+        cmap_func = colormaps.get_plugin(cmap_func_name)
+        cmap_args = get_cmap_args(product_name, source_name)
+        mpl_colors_info = cmap_func(**cmap_args)
 
     # New options for data_fusion / multi colorbars
     mpl_colors_info["colorbar_kwargs"] = {"orientation": "horizontal", "extend": "both"}
@@ -144,14 +168,23 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
         if dataset_name != "METADATA":
             xarray_datasets[dataset_name] = xarray_dict[dataset_name]
 
-    for xobj in sorted(xarray_datasets.values(), key=lambda xobj: (xobj.order)):
+    for xobj in sorted(
+        xarray_datasets.values(),
+        key=lambda xobj: (
+            xobj.fuse_order
+            if hasattr(xobj, "fuse_order")
+            else xobj["METADATA"].fuse_order
+        ),
+    ):
+        if isinstance(xobj, dict):
+            xobj = xobj["METADATA"]
         mpl_colors_info = get_final_mpl_colors_info(
             xarray_dict["METADATA"],
             xobj.dataset_name,
             xobj.attrs["product_name"],
             xobj.attrs["source_name"],
         )
-        if mpl_colors_info["colorbar"] is True:
+        if "colorbar" in mpl_colors_info and mpl_colors_info["colorbar"] is True:
             if mpl_colors_info["colorbar_kwargs"]["orientation"] == "horizontal":
                 horizontal_mpl_colors_info += [mpl_colors_info]
             elif mpl_colors_info["colorbar_kwargs"]["orientation"] == "vertical":
@@ -307,20 +340,35 @@ def layered_imagery(
         if dataset_name != "METADATA":
             xarray_datasets[dataset_name] = xarray_dict[dataset_name]
 
-    for xobj in sorted(xarray_datasets.values(), key=lambda xobj: (xobj.order)):
+    # Pull order either from the direct xarray object, or the xarray_dict['METADATA'] xarray object
+    # Some algorithms / outputs expect a dictionary of xarrays - others expect a single xarray.
+    # Handle both.
+    for xobj in sorted(
+        xarray_datasets.values(),
+        key=lambda xobj: (
+            xobj.fuse_order
+            if hasattr(xobj, "fuse_order")
+            else xobj["METADATA"].fuse_order
+        ),
+    ):
         output_kwargs = {"fig": fig, "main_ax": main_ax, "mapobj": mapobj}
         if isinstance(xobj, dict):
             curr_product_name = xobj["METADATA"].attrs["product_name"]
             curr_output_dict = xobj["METADATA"].attrs
+            curr_alg_xarray = xobj["METADATA"]
+            curr_fused_xarray_dict = xobj
         else:
             curr_product_name = xobj.attrs["product_name"]
             curr_output_dict = xobj.attrs
+            curr_alg_xarray = xobj
+            curr_fused_xarray_dict = None
         plot_data(
             curr_output_dict,
-            xobj,
+            curr_alg_xarray,
             area_def,
             curr_product_name,
             output_kwargs,
+            fused_xarray_dict=curr_fused_xarray_dict,
             no_output=True,
         )
 

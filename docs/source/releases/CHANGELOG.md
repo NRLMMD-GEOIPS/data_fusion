@@ -10,29 +10,6 @@
     # # # for more details. If you did not receive the license, for more information see:
     # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-Refactoring Updates
-=========
-
-Update interface naming
------------------------------------------
-
-*From issue GEOIPS/data_fusion#5: 2023-04-21, Update interface naming and move to plugins directory*
-
-* Moved interface_modules and yaml_configs to plugins directory.
-* Updated references to filename_format and output_format to filename_formatter and output_formatter, respectively.
-
-::
-
-    modified: setup.py
-    modified: data_fusion/commandline/args.py
-    modified: data_fusion/plugins/modules/output_formatters/layered_imagery.py
-    modified: data_fusion/plugins/modules/procflows/data_fusion.py
-    modified: tests/scripts/layered.sh
-    modified: tests/scripts/geo.sh
-    moved: data_fusion/interface_modules -> data_fusion/plugins/modules
-    moved: data_fusion/yaml_configs -> data_fusion/plugins/yaml
-
-
 ## NRLMMD-GEOIPS/geoips#69: 2023-02-06, update for interface class module plugins
 ### Refactor
 * Replace reader and algorithm functions with geoips.interfaces calls
