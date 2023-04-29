@@ -10,8 +10,8 @@
  | # # # for more details. If you did not receive the license, for more information see:
  | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-Version 1.10.0.dev0 (2023-04-24)
-********************************
+Version 1.10.0a0 (2023-04-24)
+*****************************
 
 * Update interface naming
 * Move interface_modules to plugins/modules
