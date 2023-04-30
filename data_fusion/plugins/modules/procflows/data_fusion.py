@@ -55,7 +55,9 @@ PMW_PIXEL_SIZE_Y = 1000
 
 LOG = logging.getLogger(__name__)
 
-procflow_type = "standard"
+interface = "procflows"
+family = "standard"
+name = "data_fusion"
 
 
 def get_overall_start_datetime(fuse_dict):
@@ -395,7 +397,7 @@ def run_fuse_alg(fuse_xarrays, fuse_product_name, fuse_source_name):
     return alg_xarray
 
 
-def data_fusion(fnames, command_line_args=None):
+def call(fnames, command_line_args=None):
     """Workflow for running multiple datatypes in a single call
 
     Args:

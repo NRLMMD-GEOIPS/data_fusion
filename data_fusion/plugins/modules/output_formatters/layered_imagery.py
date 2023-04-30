@@ -31,7 +31,9 @@ from geoips.sector_utils.utils import is_sector_type
 
 LOG = logging.getLogger(__name__)
 
-output_type = "xrdict_area_product_outfnames_to_outlist"
+interface = "output_formatters"
+family = "xrdict_area_product_outfnames_to_outlist"
+name = "layered_imagery"
 
 
 def layered_title(area_def, xrdict, include_end_datetime=False, dataset_dict=None):
@@ -319,7 +321,7 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
     return
 
 
-def layered_imagery(
+def call(
     xarray_dict,
     area_def,
     product_name,
