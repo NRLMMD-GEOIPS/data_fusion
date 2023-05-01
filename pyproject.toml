@@ -43,6 +43,9 @@ dynamic = ["version"]
 [project.entry-points.console_scripts]
 data_fusion_procflow = "data_fusion.commandline.data_fusion_procflow:main"
 
+[project.entry-points."geoips.plugin_packages"]
+data_fusion = "data_fusion"
+
 [project.entry-points."geoips.procflows"]
 data_fusion = "data_fusion.plugins.modules.procflows.data_fusion"
 
