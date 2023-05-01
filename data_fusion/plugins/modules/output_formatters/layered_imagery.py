@@ -9,6 +9,7 @@
 # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+"""Layered imagery output formatter module."""
 
 import logging
 
@@ -31,7 +32,9 @@ from geoips.sector_utils.utils import is_sector_type
 
 LOG = logging.getLogger(__name__)
 
-output_type = "xrdict_area_product_outfnames_to_outlist"
+interface = "output_formatters"
+family = "xrdict_area_product_outfnames_to_outlist"
+name = "layered_imagery"
 
 
 def layered_title(area_def, xrdict, include_end_datetime=False, dataset_dict=None):
@@ -319,7 +322,7 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
     return
 
 
-def layered_imagery(
+def call(
     xarray_dict,
     area_def,
     product_name,

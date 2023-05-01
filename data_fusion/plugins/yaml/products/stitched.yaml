@@ -1,0 +1,19 @@
+interface: products
+family: list
+name: stitched
+docstring: |
+  Stitched products which combine multiple data types over a geographical area.
+
+  Layered products combine multiple products that cover the same region within
+  the same image.  Stitched imagery combines multiple data types that cover an
+  extended region into a single image by blending the overlap regions between
+  data types (ie, geostationary and polar satellites over a global sector)
+spec:
+  products:
+    - name: Blended-Infrared-Gray
+      product_defaults: Infrared-Gray
+      spec:
+        display_name: Infrared-Gray
+        product_type: alg
+        alg_func: stitched
+        alg_args: {}

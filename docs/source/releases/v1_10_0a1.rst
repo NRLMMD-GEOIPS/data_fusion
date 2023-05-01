@@ -1,0 +1,89 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.10.0a1 (2023-04-30)
+*****************************
+
+* Finalize YAML plugin formatting
+
+  * products
+  * product_defaults
+* Finalize module-based plugins to include required attributes
+
+  * algorithms
+  * output_formatters
+  * procflows
+
+Breaking Changes
+================
+
+Add required attributes to module-based plugins
+-----------------------------------------------
+
+*From NRLMMD-GEOIPS/geoips#206: 2023-04-30, update plugin format*
+
+* Add interface, family, name to all python module plugins
+* Ensure module-level docstring exists
+* Rename callable from <plugin_name> to "call"
+* Update pyproject.toml to point to module vs function
+
+data_fusion plugins updated in the following interfaces:
+
+* algorithms
+* output_formatters
+* procflows
+
+::
+
+  modified: pyproject.toml
+  modified: modules/algorithms/stitched.py
+  modified: modules/output_formatters/layered_imagery.py
+  modified: modules/procflows/data_fusion.py
+
+Update to new style YAML plugin formatting
+------------------------------------------
+
+*From NRLMMD-GEOIPS/geoips#206: 2023-04-30, update plugin format*
+
+Finalize YAML plugin formatting for products and product_defaults
+YAML plugins.
+
+::
+
+  modified: data_fusion/plugins/yaml/product_defaults/Layered-Winds-Horizontal-Adjust.yaml
+  modified: data_fusion/plugins/yaml/product_defaults/Layered-Winds-Horizontal-and-Vertical.yaml
+  modified: data_fusion/plugins/yaml/product_defaults/Layered-Winds-Vertical-Adjust.yaml
+  modified: data_fusion/plugins/yaml/product_defaults/Layered-Winds-Vertical-Default.yaml
+  modified: data_fusion/plugins/yaml/product_defaults/Layered.yaml
+  modified: data_fusion/plugins/yaml/products/abi.yaml
+  modified: data_fusion/plugins/yaml/products/ahi.yaml
+  modified: data_fusion/plugins/yaml/products/layered.yaml
+  modified: data_fusion/plugins/yaml/products/seviri.yaml
+  modified: data_fusion/plugins/yaml/products/stitched.yaml
+
+Move YAML to products and product_defaults directories
+------------------------------------------------------
+
+Finalize directory structure for product lists and product defaults.
+
+::
+
+  renamed: product_params/Layered-Winds-Horizontal-Adjust.yaml -> product_defaults/Layered-Winds-Horizontal-Adjust.yaml
+  renamed: product_params/Layered-Winds-Horizontal-and-Vertical.yaml -> product_defaults/Layered-Winds-Horizontal-and-Vertical.yaml
+  renamed: product_params/Layered-Winds-Vertical-Adjust.yaml -> product_defaults/Layered-Winds-Vertical-Adjust.yaml
+  renamed: product_params/Layered-Winds-Vertical-Default.yaml -> product_defaults/Layered-Winds-Vertical-Default.yaml
+  renamed: product_params/Layered.yaml -> product_defaults/Layered.yaml
+  renamed: product_inputs/abi.yaml -> products/abi.yaml
+  renamed: product_inputs/ahi.yaml -> products/ahi.yaml
+  renamed: product_inputs/layered.yaml -> products/layered.yaml
+  renamed: product_inputs/seviri.yaml -> products/seviri.yaml
+  renamed: product_inputs/stitched.yaml -> products/stitched.yaml

@@ -23,10 +23,12 @@ import xarray
 
 LOG = logging.getLogger(__name__)
 
-alg_func_type = "xarray_dict_to_xarray"
+interface = "algorithms"
+family = "xarray_dict_to_xarray"
+name = "stitched"
 
 
-def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
+def call(xarray_dict, parallax_correction=True, satzen_correction=True):
     """Algorithm for stitching multiple datasets into a single combined product
 
     Args:

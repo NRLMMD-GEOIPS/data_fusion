@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=61.2", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages]
+find = {namespaces = false}
+
+[tool.setuptools.package-dir]
+"" = "."
+
+[tool.setuptools.package-data]
+"*" = [
+    "plugins/*.yaml",
+    "plugins/*/*.yaml",
+    "plugins/*/*/*.yaml",
+    "plugins/*/*/*/*.yaml",
+    "plugins/*/*/*/*/*.yaml",
+]
+
+[tool.setuptools.dynamic]
+entry-points = {file = ["entry-points.ini"]}
+
+[tool.setuptools_scm]
+"version_scheme" = "post-release"  # Use current version .postN vs incrementing
+"local_scheme" = "no-local-version"  # Don't include hash, or date, just postN
+"write_to" = "data_fusion/version.py"  # Write an actual file
+
+[project]
+name = "data_fusion"
+authors = []
+description = "Data Fusion GeoIPS Plugin Package"
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = []
+license = {file = "LICENSE"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dynamic = ["version"]
+
+[project.entry-points.console_scripts]
+data_fusion_procflow = "data_fusion.commandline.data_fusion_procflow:main"
+
+[project.entry-points."geoips.plugin_packages"]
+data_fusion = "data_fusion"
+
+[project.entry-points."geoips.procflows"]
+data_fusion = "data_fusion.plugins.modules.procflows.data_fusion"
+
+[project.entry-points."geoips.algorithms"]
+stitched = "data_fusion.plugins.modules.algorithms.stitched"
+
+[project.entry-points."geoips.output_formatters"]
+layered_imagery = "data_fusion.plugins.modules.output_formatters.layered_imagery"
+
