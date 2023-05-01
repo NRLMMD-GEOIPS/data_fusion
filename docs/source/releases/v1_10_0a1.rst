@@ -26,6 +26,18 @@ Version 1.10.0a1 (2023-04-30)
 Breaking Changes
 ================
 
+Import output_process_times from geoips.geoips_utils
+----------------------------------------------------
+
+*From NRLMMD-GEOIPS/geoips#206: 2023-04-30, update plugin format*
+
+In preparation for removing geoips.dev.utils, moved standard utilities from
+geoips.dev.utils to geoips.geoips_utils.
+
+::
+
+  modified: data_fusion/plugins/modules/procflows/data_fusion.py
+
 Add required attributes to module-based plugins
 -----------------------------------------------
 
