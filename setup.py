@@ -30,16 +30,16 @@ setuptools.setup(
     ],
     entry_points={
         "console_scripts": [
-            "data_fusion_procflow=data_fusion.commandline.data_fusion_procflow:main",
+            "data_fusion_procflow=data_fusion.commandline.data_fusion_procflow",
         ],
         "geoips.procflows": [
-            "data_fusion=data_fusion.plugins.modules.procflows.data_fusion:data_fusion"
+            "data_fusion=data_fusion.plugins.modules.procflows.data_fusion"
         ],
         "geoips.algorithms": [
-            "stitched=data_fusion.plugins.modules.algorithms.stitched:stitched"
+            "stitched=data_fusion.plugins.modules.algorithms.stitched"
         ],
         "geoips.output_formatters": [
-            "layered_imagery=data_fusion.plugins.modules.output_formatters.layered_imagery:layered_imagery"
+            "layered_imagery=data_fusion.plugins.modules.output_formatters.layered_imagery"
         ],
     },
 )
