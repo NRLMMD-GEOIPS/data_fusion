@@ -1,5 +1,0 @@
-interface: product_defaults
-family: xarray_dict_to_output_format
-name: Layered
-spec:
-  {}
