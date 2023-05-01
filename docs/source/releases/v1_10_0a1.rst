@@ -59,17 +59,31 @@ YAML plugins.
 
 ::
 
-  M geoips_clavrx/plugins/yaml/product_params/cloud/Temp11p0.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/Temp3p75.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldFraction.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldHeight.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldHeightBase.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldHeightTop.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldMask.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldOpd.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldPhase.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldReff.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldTemp.yaml
-  M geoips_clavrx/plugins/yaml/product_params/cloud/cldType.yaml
-  M geoips_clavrx/plugins/yaml/product_inputs/abi.yaml
-  M geoips_clavrx/plugins/yaml/product_inputs/ahi.yaml
+  modified: data_fusion/plugins/yaml/product_defaults/Layered-Winds-Horizontal-Adjust.yaml
+  modified: data_fusion/plugins/yaml/product_defaults/Layered-Winds-Horizontal-and-Vertical.yaml
+  modified: data_fusion/plugins/yaml/product_defaults/Layered-Winds-Vertical-Adjust.yaml
+  modified: data_fusion/plugins/yaml/product_defaults/Layered-Winds-Vertical-Default.yaml
+  modified: data_fusion/plugins/yaml/product_defaults/Layered.yaml
+  modified: data_fusion/plugins/yaml/products/abi.yaml
+  modified: data_fusion/plugins/yaml/products/ahi.yaml
+  modified: data_fusion/plugins/yaml/products/layered.yaml
+  modified: data_fusion/plugins/yaml/products/seviri.yaml
+  modified: data_fusion/plugins/yaml/products/stitched.yaml
+
+Move YAML to products and product_defaults directories
+------------------------------------------------------
+
+Finalize directory structure for product lists and product defaults.
+
+::
+
+  renamed: product_params/Layered-Winds-Horizontal-Adjust.yaml -> product_defaults/Layered-Winds-Horizontal-Adjust.yaml
+  renamed: product_params/Layered-Winds-Horizontal-and-Vertical.yaml -> product_defaults/Layered-Winds-Horizontal-and-Vertical.yaml
+  renamed: product_params/Layered-Winds-Vertical-Adjust.yaml -> product_defaults/Layered-Winds-Vertical-Adjust.yaml
+  renamed: product_params/Layered-Winds-Vertical-Default.yaml -> product_defaults/Layered-Winds-Vertical-Default.yaml
+  renamed: product_params/Layered.yaml -> product_defaults/Layered.yaml
+  renamed: product_inputs/abi.yaml -> products/abi.yaml
+  renamed: product_inputs/ahi.yaml -> products/ahi.yaml
+  renamed: product_inputs/layered.yaml -> products/layered.yaml
+  renamed: product_inputs/seviri.yaml -> products/seviri.yaml
+  renamed: product_inputs/stitched.yaml -> products/stitched.yaml

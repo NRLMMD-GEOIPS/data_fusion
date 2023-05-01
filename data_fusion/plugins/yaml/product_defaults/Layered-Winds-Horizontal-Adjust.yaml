@@ -1,5 +1,14 @@
-Layered-Winds-Horizontal-Adjust:
-  product_template: "Layered"
+interface: product_defaults
+family: xarray_dict_to_output_format
+name: Layered-Winds-Horizontal-Adjust
+docstring: |
+  Layered imagery example with horizontal colorbar adjustments.
+
+  This product allows layering windbarbs, windspeed, and Infrared
+  products in a single output image.  Each product is fully specified
+  command line (ie, sensor, filenames, etc), and colorbar positioning
+  is specified within this YAML.
+spec:
   coverage_dataset: windspeed
   covg_func: masked_arrays
   covg_args:
