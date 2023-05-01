@@ -10,13 +10,11 @@ find = {namespaces = false}
 
 [tool.setuptools.package-data]
 "*" = [
-    "*.txt",
-    "*.py",
-    "*.yaml",
-    "yaml_configs/*",
-    "yaml_configs/*/*",
-    "yaml_configs/*/*/*",
-    "image_utils/ascii_palettes/*",
+    "plugins/*.yaml",
+    "plugins/*/*.yaml",
+    "plugins/*/*/*.yaml",
+    "plugins/*/*/*/*.yaml",
+    "plugins/*/*/*/*/*.yaml",
 ]
 
 [tool.setuptools.dynamic]
