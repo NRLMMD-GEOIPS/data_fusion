@@ -24,6 +24,7 @@ data_fusion_procflow \
       --fusion_final_product_name Blended-Infrared-Gray \
       --fusion_final_source_name stitched \
       --fusion_final_platform_name geo \
+      --sector_list global \
       --fuse_files $GEOIPS_BASEDIR/test_data/test_data_fusion/data/goes16_20210929.0000/* \
           --fuse_reader_name abi_netcdf \
           --fuse_product_name ${curr_product} \
