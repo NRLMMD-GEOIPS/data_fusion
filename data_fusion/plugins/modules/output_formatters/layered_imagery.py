@@ -384,9 +384,9 @@ def call(
         mapobj,
         main_ax,
         area_def,
-        boundaries_info=boundaries_info,
-        gridlines_info=gridlines_info,
-        boundaries_zorder=3,
+        feature_annotator=boundaries_info,
+        gridline_annotator=gridlines_info,
+        features_zorder=3,
         gridlines_zorder=3,
     )
 

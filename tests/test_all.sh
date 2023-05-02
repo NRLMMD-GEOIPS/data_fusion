@@ -21,7 +21,7 @@
 
 # Note you must use the variable "call" in the for the loop
 
-. $GEOIPS/tests/utils/test_all_pre.sh data_fusion
+. $GEOIPS_PACKAGES_DIR/geoips/tests/utils/test_all_pre.sh data_fusion
 
 echo ""
 # "call" used in test_all_run.sh
@@ -29,7 +29,7 @@ for call in \
     "$GEOIPS_PACKAGES_DIR/data_fusion/tests/scripts/geo.sh Infrared-Gray" \
     "$GEOIPS_PACKAGES_DIR/data_fusion/tests/scripts/layered.sh"
 do
-    . $GEOIPS/tests/utils/test_all_run.sh
+    . $GEOIPS_PACKAGES_DIR/geoips/tests/utils/test_all_run.sh
 done
 
-. $GEOIPS/tests/utils/test_all_post.sh
+. $GEOIPS_PACKAGES_DIR/geoips/tests/utils/test_all_post.sh

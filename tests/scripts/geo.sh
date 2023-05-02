@@ -20,8 +20,6 @@ data_fusion_procflow \
       --procflow data_fusion \
       --compare_path $GEOIPS_BASEDIR/geoips_packages/data_fusion/tests/outputs/${curr_product}_image \
       --filename_formatter geoips_fname \
-      --sectorfiles $GEOIPS_PACKAGES_DIR/geoips/geoips/plugins/yaml/sectors_static/global.yaml \
-      -s global \
       --fusion_final_output_formatter imagery_annotated \
       --fusion_final_product_name Blended-Infrared-Gray \
       --fusion_final_source_name stitched \
