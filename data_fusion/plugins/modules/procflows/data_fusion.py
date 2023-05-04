@@ -528,7 +528,7 @@ def call(fnames, command_line_args=None):
             #                                                        sect_xarrays[0].source_name,product_name))
 
     process_datetimes["overall_end"] = datetime.utcnow()
-    from geoips.dev.utils import output_process_times
+    from geoips.geoips_utils import output_process_times
 
     output_process_times(process_datetimes, num_jobs)
 

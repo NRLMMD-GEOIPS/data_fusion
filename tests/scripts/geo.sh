@@ -20,12 +20,11 @@ data_fusion_procflow \
       --procflow data_fusion \
       --compare_path $GEOIPS_BASEDIR/geoips_packages/data_fusion/tests/outputs/${curr_product}_image \
       --filename_formatter geoips_fname \
-      --sectorfiles $GEOIPS_PACKAGES_DIR/geoips/geoips/plugins/yaml/sectors_static/global.yaml \
-      -s global \
       --fusion_final_output_formatter imagery_annotated \
       --fusion_final_product_name Blended-Infrared-Gray \
       --fusion_final_source_name stitched \
       --fusion_final_platform_name geo \
+      --sector_list global \
       --fuse_files $GEOIPS_BASEDIR/test_data/test_data_fusion/data/goes16_20210929.0000/* \
           --fuse_reader_name abi_netcdf \
           --fuse_product_name ${curr_product} \
