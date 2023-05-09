@@ -27,7 +27,6 @@ from geoips.plugins.modules.procflows.single_source import plot_data
 from geoips.interfaces import colormaps
 
 # Old geoips YAML based plugins not yet implemented as class-based plugins
-from geoips.dev.product import get_cmap_name, get_cmap_args
 from geoips.sector_utils.utils import is_sector_type
 
 LOG = logging.getLogger(__name__)
@@ -102,27 +101,28 @@ def layered_title(area_def, xrdict, include_end_datetime=False, dataset_dict=Non
     return title_string
 
 
-def get_arg(xobj, arg_type, dataset_name, arg_name):
-    # Like: xarray_dict['METADATA'].product_definition['mpl_colors_info'][xobj.dataset_name]['width']
-    arg_val = None
-    if (
-        hasattr(xobj, "product_definition")
-        and arg_type in xobj.attrs["product_definition"]
-        and dataset_name in xobj.attrs["product_definition"][arg_type]
-        and arg_name in xobj.attrs["product_definition"][arg_type][dataset_name]
-    ):
-        arg_val = xobj.attrs["product_definition"][arg_type][dataset_name][arg_name]
-    return arg_val
+# def get_arg(xobj, arg_type, dataset_name, arg_name):
+#     # Like: xarray_dict['METADATA'].product_definition['mpl_colors_info'][xobj.dataset_name]['width']
+#     arg_val = None
+#     if (
+#         hasattr(xobj, "product_plugin")
+#         and arg_type in xobj.attrs["product_plugin"]
+#         and dataset_name in xobj.attrs["product_plugin"][arg_type]
+#         and arg_name in xobj.attrs["product_plugin"][arg_type][dataset_name]
+#     ):
+#         arg_val = xobj.attrs["product_plugin"][arg_type][dataset_name][arg_name]
+#     return arg_val
 
 
-def get_final_mpl_colors_info(xobj, dataset_name, product_name, source_name):
-    cmap_func_name = get_cmap_name(product_name, source_name)
-    if not cmap_func_name:
+def get_final_mpl_colors_info(xobj, dataset_name, prod_plugin, source_name):
+    if "colormap" not in prod_plugin["spec"]:
         mpl_colors_info = {}
     else:
-        cmap_func = colormaps.get_plugin(cmap_func_name)
-        cmap_args = get_cmap_args(product_name, source_name)
-        mpl_colors_info = cmap_func(**cmap_args)
+        cmap_plugin = colormaps.get_plugin(
+            prod_plugin["spec"]["colormap"]["plugin"]["name"]
+        )
+        cmap_args = prod_plugin["spec"]["colormap"]["plugin"]["arguments"]
+        mpl_colors_info = cmap_plugin(**cmap_args)
 
     # New options for data_fusion / multi colorbars
     mpl_colors_info["colorbar_kwargs"] = {"orientation": "horizontal", "extend": "both"}
@@ -132,7 +132,10 @@ def get_final_mpl_colors_info(xobj, dataset_name, product_name, source_name):
 
     # Replace mpl_colors_info parameters with final product specified.
     for key in mpl_colors_info:
-        curr_arg = get_arg(xobj, "mpl_colors_info", dataset_name, key)
+        try:
+            curr_arg = xobj.product_plugin["spec"]["mpl_colors_info"][dataset_name][key]
+        except (AttributeError, KeyError):
+            curr_arg = None
         if curr_arg is not None:
             if isinstance(curr_arg, dict) and isinstance(mpl_colors_info[key], dict):
                 for subkey in curr_arg:
@@ -184,7 +187,7 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
         mpl_colors_info = get_final_mpl_colors_info(
             xarray_dict["METADATA"],
             xobj.dataset_name,
-            xobj.attrs["product_name"],
+            xobj.attrs["product_plugin"],
             xobj.attrs["source_name"],
         )
         if "colorbar" in mpl_colors_info and mpl_colors_info["colorbar"] is True:
@@ -356,11 +359,13 @@ def call(
     ):
         output_kwargs = {"fig": fig, "main_ax": main_ax, "mapobj": mapobj}
         if isinstance(xobj, dict):
+            curr_prod_plugin = xobj["METADATA"].attrs["product_plugin"]
             curr_product_name = xobj["METADATA"].attrs["product_name"]
             curr_output_dict = xobj["METADATA"].attrs
             curr_alg_xarray = xobj["METADATA"]
             curr_fused_xarray_dict = xobj
         else:
+            curr_prod_plugin = xobj.attrs["product_plugin"]
             curr_product_name = xobj.attrs["product_name"]
             curr_output_dict = xobj.attrs
             curr_alg_xarray = xobj
@@ -369,7 +374,7 @@ def call(
             curr_output_dict,
             curr_alg_xarray,
             area_def,
-            curr_product_name,
+            curr_prod_plugin,
             output_kwargs,
             fused_xarray_dict=curr_fused_xarray_dict,
             no_output=True,

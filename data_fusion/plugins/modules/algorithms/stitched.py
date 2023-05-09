@@ -54,7 +54,7 @@ def call(xarray_dict, parallax_correction=True, satzen_correction=True):
     final_source_name = metadata_xobj.attrs["source_name"]
     final_platform_name = metadata_xobj.attrs["platform_name"]
     final_data_provider = metadata_xobj.attrs["data_provider"]
-    final_product_definition = metadata_xobj.attrs["product_definition"]
+    final_prod_plugin = metadata_xobj.attrs["product_plugin"]
 
     source_names = []
     platform_names = []
@@ -188,7 +188,7 @@ def call(xarray_dict, parallax_correction=True, satzen_correction=True):
     final_xarray.attrs["start_datetime"] = start_datetime
     final_xarray.attrs["end_datetime"] = end_datetime
     final_xarray.attrs["data_provider"] = final_data_provider
-    final_xarray.attrs["product_definition"] = final_product_definition
+    final_xarray.attrs["product_plugin"] = final_prod_plugin
     lons, lats = final_xarray.area_definition.get_lonlats()
     final_xarray["latitude"] = xarray.DataArray(lats)
     final_xarray["longitude"] = xarray.DataArray(lons)
