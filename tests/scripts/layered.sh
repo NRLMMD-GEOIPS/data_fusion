@@ -18,7 +18,7 @@ for product_name in Layered-Winds-Default \
                     Layered-Winds-Horizontal-and-Vertical; do
 
 data_fusion_procflow \
-      --compare_path $GEOIPS_BASEDIR/geoips_packages/data_fusion/tests/outputs/${product_name}_image \
+      --compare_path $GEOIPS_PACKAGES_DIR/data_fusion/tests/outputs/${product_name}_image \
       --filename_formatter geoips_fname \
       --procflow data_fusion \
       --trackfile_parser bdeck_parser \
