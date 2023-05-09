@@ -6,6 +6,7 @@ docstring: |
 spec:
   products:
     - name: Blended-Infrared-Gray
+      source_name: abi
       docstring: |
         Blended-Infrared-Gray ABI product for use in stitched imagery.
 
@@ -14,5 +15,4 @@ spec:
         image.
       product_defaults: Infrared-Gray
       spec:
-        source_name: abi
-        variables: ["SatZenith"]
+        variables: ["B14BT", "SatZenith"]
