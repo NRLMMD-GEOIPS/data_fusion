@@ -1,0 +1,63 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.10.0a2 (2023-05-09)
+*****************************
+
+* Update test scripts to adhere to new YAML-based interfaces
+* Update data_fusion procflow to use new YAML-based interfaces
+* Finalize formatting of YAML products
+* Update geo.sh stitched test script to use ABI and AHI only
+
+Breaking Changes
+================
+
+Update data_fusion procflow to use new YAML-based interfaces
+------------------------------------------------------------
+
+::
+
+  data_fusion/plugins/modules/procflows/data_fusion.py
+
+
+Pass product_plugin vs product_name to data_fusion utilities
+------------------------------------------------------------
+
+To avoid re-opening the YAML files repeatedly, pass the plugin vs just the
+product_name to procflow utilities.
+
+::
+
+  data_fusion/plugins/modules/algorithms/stitched.py
+  data_fusion/plugins/modules/output_formatters/layered_imagery.py
+  data_fusion/plugins/modules/procflows/data_fusion.py
+
+Finalize formatting of YAML products
+------------------------------------
+
+Conform to updated YAML schema for product_defaults, and products.
+
+::
+
+  data_fusion/plugins/yaml/product_defaults/*.yaml
+  data_fusion/plugins/yaml/products/*.yaml
+
+Update geo.sh stitched test script to use ABI and AHI only
+----------------------------------------------------------
+
+To simplify the process of obtaining test data, use ABI and AHI only
+for the geo.sh stitched product test.
+
+::
+
+  tests/scripts/geo.sh
+  tests/outputs/Infrared-Gray_image/*.png
