@@ -11,9 +11,19 @@ docstring: |
 spec:
   products:
     - name: Blended-Infrared-Gray
-      product_defaults: Infrared-Gray
+      source_name: stitched
+      family: algorithm_colormap
+      docstring: "Blended infrared gray product for multiple GEO sensors"
       spec:
         display_name: Infrared-Gray
-        product_type: alg
-        alg_func: stitched
-        alg_args: {}
+        algorithm:
+          plugin:
+            name: stitched
+            arguments: {}
+        colormap:
+          plugin:
+            name: matplotlib_linear_norm
+            arguments:
+              data_range: [-100.0, 50.0]
+              cmap_name: Greys
+              cbar_label: "Brightness Temperatures (degrees Celsius)"

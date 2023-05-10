@@ -15,6 +15,11 @@ find = {namespaces = false}
     "plugins/*/*/*.yaml",
     "plugins/*/*/*/*.yaml",
     "plugins/*/*/*/*/*.yaml",
+    "plugins/*.txt",
+    "plugins/*/*.txt",
+    "plugins/*/*/*.txt",
+    "plugins/*/*/*/*.txt",
+    "plugins/*/*/*/*/*.txt",
 ]
 
 [tool.setuptools.dynamic]
@@ -52,4 +57,3 @@ stitched = "data_fusion.plugins.modules.algorithms.stitched"
 
 [project.entry-points."geoips.output_formatters"]
 layered_imagery = "data_fusion.plugins.modules.output_formatters.layered_imagery"
-
