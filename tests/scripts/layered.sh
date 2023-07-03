@@ -18,15 +18,15 @@ for product_name in Layered-Winds-Default \
                     Layered-Winds-Horizontal-and-Vertical; do
 
 data_fusion_procflow \
-      --compare_path $GEOIPS_BASEDIR/geoips_packages/data_fusion/tests/outputs/${product_name}_image \
-      --filename_format geoips_fname \
+      --compare_path $GEOIPS_PACKAGES_DIR/data_fusion/tests/outputs/${product_name}_image \
+      --filename_formatter geoips_fname \
       --procflow data_fusion \
       --trackfile_parser bdeck_parser \
       --trackfiles $GEOIPS_PACKAGES_DIR/geoips/tests/sectors/tc_bdecks/bwp142022.dat \
       --fusion_final_product_name $product_name \
       --fusion_final_source_name layered \
       --fusion_final_platform_name multi \
-      --fusion_final_output_format layered_imagery \
+      --fusion_final_output_formatter layered_imagery \
       --fuse_files $GEOIPS_TESTDATA_DIR/test_data_scat/bg_data/ahi_20220911_1330_tc2022wp14muifa/* \
           --fuse_reader_name ahi_hsd \
           --fuse_product_name Infrared-Gray \

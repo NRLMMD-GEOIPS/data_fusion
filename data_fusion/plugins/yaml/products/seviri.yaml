@@ -1,0 +1,18 @@
+interface: products
+family: list
+name: seviri
+docstring: |
+  SEVIRI products for use within data_fusion processing.
+spec:
+  products:
+    - name: Blended-Infrared-Gray
+      source_name: seviri
+      docstring: |
+        Blended-Infrared-Gray SEVIRI product for use in stitched imagery.
+
+        This uses the standard Infrared-Gray product_defaults, with the addition
+        of the "SatZenith" variable for blending between satellites in a stitched
+        image, as well as latitude and longitude for location-based corrections.
+      product_defaults: Infrared-Gray
+      spec:
+        variables: ["B09BT", "SatZenith", "latitude", "longitude"]

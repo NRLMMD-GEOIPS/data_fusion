@@ -1,0 +1,123 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.10.2 (2023-06-15)
+*****************************
+
+* Add v1_10_2.rst release note
+* Update interface naming
+* Finalize setup/install
+
+  * Update setuptools_scm to write to _version.py
+  * Update to standard README.md
+* Finalize test_all.sh - check_code, and $GEOIPS checks
+
+Breaking Changes
+================
+
+Update interface naming
+-----------------------
+
+*From GEOIPS#33: 2023-06-15, Interface Updates*
+
+* Updated references to colormap(s) to colormapper(s).
+
+::
+
+    modified: data_fusion/plugins/modules/output_formatters/layered_imagery.py
+    modified: data_fusion/plugins/modules/procflows/data_fusion.py
+    modified: data_fusion/plugins/yaml/products/stitched.yaml
+    modified:   data_fusion/plugins/yaml/product_defaults/Layered-Winds-Horizontal-Adjust.yaml
+    modified:   data_fusion/plugins/yaml/product_defaults/Layered-Winds-Horizontal-and-Vertical.yaml
+    modified:   data_fusion/plugins/yaml/product_defaults/Layered-Winds-Vertical-Adjust.yaml
+    modified:   data_fusion/plugins/yaml/product_defaults/Layered-Winds-Vertical-Default.yaml
+    modified:   data_fusion/plugins/yaml/products/layered.yaml
+
+Refactoring Updates
+===================
+
+Finalize required formatting for all plugins
+---------------------------------------------------------
+
+This includes all module-based and YAML-based plugins.
+
+Modified for flake8/code formatting as well.
+
+::
+
+  modified:   data_fusion/commandline/args.py
+  modified:   data_fusion/commandline/data_fusion_procflow.py
+  modified:   data_fusion/plugins/modules/algorithms/stitched.py
+  modified:   data_fusion/plugins/modules/output_formatters/layered_imagery.py
+  modified:   data_fusion/plugins/modules/procflows/data_fusion.py
+  modified:   tests/test_all.sh
+
+Add docstrings to __init__.py in all package directories
+--------------------------------------------------------
+
+::
+
+  modified:   data_fusion/commandline/__init__.py
+  modified:   data_fusion/plugins/__init__.py
+  modified:   data_fusion/plugins/modules/__init__.py
+  modified:   data_fusion/plugins/modules/algorithms/__init__.py
+  modified:   data_fusion/plugins/modules/output_formatters/__init__.py
+  modified:   data_fusion/plugins/modules/procflows/__init__.py
+
+Update setuptools_scm to write to _version.py vs version.py
+-----------------------------------------------------------
+
+This is a more accepted and standard usage. Ensure we ignore the _version.py
+file, import from __init__.py, as well as adding to pyproject.toml.
+
+::
+
+  modified: .gitignore
+  modified: data_fusion/__init__.py
+  modified: pyproject.toml
+
+Update README.md
+----------------------------
+
+Update to include standard README.md information.
+
+* Update GeoIPS version requirement
+
+::
+
+  modified: README.md
+
+Testing Updates
+===============
+
+Update test_all.sh to include $GEOIPS check and code_check test
+---------------------------------------------------------------
+
+Standardize test_all.sh to ensure $GEOIPS is cloned locally, and to
+call the "code_check" test script by default.
+
+::
+
+  tests/test_all.sh
+
+Release Updates
+===============
+
+Add 1.10.2 release note
+-----------------------
+
+*From GEOIPS#33: 2023-06-15, Interface Updates*
+
+::
+
+    new file: docs/source/releases/v1_10_2.rst
+    modified: docs/source/releases/index.rst
