@@ -10,20 +10,26 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-"""
-Command line script for kicking off geoips based procflows.
+"""Test all YAML plugins."""
+import pytest
+import yaml
+from importlib import resources
 
-MUST call with --procflow
-"""
-
-from geoips.commandline.run_procflow import main as geoips_main
-from data_fusion.commandline.args import get_command_line_args
+from geoips.schema import PluginValidator
 
 
-def main():
-    """Script to kick off processing based on command line args."""
-    geoips_main(get_command_line_args)
+validator = PluginValidator()
 
 
-if __name__ == "__main__":
-    main()
+def yield_plugins():
+    """Yield plugins."""
+    fpath = resources.files("data_fusion") / "plugins/yaml"
+    plugin_files = fpath.rglob("*.yaml")
+    for pf in plugin_files:
+        yield yaml.safe_load(open(pf, "r"))
+
+
+@pytest.mark.parametrize("plugin", yield_plugins())
+def test_is_plugin_valid(plugin):
+    """Test if plugin is valid."""
+    validator.validate(plugin)

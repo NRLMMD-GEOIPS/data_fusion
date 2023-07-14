@@ -14,8 +14,8 @@ Data Fusion GeoIPS Plugin
 ==========================
 
 The data_fusion package is a GeoIPS-compatible plugin, intended to be used within the GeoIPS ecosystem.
-Please see the 
-[GeoIPS Documentation](https://github.com/NRLMMD-GEOIPS/geoips/blob/main/README.md)
+Please see the
+[GeoIPS Documentation](https://github.com/NRLMMD-GEOIPS/geoips#readme)
 for more information on the GeoIPS plugin architecture and base infrastructure.
 
 Package Overview
@@ -33,35 +33,31 @@ contact geoips@nrlmry.navy.mil.
 System Requirements
 ---------------------
 
-* geoips >= 1.5.3
+* geoips >= 1.10.0
 * Test data repos contained in $GEOIPS_TESTDATA_DIR for tests to pass.
+  * test_data_fusion
+  * test_data_scat
   * NOTE: Must obtain appropriate ABI, AHI test datasets via NOAA AWS
-  * NOTE: Must obtain appropriate SEVIRI test datasets via EUMETSAT
 
 IF REQUIRED: Install base geoips package
 ------------------------------------------------------------
-SKIP IF YOU HAVE ALREADY INSTALLED BASE GEOIPS ENVIRONMENT 
+SKIP IF YOU HAVE ALREADY INSTALLED BASE GEOIPS ENVIRONMENT
 
 If GeoIPS Base is not yet installed, follow the
-[installation instructions](https://github.com/NRLMMD-GEOIPS/geoips/blob/main/docs/installation.rst)
+[installation instructions](https://github.com/NRLMMD-GEOIPS/geoips#installation)
 within the geoips source repo documentation:
 
 Install data_fusion package
 ----------------------------
 ```bash
-    # Assuming you followed the fully supported installation,
-    # using $GEOIPS_PACKAGES_DIR and $GEOIPS_CONFIG_FILE:
-    source $GEOIPS_CONFIG_FILE
+    # Ensure geoips Python environment is enabled.
     git clone https://github.com/NRLMMD-GEOIPS/data_fusion.git $GEOIPS_PACKAGES_DIR/data_fusion
-
     pip install -e $GEOIPS_PACKAGES_DIR/data_fusion
 ```
 
 Test data_fusion installation
 -----------------------------
 ```bash
-    # Assuming you followed the fully supported installation,
-    # using $GEOIPS_PACKAGES_DIR and $GEOIPS_CONFIG_FILE:
-    source $GEOIPS_CONFIG_FILE
+    # Ensure geoips Python environment is enabled.
     $GEOIPS_PACKAGES_DIR/data_fusion/tests/test_all.sh
 ```

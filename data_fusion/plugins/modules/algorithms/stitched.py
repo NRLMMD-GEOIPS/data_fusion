@@ -10,49 +10,51 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-""" Data manipulation steps for "stitched" algorithm."""
+"""Data manipulation steps for "stitched" algorithm."""
 
 # Installed Libraries
-from datetime import timedelta
-import glob
 import logging
 import numpy as np
-from numpy.ma import where
-import os
 import xarray
 
 LOG = logging.getLogger(__name__)
 
-alg_func_type = "xarray_dict_to_xarray"
+interface = "algorithms"
+family = "xarray_dict_to_xarray"
+name = "stitched"
 
 
-def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
-    """Algorithm for stitching multiple datasets into a single combined product
+def call(xarray_dict, parallax_correction=True, satzen_correction=True):
+    """
+    Algorithm for stitching multiple datasets into a single combined product.
 
-    Args:
-        xobj (xarray.dataset) :
-            * list of numpy.ndarray or numpy.MaskedArray of channel data, in order of sensor "channels" list
+    Parameters
+    ----------
+        xobj : xarray.dataset
+            * list of numpy.ndarray or numpy.MaskedArray of channel data,
+              in order of sensor "channels" list
             * Degrees Kelvin
 
-    Returns:
-        numpy.ndarray : dstacked numpy.ndarrays or numpy.MaskedArrays containing:
-                           np.ma.dstack((pcb_mask, mod_mask, bt110, bt110_night)).squeeze()
+    Returns
+    -------
+        numpy.ndarray
+            * dstacked numpy.ndarrays or numpy.MaskedArrays containing:
+                * np.ma.dstack((pcb_mask, mod_mask, bt110, bt110_night)).squeeze()
     """
-
     # This will change when blending polar!!
     metadata_xobj = xarray_dict.pop("METADATA")
     primary_area_definition = metadata_xobj.attrs["area_definition"]
     primary_sector_shape = primary_area_definition.shape
     merged_data_array = np.ma.masked_all(primary_sector_shape)
     partial_data_array = np.ma.masked_all(primary_sector_shape)
-    satzen_array = np.ma.masked_all(primary_sector_shape)
+    # satzen_array = np.ma.masked_all(primary_sector_shape)
     start_datetime = metadata_xobj.attrs["start_datetime"]
     end_datetime = metadata_xobj.attrs["end_datetime"]
     final_product_name = metadata_xobj.attrs["product_name"]
     final_source_name = metadata_xobj.attrs["source_name"]
     final_platform_name = metadata_xobj.attrs["platform_name"]
     final_data_provider = metadata_xobj.attrs["data_provider"]
-    final_product_definition = metadata_xobj.attrs["product_definition"]
+    final_prod_plugin = metadata_xobj.attrs["product_plugin"]
 
     source_names = []
     platform_names = []
@@ -65,12 +67,14 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
         if curr_xarray.end_datetime > end_datetime:
             end_datetime = curr_xarray.end_datetime
         currdata = np.ma.masked_all(primary_sector_shape)
-        # Pull the min/max lines/samples out of the config file for the current subsector.
+        # Pull the min/max lines/samples out of the config file for the
+        # current subsector.
         # This determines where the current data will go in the primary sector.
         curr_sector_shape = curr_xarray.area_definition.shape
         varname = curr_xarray.product_name
 
-        # Pull the min/max lines/samples out of the config file for the current subsector.
+        # Pull the min/max lines/samples out of the config file for the
+        # current subsector.
         # This determines where the current data will go in the primary sector.
         min_sample = 0
         min_line = 0
@@ -80,7 +84,8 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
         currdata[min_line:max_line, min_sample:max_sample] = np.ma.masked_invalid(
             curr_xarray[varname]
         )
-        # Major parallax issues between msg-1 and himawari-8, but this needs a more intelligent fix than this.
+        # Major parallax issues between msg-1 and himawari-8, but this needs a
+        # more intelligent fix than this.
         # Maybe blend into this box using logic similar to below ?
         if curr_xarray.platform_name == "msg-1" and parallax_correction:
             currdata = np.ma.masked_where(
@@ -92,14 +97,16 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
                 currdata,
             )
 
-        # Once we have an existing merged data array for the current channel, merge the current subsector
-        # data into the existing final data array.  Note this puts the first image we find on top, and
-        # it stays there.
-        # MLS3 Note this where we would blend the arrays together to make a prettier picture without
-        # sharp transitions.  There would be an extra line creating a "blended_data_array" which smooths
-        # the transitions between currdata and merged_data_array, then merged_data_array[channame] would be
-        # replaced with "blended_data_array" in the np.ma.where call below. Or, use the same line below,
-        # and update merged_data_array[channame] with the blended values prior to calling np.ma.where
+        # Once we have an existing merged data array for the current channel,
+        # merge the current subsector data into the existing final data array.
+        # Note this puts the first image we find on top, and it stays there.
+        # MLS3 Note this where we would blend the arrays together to make a
+        # prettier picture without sharp transitions.  There would be an extra
+        # line creating a "blended_data_array" which smooths the transitions
+        # between currdata and merged_data_array, then merged_data_array[channame]
+        # would be replaced with "blended_data_array" in the np.ma.where call
+        # below. Or, use the same line below, and update merged_data_array[channame]
+        # with the blended values prior to calling np.ma.where.
 
         LOG.info(
             " Adding %s %s %s %s %s data, %0.2f coverage ... ",
@@ -133,12 +140,15 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
             else:
                 LOG.info("     No overlapping data, not applying SatZenith correction")
             LOG.info("        Num points: %s", len(currdata_inds[0]))
-            # satzen_array[currdata_inds] = np.radians(curr_xarray['SatZenith'].to_masked_array()[currdata_inds])
-            # satzen_array[overlap_inds] = np.radians(curr_xarray['SatZenith'].to_masked_array()[overlap_inds])
+            # satzen_array[currdata_inds] = np.radians(curr_xarray['SatZenith'
+            #                                 ].to_masked_array()[currdata_inds])
+            # satzen_array[overlap_inds] = np.radians(curr_xarray['SatZenith'
+            #                                 ].to_masked_array()[overlap_inds])
 
         else:
             LOG.info(
-                "     SatZenith array not defined or satzen_correction %s not requested",
+                "     SatZenith array not defined or satzen_correction %s not "
+                "requested",
                 satzen_correction,
             )
             merged_data_array = np.ma.where(
@@ -146,10 +156,11 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
             )
 
         # Tell the user what source, platform, time, channel was just merged.
-        # Include the current subsector's percent coverage, as well as the new fully merged array percent
-        # coverage.
+        # Include the current subsector's percent coverage, as well as the
+        # new fully merged array percent coverage.
         LOG.info(
-            "     Added %s %s %s %s %s data, %0.2f coverage, partial coverage now %0.2f, total coverage %0.2f",
+            "     Added %s %s %s %s %s data, %0.2f coverage, "
+            "partial coverage now %0.2f, total coverage %0.2f",
             curr_xarray.source_name,
             curr_xarray.platform_name,
             curr_xarray.product_name,
@@ -163,9 +174,12 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
     LOG.info("Merging partial array with full array")
     # overlap_inds = np.ma.where(~satzen_array.mask & ~partial_data_array.mask)
     # if overlap_inds[0].size > 0:
-    #     satzen_overlap = np.radians(curr_xarray['SatZenith'].to_masked_array()[overlap_inds])
-    #     merged_data_array[overlap_inds] = np.cos(satzen_overlap) * merged_data_array[overlap_inds] \
-    #                                       + (1 - np.cos(satzen_overlap)) * partial_data_array[overlap_inds]
+    #     satzen_overlap = np.radians(curr_xarray['SatZenith'
+    #                                             ].to_masked_array()[overlap_inds])
+    #     merged_data_array[overlap_inds] = np.cos(satzen_overlap) * \
+    #                                       merged_data_array[overlap_inds] \
+    #                                       + (1 - np.cos(satzen_overlap)) * \
+    #                                         partial_data_array[overlap_inds]
     merged_data_array = np.ma.where(
         merged_data_array.mask == False, merged_data_array, partial_data_array
     )
@@ -186,13 +200,13 @@ def stitched(xarray_dict, parallax_correction=True, satzen_correction=True):
     final_xarray.attrs["start_datetime"] = start_datetime
     final_xarray.attrs["end_datetime"] = end_datetime
     final_xarray.attrs["data_provider"] = final_data_provider
-    final_xarray.attrs["product_definition"] = final_product_definition
+    final_xarray.attrs["product_plugin"] = final_prod_plugin
     lons, lats = final_xarray.area_definition.get_lonlats()
     final_xarray["latitude"] = xarray.DataArray(lats)
     final_xarray["longitude"] = xarray.DataArray(lons)
 
-    # Put xarray_dict back the way we found it.  We popped it off earlier in order to ensure we had just the
-    # data xarray objects when looping through.
+    # Put xarray_dict back the way we found it.  We popped it off earlier in
+    # order to ensure we had just the data xarray objects when looping through.
     xarray_dict["METADATA"] = metadata_xobj
 
     return final_xarray

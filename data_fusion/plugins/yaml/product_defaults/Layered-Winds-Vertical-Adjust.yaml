@@ -1,0 +1,47 @@
+interface: product_defaults
+family: xarray_dict_to_output_format
+name: Layered-Winds-Vertical-Adjust
+docstring: |
+  Layered imagery example with vertical colorbar adjustments.
+
+  This product allows layering windbarbs, windspeed, and Infrared
+  products in a single output image.  Each product is fully specified
+  command line (ie, sensor, filenames, etc), and colorbar positioning
+  is specified within this YAML.
+spec:
+  coverage_checker:
+    plugin:
+      name: masked_arrays
+      arguments:
+        varname: windspeed
+        alt_varname: wind_speed_kts
+  mpl_colors_info: # These use "dataset_id" as specified in command line call as keys,
+    # and override defaults found in the product's colormapper specification
+    windbarbs:
+      colorbar: True # Produce this colorbar
+      colorbar_kwargs:
+        orientation: "vertical" # Make sure labels and ticks are rendered in the correct orientation
+      colorbar_positioning: # Relative to main axis: <0 and >1 positions are outside the bounds of main axis
+        start_x_pos: 1.0064516129032257 # 0.0 left, 1.0 right of main axis
+        end_x_pos: 1.032258064516129 # 0.0 left, 1.0 right of main axis
+        start_y_pos: 0.7666666666666665 # 0.0 bottom, 1.0 top of main axis
+        end_y_pos: 0.9999999999999998 # 0.0 bottom, 1.0 top of main axis
+    windspeed:
+      colorbar: True # Produce this colorbar
+      colorbar_kwargs:
+        orientation: "vertical" # Make sure labels and ticks are rendered in the correct orientation
+      colorbar_positioning: # Relative to main axis: <0 and >1 positions are outside the bounds of main axis
+        start_x_pos: 1.0064516129032257 # 0.0 left, 1.0 right of main axis
+        end_x_pos: 1.032258064516129 # 0.0 left, 1.0 right of main axis
+        start_y_pos: 0.26666666666666666 # 0.0 bottom, 1.0 top of main axis
+        end_y_pos: 0.7333333333333334 # 0.0 bottom, 1.0 top of main axis
+    ir:
+      colorbar: True # Produce this colorbar
+      colorbar_kwargs:
+        orientation: "vertical" # Make sure labels and ticks are rendered in the correct orientation
+      colorbar_positioning: # Relative to main axis: <0 and >1 positions are outside the bounds of main axis
+        start_x_pos: 1.0064516129032257 # 0.0 left, 1.0 right of main axis
+        end_x_pos: 1.032258064516129 # 0.0 left, 1.0 right of main axis
+        start_y_pos: 0.0 # 0.0 bottom, 1.0 top of main axis
+        end_y_pos: 0.23333333333333334 # 0.0 bottom, 1.0 top of main axis
+      cbar_label: "BT (degrees C)" # This overrides the default from mpl_colors_info

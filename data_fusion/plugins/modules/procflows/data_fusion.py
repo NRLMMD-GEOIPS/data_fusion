@@ -10,35 +10,39 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-""" Driver for standard single channel products """
+"""Driver for standard single channel products."""
 
 import logging
+from os import getenv
 
 import xarray
 
 # New class-based interfaces
+from geoips.errors import PluginError
 from geoips.interfaces import algorithms
 from geoips.interfaces import readers
+from geoips.interfaces import products
+
+from geoips.filenames.duplicate_files import remove_duplicates
+
 
 # Old interfaces (YAML, not updated to classes yet!)
 from geoips.dev.product import (
-    get_alg_name,
     get_required_variables,
-    get_alg_args,
-    get_product_type,
-    get_product,
+    get_covg_args_from_product,
 )
 
 # Direct imports from single_source
-from geoips.interface_modules.procflows.single_source import (
+from geoips.plugins.modules.procflows.single_source import (
     pad_area_definition,
     get_alg_xarray,
     get_area_defs_from_command_line_args,
     plot_data,
-    get_output_format_kwargs,
+    get_output_formatter_kwargs,
 )
 
 from data_fusion.commandline.args import check_command_line_args
+
 try:
     from geoips_db.utils.database_writes import (
         write_stats_to_database,
@@ -47,7 +51,6 @@ except ImportError:
     print("Please install geoips_db package if required")
 from geoips.utils.memusg import print_mem_usage
 
-
 PMW_NUM_PIXELS_X = 1400
 PMW_NUM_PIXELS_Y = 1400
 PMW_PIXEL_SIZE_X = 1000
@@ -55,10 +58,13 @@ PMW_PIXEL_SIZE_Y = 1000
 
 LOG = logging.getLogger(__name__)
 
-procflow_type = "standard"
+interface = "procflows"
+family = "standard"
+name = "data_fusion"
 
 
 def get_overall_start_datetime(fuse_dict):
+    """Get the starting datetime for all products."""
     min_start_datetime = None
     for fuse_name in fuse_dict:
         if (
@@ -77,6 +83,7 @@ def get_overall_start_datetime(fuse_dict):
 
 
 def get_overall_end_datetime(fuse_dict):
+    """Get the ending datetime for all products."""
     max_end_datetime = None
     for fuse_name in fuse_dict:
         if (
@@ -95,7 +102,7 @@ def get_overall_end_datetime(fuse_dict):
 
 
 def unpack_fusion_arguments(argdict):
-
+    """Unpack fusion arguments."""
     fusion_files = argdict["fuse_files"]
     fusion_readers = argdict["fuse_reader_name"]
     fusion_products = argdict["fuse_product_name"]
@@ -130,10 +137,11 @@ def unpack_fusion_arguments(argdict):
             "metadata_xobj": meta["METADATA"],
         }
 
-        # All other "fuse_*" arguments are optional - but if included, must be included for each dataset.
+        # All other "fuse_*" arguments are optional - but if included, must be
+        # included for each dataset.
         # If number arguments equals number of fusion datasets, include in dictionary
         if fusion_outputs:
-            curr_fuse_dict["output_format"] = fusion_outputs[curr_num]
+            curr_fuse_dict["output_formatter"] = fusion_outputs[curr_num]
         if fusion_orders:
             curr_fuse_dict["fuse_order"] = fusion_orders[curr_num]
         if fusion_self_register_sources:
@@ -163,7 +171,7 @@ def unpack_fusion_arguments(argdict):
         "product_name": argdict["fusion_final_product_name"],
         "source_name": argdict["fusion_final_source_name"],
         "platform_name": argdict["fusion_final_platform_name"],
-        "output_format": argdict["fusion_final_output_format"],
+        "output_format": argdict["fusion_final_output_formatter"],
         "start_datetime": overall_start_datetime,
         "end_datetime": overall_end_datetime,
     }
@@ -192,15 +200,18 @@ def unpack_fusion_arguments(argdict):
 
 def get_fused_xarray(area_def, fuse_data):
     """
-    This loops through each "fuse" dataset, and calls single_source.get_alg_xarray to pre-process each appropriately
+    Get the fused xarray.
 
-    After pre-processing each dataset to their individual "products", the final algorithm is applied to all datasets
+    This loops through each "fuse" dataset, and calls single_source.get_alg_xarray
+    to pre-process each appropriately. After pre-processing each dataset to their
+    individual "products", the final algorithm is applied to all datasets.
     """
     from geoips.xarray_utils.data import sector_xarrays
 
     final_product_name = fuse_data["final"]["product_name"]
     final_source_name = fuse_data["final"]["source_name"]
-    final_product = get_product(final_product_name, final_source_name)
+    final_prod_plugin = products.get_plugin(final_source_name, final_product_name)
+    final_covg_args = get_covg_args_from_product(final_prod_plugin)
 
     metadata_xobj = fuse_data["final"]["metadata_xobj"]
     coverage_dataset = None
@@ -216,20 +227,25 @@ def get_fused_xarray(area_def, fuse_data):
         source_name = fuse_data[fuse_data_name]["source_name"]
         reader = fuse_data[fuse_data_name]["reader_func"]
         files = fuse_data[fuse_data_name]["files"]
-        required_variables = get_required_variables(product_name, source_name)
+        prod_plugin = products.get_plugin(source_name, product_name)
+        required_variables = get_required_variables(prod_plugin)
 
-        # We are checking to see if there are any additional variables required for this particular combined
-        # final_product_name for the current source.
+        # We are checking to see if there are any additional variables required
+        # for this particular combined final_product_name for the current
+        # source.
         # This could be things like "SatZenith" for blending between satellites, etc.
         try:
-            final_product_for_curr_source = get_product(final_product_name, source_name)
-            # If variables are specified within the "final_product" definition in product_inputs/<source_name>.yaml,
-            # Then append them to the required_variables list here (if variables not specified, nothing to add)
-            if "variables" in final_product_for_curr_source:
-                required_variables += list(
-                    set(get_required_variables(final_product_name, source_name))
-                )
-        except KeyError:
+            final_prod_plugin_for_curr_source = products.get_plugin(
+                source_name, final_product_name
+            )
+            # If variables are specified within the "final_product" definition
+            # in product_inputs/<source_name>.yaml, Then append them to the
+            # required_variables list here (if variables not specified, nothing
+            # to add)
+            required_variables += list(
+                set(get_required_variables(final_prod_plugin_for_curr_source))
+            )
+        except PluginError:
             LOG.info(
                 "No additional requirements for source %s / final product %s",
                 source_name,
@@ -240,8 +256,7 @@ def get_fused_xarray(area_def, fuse_data):
         # "fuse_product" within product_inputs/<source_name>.yaml,
         # then pad appropriately here.  If a product is missing some
         # data after reprojecting, you may need to pad.
-        product = get_product(product_name, source_name)
-        product_type = product["product_type"]
+        prod_plugin = products.get_plugin(source_name, product_name)
 
         unsectored_product_types = [
             "unsectored_xarray_dict_to_output_format",
@@ -250,9 +265,9 @@ def get_fused_xarray(area_def, fuse_data):
         ]
 
         if (
-            product_type not in unsectored_product_types
-            and "pad_area_definition" in product
-            and product["pad_area_definition"]
+            prod_plugin.family not in unsectored_product_types
+            and "pad_area_definition" in prod_plugin["spec"]
+            and prod_plugin["spec"]["pad_area_definition"]
         ):
             pad_area_def = pad_area_definition(
                 area_def, force_pad=True, x_scale_factor=1.5, y_scale_factor=1.5
@@ -260,32 +275,36 @@ def get_fused_xarray(area_def, fuse_data):
         else:
             pad_area_def = area_def
 
-        # Read the padded area definition (ensure we have enough data to cover the entire sector after reprojecting
+        # Read the padded area definition (ensure we have enough data to cover
+        # the entire sector after reprojecting
         reader_out = reader(
             files, metadata_only=False, chans=required_variables, area_def=pad_area_def
         )
 
-        if product_type not in unsectored_product_types:
+        if prod_plugin.family not in unsectored_product_types:
             pad_sect_xarrays = sector_xarrays(
                 reader_out, pad_area_def, required_variables
             )
         else:
             pad_sect_xarrays = reader_out
 
-        product = get_product(product_name, pad_sect_xarrays["METADATA"].source_name)
-        product_type = product["product_type"]
+        # Is this any different from the previous `prod_plugin?`
+        prod_plugin = products.get_plugin(
+            pad_sect_xarrays["METADATA"].source_name,
+            product_name,
+        )
         # dataset_name is {dataset_name} for uniqueness.
         dataset_name = fuse_data[fuse_data_name]["dataset_name"]
 
         alg_product_types = [
-            "alg",
-            "interp_alg",
-            "interp_alg_cmap",
-            "alg_interp_cmap",
-            "alg_cmap",
-            "cmap",
+            "algorithm",
+            "interpolator_algorithm",
+            "interpolator_algorithm_colormapper",
+            "algorithm_interpolator_colormapper",
+            "algorithm_colormapper",
+            "colormapper",
         ]
-        interp_only_product_types = ["interp"]
+        interp_only_product_types = ["interpolator"]
         noalg_product_types = [
             "sectored_xarray_dict_to_output_format",
             "sectored_xarray_dict_area_to_output_format",
@@ -294,17 +313,18 @@ def get_fused_xarray(area_def, fuse_data):
             "unsectored_xarray_dict_area_to_output_format",
             "unmodified",
         ]
-        # If we need interpolation or an algorithm applied, call get_alg_xarray from single_source procflow
-        if product_type in alg_product_types + interp_only_product_types:
+        # If we need interpolation or an algorithm applied, call get_alg_xarray
+        # from single_source procflow
+        if prod_plugin.family in alg_product_types + interp_only_product_types:
             interp_xarrays[dataset_name] = get_alg_xarray(
                 pad_sect_xarrays,
                 area_def,
-                product_name,
+                prod_plugin,
                 variable_names=required_variables,
                 resector=False,
                 resampled_read=False,
             )
-            interp_xarrays[dataset_name].attrs["product_definition"] = product
+            interp_xarrays[dataset_name].attrs["product_plugin"] = prod_plugin
             # Set all the fuse_data attrs on the xarray obj itself
             for attrname in fuse_data[dataset_name].keys():
                 if attrname == "metadata_xobj":
@@ -312,12 +332,13 @@ def get_fused_xarray(area_def, fuse_data):
                 interp_xarrays[dataset_name].attrs[attrname] = fuse_data[dataset_name][
                     attrname
                 ]
-        # If no modification required to data, just set pad_sect_xarrays to interp_xarrays[dataset_name]
-        elif product_type in noalg_product_types:
+        # If no modification required to data, just set pad_sect_xarrays to
+        # interp_xarrays[dataset_name]
+        elif prod_plugin.family in noalg_product_types:
             interp_xarrays[dataset_name] = pad_sect_xarrays
             interp_xarrays[dataset_name]["METADATA"].attrs[
-                "product_definition"
-            ] = product
+                "product_plugin"
+            ] = prod_plugin
             # Set all the fuse_data attrs on the METADATA xarray obj
             for attrname in fuse_data[dataset_name].keys():
                 if attrname == "metadata_xobj":
@@ -327,19 +348,18 @@ def get_fused_xarray(area_def, fuse_data):
                 ][attrname]
         else:
             raise ValueError(
-                f"Product type {product_type} must be one of {alg_product_type}, {interp_only_product_type}, or {noalg_product_type}"
+                f"Product type {prod_plugin.family} must be one of "
+                f"{alg_product_types}, {interp_only_product_types}, or "
+                f"{noalg_product_types}"
             )
-        if (
-            "coverage_dataset" in final_product
-            and final_product["coverage_dataset"] == dataset_name
-        ):
+        if "varname" in final_covg_args and final_covg_args["varname"] == dataset_name:
             coverage_dataset = interp_xarrays[dataset_name]
 
     # Set METADATA xarray object on interp_xarrays dictionary, for consistency
     interp_xarrays["METADATA"] = metadata_xobj
-    # Use start and end datetime, and variables from coverage_dataset (leave the rest the same as METADATA)
+    # Use start and end datetime, and variables from coverage_dataset (leave the
+    # rest the same as METADATA)
     if coverage_dataset:
-        coverage_fuse_data = fuse_data[final_product["coverage_dataset"]]
         interp_xarrays["METADATA"].attrs["start_datetime"] = coverage_dataset.attrs[
             "start_datetime"
         ]
@@ -349,12 +369,10 @@ def get_fused_xarray(area_def, fuse_data):
         for product_name in coverage_dataset.keys():
             interp_xarrays["METADATA"][product_name] = coverage_dataset[product_name]
     # Attach the final product information to the METADATA xarray
-    interp_xarrays["METADATA"].attrs["product_definition"] = final_product
+    interp_xarrays["METADATA"].attrs["product_plugin"] = final_prod_plugin
     # Attach the area_def information to the METADATA xarray
     interp_xarrays["METADATA"].attrs["area_definition"] = area_def
-    interp_xarrays["METADATA"].attrs["product_name"] = final_product_name
-
-    final_product_type = get_product_type(final_product_name, final_source_name)
+    interp_xarrays["METADATA"].attrs["product_name"] = final_prod_plugin.name
 
     no_alg_product_types = [
         "sectored_xarray_dict_to_output_format",
@@ -365,51 +383,63 @@ def get_fused_xarray(area_def, fuse_data):
         "unmodified",
     ]
 
-    # If no algorithm is required for the final output product, just return interp_xarrays
-    if final_product_type in no_alg_product_types:
+    # If no algorithm is required for the final output product, just return
+    # interp_xarrays
+    if final_prod_plugin.family in no_alg_product_types:
         alg_xarray = interp_xarrays
     # Else apply the fusion algorithm
     else:
-        alg_xarray = run_fuse_alg(interp_xarrays, final_product_name, final_source_name)
+        alg_xarray = run_fuse_alg(interp_xarrays, final_prod_plugin, final_source_name)
         if "product_name" not in alg_xarray.attrs:
-            alg_xarray.attrs["product_name"] = final_product_name
+            alg_xarray.attrs["product_name"] = final_prod_plugin.name
 
     return alg_xarray
 
 
-def run_fuse_alg(fuse_xarrays, fuse_product_name, fuse_source_name):
-    alg_func = algorithms.get_plugin(get_alg_name(fuse_product_name, fuse_source_name))
-    alg_func_type = alg_func.family
-    alg_args = get_alg_args(fuse_product_name, fuse_source_name)
+def run_fuse_alg(fuse_xarrays, fuse_prod_plugin, fuse_source_name):
+    """Run the fusion algorithm."""
+    alg_plugin = algorithms.get_plugin(
+        fuse_prod_plugin["spec"]["algorithm"]["plugin"]["name"]
+    )
+    alg_args = fuse_prod_plugin["spec"]["algorithm"]["plugin"]["arguments"]
 
-    # alg_xarray will either be a single xarray Dataset, or a dictionary of xarray Datasets.
-    # single_source procflow handles them separately in "plot_data"
-    # (xarray_dict[final_product_name] used for metadata, xarray_dict used for actual plotting if dict based)
-    if alg_func_type in ["xarray_dict_to_xarray", "xarray_dict_to_xarray_dict"]:
-        alg_xarray = alg_func(fuse_xarrays, **alg_args)
+    # alg_xarray will either be a single xarray Dataset, or a dictionary of
+    # xarray Datasets.  single_source procflow handles them separately in
+    # "plot_data" (xarray_dict[final_product_name] used for metadata,
+    # xarray_dict used for actual plotting if dict based)
+    if alg_plugin.family in ["xarray_dict_to_xarray", "xarray_dict_to_xarray_dict"]:
+        alg_xarray = alg_plugin(fuse_xarrays, **alg_args)
     else:
         raise TypeError(
-            f"Unsupported algorithm type for fusion driver: {alg_func_type}"
+            f"Unsupported algorithm type for fusion driver: {alg_plugin.family}"
         )
 
     return alg_xarray
 
 
-def data_fusion(fnames, command_line_args=None):
-    """Workflow for running multiple datatypes in a single call
+def call(fnames, command_line_args=None):
+    """
+    Workflow for running multiple datatypes in a single call.
 
-    Args:
-        fnames (list) : List of strings specifying full paths to input file names to process
-        command_line_args (dict) : dictionary of command line arguments
-                                     'reader_name': Explicitly request reader
-                                                      geoips*.readers.readername.readername
-                                     Optional: 'sectorfiles': list of YAML sectorfiles
-                                               'sectorlist': list of desired sectors found in "sectorfiles"
-                                                                tc<YYYY><BASIN><NUM><NAME> for TCs,
-                                                                ie tc2020sh16gabekile
-                                     If sectorfiles and sectorlist not included, looks in database
-    Returns:
-        (list) : Return list of strings specifying full paths to output products that were produced
+    Parameters
+    ----------
+        fnames : list of strings
+            * List of strings specifying full paths to input file names to process
+        command_line_args (dict) :
+            * dictionary of command line arguments
+                * 'reader_name': Explicitly request reader
+                    * geoips*.readers.readername.readername
+                * Optional: 'sector_list': list of YAML sectorfiles
+                    * tc<YYYY><BASIN><NUM><NAME> for TCs,
+                      ie tc2020sh16gabekile
+                      If sectorfiles and sectorlist not included,
+                      looks in database
+
+    Returns
+    -------
+        list
+            * Return list of strings specifying full paths to output products
+              that were produced.
     """
     from datetime import datetime
 
@@ -421,13 +451,12 @@ def data_fusion(fnames, command_line_args=None):
 
     # These args should always be checked
     check_args = [
-        "sectorlist",
-        "sectorfiles",  # Static sectors,
+        "sector_list",
         "tcdb",
-        "tcdb_sectorlist",  # TC Database sectors,
+        "tcdb_sector_list",  # TC Database sectors,
         "trackfiles",
         "trackfile_parser",
-        "trackfile_sectorlist",  # Flat text trackfile,
+        "trackfile_sector_list",  # Flat text trackfile,
         "fuse_files",
         "fuse_reader_name",
         "fuse_product_name",
@@ -444,29 +473,27 @@ def data_fusion(fnames, command_line_args=None):
         product_db = False
 
     if product_db:
-        from os import getenv
-
         if not getenv("GEOIPS_DB_USER") or not getenv("GEOIPS_DB_PASS"):
             raise ValueError("Need to set both $GEOIPS_DB_USER and $GEOIPS_DB_PASS")
 
     fuse_data = unpack_fusion_arguments(command_line_args)
     final_product_name = fuse_data["final"]["product_name"]
     final_source_name = fuse_data["final"]["source_name"]
-    final_product_type = get_product_type(final_product_name, final_source_name)
+    final_prod_plugin = products.get_plugin(final_source_name, final_product_name)
 
-    # Set output_format and product_name in the command_line_args dict, used throughout single_source code.
-    command_line_args["output_format"] = fuse_data["final"]["output_format"]
+    # Set output_format and product_name in the command_line_args dict, used
+    # throughout single_source code.
+    command_line_args["output_formatter"] = fuse_data["final"]["output_format"]
     command_line_args["product_name"] = fuse_data["final"]["product_name"]
 
-    # "final" dataset is pre-populated with an intermediate METADATA dataset, with the best-available information.
+    # "final" dataset is pre-populated with an intermediate METADATA dataset,
+    # with the best-available information.
     # The METADATA will be updated once all algorithms/products have been applied.
     area_defs = get_area_defs_from_command_line_args(
         command_line_args, {"METADATA": fuse_data["final"]["metadata_xobj"]}
     )
 
     num_jobs = 0
-
-    from geoips.filenames.duplicate_files import remove_duplicates
 
     for area_def in area_defs:
         process_datetimes[area_def.name] = {}
@@ -478,27 +505,31 @@ def data_fusion(fnames, command_line_args=None):
             # If it is a dict, set alg_xarray to xarray_dict['METADATA']
             if isinstance(fused_xarray, dict):
                 fused_xarray_dict = fused_xarray
-                # This should contain all appropriate metadata, for use in setting up filenames, etc in plot_data.
+                # This should contain all appropriate metadata, for use in setting up
+                # filenames, etc in plot_data.
                 alg_xarray = fused_xarray["METADATA"]
 
-            # If it is an xarray.Dataset, then just use the alg_xarray for everything (plotting data, and metadata)
+            # If it is an xarray.Dataset, then just use the alg_xarray for
+            # everything (plotting data, and metadata)
             elif isinstance(fused_xarray, xarray.Dataset):
                 fused_xarray_dict = None
                 alg_xarray = fused_xarray
                 final_product_name = fused_xarray.product_name
 
             # xarray_obj not actually used in output_format_kwargs...
-            # This determines what keyword arguments were specified within the product YAML for the output
-            output_format_kwargs = get_output_format_kwargs(
+            # This determines what keyword arguments were specified within the
+            # product YAML for the output
+            output_format_kwargs = get_output_formatter_kwargs(
                 command_line_args, xarray_obj=alg_xarray, area_def=area_def
             )
 
-            # Note fused_xarray_dict is used for actual output format call, alg_xarray used for filenames, etc.
+            # Note fused_xarray_dict is used for actual output format call,
+            # alg_xarray used for filenames, etc.
             curr_products = plot_data(
                 command_line_args,
                 alg_xarray,
                 area_def,
-                final_product_name,
+                final_prod_plugin,
                 output_format_kwargs,
                 fused_xarray_dict=fused_xarray_dict,
             )
@@ -522,17 +553,18 @@ def data_fusion(fnames, command_line_args=None):
                 alg_xarray.source_names,
                 area_def.name,
             )
-            # raise ImportError('Failed to find required fields in product algorithm: {0}.{1}'.format(
-            #                                                        sect_xarrays[0].source_name,product_name))
+            # raise ImportError('Failed to find required fields in product
+            # algorithm: {0}.{1}'.format(
+            # sect_xarrays[0].source_name,product_name))
 
     process_datetimes["overall_end"] = datetime.utcnow()
-    from geoips.dev.utils import output_process_times
+    from geoips.geoips_utils import output_process_times
 
     output_process_times(process_datetimes, num_jobs)
 
     mem_usage_stats = print_mem_usage("MEMUSG", verbose=True)
     if product_db:
-        if command_line_args.get("sectorfiles") and (
+        if command_line_args.get("sector_list") and (
             command_line_args.get("tcdb") or command_line_args.get("trackfiles")
         ):
             sector_type = "static_and_dynamic_tc"

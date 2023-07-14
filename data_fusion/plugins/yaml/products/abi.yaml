@@ -1,0 +1,18 @@
+interface: products
+family: list
+name: abi
+docstring: |
+  ABI products for use within data_fusion processing.
+spec:
+  products:
+    - name: Blended-Infrared-Gray
+      source_name: abi
+      docstring: |
+        Blended-Infrared-Gray ABI product for use in stitched imagery.
+
+        This uses the standard Infrared-Gray product_defaults, with the addition
+        of the "SatZenith" variable for blending between satellites in a stitched
+        image.
+      product_defaults: Infrared-Gray
+      spec:
+        variables: ["B14BT", "SatZenith"]
