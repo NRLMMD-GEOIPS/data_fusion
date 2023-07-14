@@ -16,7 +16,11 @@ spec:
         varname: windspeed
         alt_varname: wind_speed_kts
   mpl_colors_info: # These use "dataset_id" as specified in command line call as keys,
+<<<<<<< HEAD
     # and override defaults found in the product's colormap specification
+=======
+    # and override defaults found in the product's colormapper specification
+>>>>>>> main
     windbarbs:
       colorbar: True # Produce this colorbar
       colorbar_positioning: # Relative to main axis: <0 and >1 positions are outside the bounds of main axis
@@ -38,4 +42,8 @@ spec:
         end_x_pos: 0.23333333333333334 # 0.0 left, 1.0 right of main axis
         start_y_pos: -0.07792207792207793 # 0.0 bottom, 1.0 top of main axis
         end_y_pos: -0.05194805194805195 # 0.0 bottom, 1.0 top of main axis
+<<<<<<< HEAD
       cbar_label: "BT (degrees C)" # This overrides the default from the colormap specification
+=======
+      cbar_label: "BT (degrees C)" # This overrides the default from the colormapper specification
+>>>>>>> main

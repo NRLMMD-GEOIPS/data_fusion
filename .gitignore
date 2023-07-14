@@ -1,5 +1,5 @@
 # Generated verison file.
-version.py
+_version.py
 
 # GeoIPS diff test outputs
 *diff_test_output_dir*

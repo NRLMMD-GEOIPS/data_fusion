@@ -10,14 +10,18 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-""" Command line script for kicking off geoips based procflows. MUST call with --procflow"""
+"""
+Command line script for kicking off geoips based procflows.
+
+MUST call with --procflow
+"""
 
 from geoips.commandline.run_procflow import main as geoips_main
 from data_fusion.commandline.args import get_command_line_args
 
 
 def main():
-    """Script to kick off processing based on command line args"""
+    """Script to kick off processing based on command line args."""
     geoips_main(get_command_line_args)
 
 

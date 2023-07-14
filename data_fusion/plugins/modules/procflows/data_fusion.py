@@ -10,7 +10,11 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
+<<<<<<< HEAD
 """ Driver for standard single channel products """
+=======
+"""Driver for standard single channel products."""
+>>>>>>> main
 
 import logging
 from os import getenv
@@ -64,6 +68,10 @@ name = "data_fusion"
 
 
 def get_overall_start_datetime(fuse_dict):
+<<<<<<< HEAD
+=======
+    """Get the starting datetime for all products."""
+>>>>>>> main
     min_start_datetime = None
     for fuse_name in fuse_dict:
         if (
@@ -82,6 +90,10 @@ def get_overall_start_datetime(fuse_dict):
 
 
 def get_overall_end_datetime(fuse_dict):
+<<<<<<< HEAD
+=======
+    """Get the ending datetime for all products."""
+>>>>>>> main
     max_end_datetime = None
     for fuse_name in fuse_dict:
         if (
@@ -135,7 +147,12 @@ def unpack_fusion_arguments(argdict):
             "metadata_xobj": meta["METADATA"],
         }
 
+<<<<<<< HEAD
         # All other "fuse_*" arguments are optional - but if included, must be included for each dataset.
+=======
+        # All other "fuse_*" arguments are optional - but if included, must be
+        # included for each dataset.
+>>>>>>> main
         # If number arguments equals number of fusion datasets, include in dictionary
         if fusion_outputs:
             curr_fuse_dict["output_formatter"] = fusion_outputs[curr_num]
@@ -196,9 +213,18 @@ def unpack_fusion_arguments(argdict):
 
 
 def get_fused_xarray(area_def, fuse_data):
+<<<<<<< HEAD
     """This loops through each "fuse" dataset, and calls single_source.get_alg_xarray to pre-process each appropriately
 
     After pre-processing each dataset to their individual "products", the final algorithm is applied to all datasets
+=======
+    """
+    Get the fused xarray.
+
+    This loops through each "fuse" dataset, and calls single_source.get_alg_xarray
+    to pre-process each appropriately. After pre-processing each dataset to their
+    individual "products", the final algorithm is applied to all datasets.
+>>>>>>> main
     """
     from geoips.xarray_utils.data import sector_xarrays
 
@@ -292,11 +318,19 @@ def get_fused_xarray(area_def, fuse_data):
 
         alg_product_types = [
             "algorithm",
+<<<<<<< HEAD
             "interpoloator_algorithm",
             "interpolator_algorithm_colormap",
             "algorithm_interpolator_colormap",
             "algorithm_colormap",
             "colormap",
+=======
+            "interpolator_algorithm",
+            "interpolator_algorithm_colormapper",
+            "algorithm_interpolator_colormapper",
+            "algorithm_colormapper",
+            "colormapper",
+>>>>>>> main
         ]
         interp_only_product_types = ["interpolator"]
         noalg_product_types = [
@@ -391,6 +425,10 @@ def get_fused_xarray(area_def, fuse_data):
 
 
 def run_fuse_alg(fuse_xarrays, fuse_prod_plugin, fuse_source_name):
+<<<<<<< HEAD
+=======
+    """Run the fusion algorithm."""
+>>>>>>> main
     alg_plugin = algorithms.get_plugin(
         fuse_prod_plugin["spec"]["algorithm"]["plugin"]["name"]
     )
@@ -411,6 +449,7 @@ def run_fuse_alg(fuse_xarrays, fuse_prod_plugin, fuse_source_name):
 
 
 def call(fnames, command_line_args=None):
+<<<<<<< HEAD
     """Workflow for running multiple datatypes in a single call
 
     Args:
@@ -427,6 +466,30 @@ def call(fnames, command_line_args=None):
     Returns:
         (list) : Return list of strings specifying full paths to output products
         that were produced
+=======
+    """
+    Workflow for running multiple datatypes in a single call.
+
+    Parameters
+    ----------
+        fnames : list of strings
+            * List of strings specifying full paths to input file names to process
+        command_line_args (dict) :
+            * dictionary of command line arguments
+                * 'reader_name': Explicitly request reader
+                    * geoips*.readers.readername.readername
+                * Optional: 'sector_list': list of YAML sectorfiles
+                    * tc<YYYY><BASIN><NUM><NAME> for TCs,
+                      ie tc2020sh16gabekile
+                      If sectorfiles and sectorlist not included,
+                      looks in database
+
+    Returns
+    -------
+        list
+            * Return list of strings specifying full paths to output products
+              that were produced.
+>>>>>>> main
     """
     from datetime import datetime
 
@@ -468,11 +531,21 @@ def call(fnames, command_line_args=None):
     final_source_name = fuse_data["final"]["source_name"]
     final_prod_plugin = products.get_plugin(final_source_name, final_product_name)
 
+<<<<<<< HEAD
     # Set output_format and product_name in the command_line_args dict, used throughout single_source code.
     command_line_args["output_formatter"] = fuse_data["final"]["output_format"]
     command_line_args["product_name"] = fuse_data["final"]["product_name"]
 
     # "final" dataset is pre-populated with an intermediate METADATA dataset, with the best-available information.
+=======
+    # Set output_format and product_name in the command_line_args dict, used
+    # throughout single_source code.
+    command_line_args["output_formatter"] = fuse_data["final"]["output_format"]
+    command_line_args["product_name"] = fuse_data["final"]["product_name"]
+
+    # "final" dataset is pre-populated with an intermediate METADATA dataset,
+    # with the best-available information.
+>>>>>>> main
     # The METADATA will be updated once all algorithms/products have been applied.
     area_defs = get_area_defs_from_command_line_args(
         command_line_args, {"METADATA": fuse_data["final"]["metadata_xobj"]}
@@ -490,17 +563,31 @@ def call(fnames, command_line_args=None):
             # If it is a dict, set alg_xarray to xarray_dict['METADATA']
             if isinstance(fused_xarray, dict):
                 fused_xarray_dict = fused_xarray
+<<<<<<< HEAD
                 # This should contain all appropriate metadata, for use in setting up filenames, etc in plot_data.
                 alg_xarray = fused_xarray["METADATA"]
 
             # If it is an xarray.Dataset, then just use the alg_xarray for everything (plotting data, and metadata)
+=======
+                # This should contain all appropriate metadata, for use in setting up
+                # filenames, etc in plot_data.
+                alg_xarray = fused_xarray["METADATA"]
+
+            # If it is an xarray.Dataset, then just use the alg_xarray for
+            # everything (plotting data, and metadata)
+>>>>>>> main
             elif isinstance(fused_xarray, xarray.Dataset):
                 fused_xarray_dict = None
                 alg_xarray = fused_xarray
                 final_product_name = fused_xarray.product_name
 
             # xarray_obj not actually used in output_format_kwargs...
+<<<<<<< HEAD
             # This determines what keyword arguments were specified within the product YAML for the output
+=======
+            # This determines what keyword arguments were specified within the
+            # product YAML for the output
+>>>>>>> main
             output_format_kwargs = get_output_formatter_kwargs(
                 command_line_args, xarray_obj=alg_xarray, area_def=area_def
             )

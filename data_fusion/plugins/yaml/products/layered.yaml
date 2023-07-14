@@ -33,7 +33,11 @@ spec:
               varname: windspeed
               alt_varname: wind_speed_kts
         mpl_colors_info: # These use "dataset_id" as specified in command line call as keys,
+<<<<<<< HEAD
           # and override defaults found in the product's colormap specification
+=======
+          # and override defaults found in the product's colormapper specification
+>>>>>>> main
           windbarbs:
             colorbar: False
           windspeed:
