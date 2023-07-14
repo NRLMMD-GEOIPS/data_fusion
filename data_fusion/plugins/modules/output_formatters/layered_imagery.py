@@ -9,44 +9,26 @@
 # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
-<<<<<<< HEAD
-=======
 
->>>>>>> main
 """Layered imagery output formatter module."""
 
 import logging
 
-<<<<<<< HEAD
-import matplotlib.pyplot as plt
 import matplotlib
 
-rc_params = matplotlib.rcParams
-
-=======
-import matplotlib
-
->>>>>>> main
 from geoips.image_utils.mpl_utils import create_figure_and_main_ax_and_mapobj
 from geoips.image_utils.mpl_utils import save_image, plot_overlays
 from geoips.image_utils.mpl_utils import set_title, create_colorbar
 from geoips.plugins.modules.procflows.single_source import plot_data
 
 # New geoips interface classes
-<<<<<<< HEAD
-from geoips.interfaces import colormaps
-=======
 from geoips.interfaces import colormappers
->>>>>>> main
 
 # Old geoips YAML based plugins not yet implemented as class-based plugins
 from geoips.sector_utils.utils import is_sector_type
 
-<<<<<<< HEAD
-=======
 rc_params = matplotlib.rcParams
 
->>>>>>> main
 LOG = logging.getLogger(__name__)
 
 interface = "output_formatters"
@@ -55,10 +37,7 @@ name = "layered_imagery"
 
 
 def layered_title(area_def, xrdict, include_end_datetime=False, dataset_dict=None):
-<<<<<<< HEAD
-=======
     """Create title for the fused data output."""
->>>>>>> main
     LOG.info("Setting dynamic title")
 
     title_lines = []
@@ -93,12 +72,8 @@ def layered_title(area_def, xrdict, include_end_datetime=False, dataset_dict=Non
                 xarray_obj = xarray_obj[dataset_dict[dataset_name]]
             else:
                 xarray_obj = xarray_obj["METADATA"]
-<<<<<<< HEAD
-        # data_time = xarray_obj.start_datetime + (xarray_obj.end_datetime - xarray_obj.start_datetime)/2
-=======
         # data_time = xarray_obj.start_datetime + (xarray_obj.end_datetime -
         #                                          xarray_obj.start_datetime)/2
->>>>>>> main
         data_time = xarray_obj.start_datetime
         end_time = xarray_obj.end_datetime
         if include_end_datetime:
@@ -129,12 +104,8 @@ def layered_title(area_def, xrdict, include_end_datetime=False, dataset_dict=Non
 
 
 # def get_arg(xobj, arg_type, dataset_name, arg_name):
-<<<<<<< HEAD
-#     # Like: xarray_dict['METADATA'].product_definition['mpl_colors_info'][xobj.dataset_name]['width']
-=======
 #     # Like: xarray_dict['METADATA'].product_definition['mpl_colors_info'][ \
 #                           xobj.dataset_name]['width']
->>>>>>> main
 #     arg_val = None
 #     if (
 #         hasattr(xobj, "product_plugin")
@@ -147,15 +118,6 @@ def layered_title(area_def, xrdict, include_end_datetime=False, dataset_dict=Non
 
 
 def get_final_mpl_colors_info(xobj, dataset_name, prod_plugin, source_name):
-<<<<<<< HEAD
-    if "colormap" not in prod_plugin["spec"]:
-        mpl_colors_info = {}
-    else:
-        cmap_plugin = colormaps.get_plugin(
-            prod_plugin["spec"]["colormap"]["plugin"]["name"]
-        )
-        cmap_args = prod_plugin["spec"]["colormap"]["plugin"]["arguments"]
-=======
     """Get final mpl_colors_info dictionary."""
     if "colormapper" not in prod_plugin["spec"]:
         mpl_colors_info = {}
@@ -164,7 +126,6 @@ def get_final_mpl_colors_info(xobj, dataset_name, prod_plugin, source_name):
             prod_plugin["spec"]["colormapper"]["plugin"]["name"]
         )
         cmap_args = prod_plugin["spec"]["colormapper"]["plugin"]["arguments"]
->>>>>>> main
         mpl_colors_info = cmap_plugin(**cmap_args)
 
     # New options for data_fusion / multi colorbars
@@ -190,10 +151,7 @@ def get_final_mpl_colors_info(xobj, dataset_name, prod_plugin, source_name):
 
 
 def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
-<<<<<<< HEAD
-=======
     """Create colorbars for each product."""
->>>>>>> main
     horizontal_mpl_colors_info = []
     vertical_mpl_colors_info = []
 
@@ -203,17 +161,10 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
     main_ax_min_y_pix = main_ax.bbox.bounds[1]
     main_ax_height_pix = main_ax.bbox.bounds[3]
 
-<<<<<<< HEAD
-    fig_min_x_pix = fig.bbox.bounds[0]
-    fig_width_pix = fig.bbox.bounds[2]
-
-    fig_min_y_pix = fig.bbox.bounds[1]
-=======
     # fig_min_x_pix = fig.bbox.bounds[0]
     fig_width_pix = fig.bbox.bounds[2]
 
     # fig_min_y_pix = fig.bbox.bounds[1]
->>>>>>> main
     fig_height_pix = fig.bbox.bounds[3]
 
     main_ax_width_percent = main_ax_width_pix / fig_width_pix
@@ -250,19 +201,6 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
             elif mpl_colors_info["colorbar_kwargs"]["orientation"] == "vertical":
                 vertical_mpl_colors_info += [mpl_colors_info]
 
-<<<<<<< HEAD
-    ##########################################################################################################
-    ###
-    ### We are separating horizontal and vertical colorbars here only for generating reasonable defaults
-    ###
-    ### By default, vertical will be placed on the right, and horizontal along the bottom.
-    ### Separating vertical and horizontal allows calculating the exact locations based on the number of each
-    ###
-    ### If full "colorbar_positioning" is specified, they will be placed as requested, regardless of the
-    ### number of horizontal vs vertical colorbars
-    ###
-    ##########################################################################################################
-=======
     ###############################################################################
     #
     # We are separating horizontal and vertical colorbars here only for
@@ -277,7 +215,6 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
     # requested, regardless of the number of horizontal vs vertical colorbars.
     #
     ###############################################################################
->>>>>>> main
 
     num_cmaps = {}
     gap = {}
@@ -305,28 +242,18 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
         cbar_fraction["vertical"] = 1.0 / num_cmaps["vertical"]
         start_pos["vertical"] = main_ax_min_y_percent
 
-<<<<<<< HEAD
-    # Now start creating each colorbar, based on information in mpl_colors_info dictionaries
-=======
     # Now start creating each colorbar, based on information
     # in mpl_colors_info dictionaries
->>>>>>> main
     for mpl_colors_info in horizontal_mpl_colors_info + vertical_mpl_colors_info:
         orientation = mpl_colors_info["colorbar_kwargs"]["orientation"]
 
         # Provide defaults if "colorbar_positioning" is None
         if mpl_colors_info["colorbar_positioning"] is None:
-<<<<<<< HEAD
-            # Provide the defaults for vertical colorbars, if colorbar_positioning is not set
-            if mpl_colors_info["colorbar_kwargs"]["orientation"] == "vertical":
-                # This is to match the "old" start position of 0.005 cbar_top_offset relative to fig
-=======
             # Provide the defaults for vertical colorbars, if
             # colorbar_positioning is not set
             if mpl_colors_info["colorbar_kwargs"]["orientation"] == "vertical":
                 # This is to match the "old" start position of 0.005
                 # cbar_top_offset relative to fig
->>>>>>> main
                 # start_x_pos = 1.0064516129032257
                 start_x_pos = (main_ax_width_percent + 0.005) / main_ax_width_percent
 
@@ -343,12 +270,8 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
                     / main_ax_height_percent
                 ) + start_y_pos
 
-<<<<<<< HEAD
-            # Provide the defaults for horizontal colorbars if "colorbar_positioning" is not specified
-=======
             # Provide the defaults for horizontal colorbars if
             # "colorbar_positioning" is not specified
->>>>>>> main
             if mpl_colors_info["colorbar_kwargs"]["orientation"] == "horizontal":
                 start_x_pos = (
                     start_pos["horizontal"] - main_ax_min_x_percent
@@ -357,12 +280,8 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
                     full_width["horizontal"] * cbar_fraction["horizontal"]
                 ) / main_ax_width_percent + start_x_pos
 
-<<<<<<< HEAD
-                # This is to match the "old" start position of 0.05 cbar_bottom_offset relative to fig
-=======
                 # This is to match the "old" start position of 0.05
                 # cbar_bottom_offset relative to fig
->>>>>>> main
                 # start_y_pos = -0.07792207792207793
                 start_y_pos = (0.05 - main_ax_min_y_percent) / main_ax_height_percent
 
@@ -404,13 +323,6 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
             cbar_ax_max_y_percent - cbar_ax_min_y_percent
         ) * main_ax_height_percent
 
-<<<<<<< HEAD
-        # These fields are what are actually used within "create_colorbar" for placing the colorbar
-        # Explicit "axes" locations for the new colorbar axis, relative to the overall FIGURE, not the MAIN AX
-        #
-        # We are using x/y start/end positions relative to the MAIN AXIS in order to calculate the final
-        # colorbar axis positions relative to the FIGURE.
-=======
         # These fields are what are actually used within "create_colorbar" for
         # placing the colorbar.
         # Explicit "axes" locations for the new colorbar axis, relative to the
@@ -418,7 +330,6 @@ def create_all_colorbars(fig, main_ax, mapobj, xarray_dict):
         #
         # We are using x/y start/end positions relative to the MAIN AXIS in order
         # to calculate the final colorbar axis positions relative to the FIGURE.
->>>>>>> main
         mpl_colors_info["cbar_ax_left_start_pos"] = cbar_ax_left_start_pos
         mpl_colors_info["cbar_ax_bottom_start_pos"] = cbar_ax_bottom_start_pos
         mpl_colors_info["cbar_ax_width"] = cbar_ax_width
@@ -439,10 +350,7 @@ def call(
     title_format=None,
     title_copyright=None,
 ):
-<<<<<<< HEAD
-=======
     """Plot the fused datasets."""
->>>>>>> main
     # Create matplotlib figure and main axis, where the main image will be plotted
     fig, main_ax, mapobj = create_figure_and_main_ax_and_mapobj(
         area_def.x_size, area_def.y_size, area_def, noborder=False
@@ -454,15 +362,10 @@ def call(
         if dataset_name != "METADATA":
             xarray_datasets[dataset_name] = xarray_dict[dataset_name]
 
-<<<<<<< HEAD
-    # Pull order either from the direct xarray object, or the xarray_dict['METADATA'] xarray object
-    # Some algorithms / outputs expect a dictionary of xarrays - others expect a single xarray.
-=======
     # Pull order either from the direct xarray object, or
     #   the xarray_dict['METADATA'] xarray object
     # Some algorithms / outputs expect a dictionary of xarrays - others expect
     #   a single xarray.
->>>>>>> main
     # Handle both.
     for xobj in sorted(
         xarray_datasets.values(),
@@ -475,21 +378,13 @@ def call(
         output_kwargs = {"fig": fig, "main_ax": main_ax, "mapobj": mapobj}
         if isinstance(xobj, dict):
             curr_prod_plugin = xobj["METADATA"].attrs["product_plugin"]
-<<<<<<< HEAD
-            curr_product_name = xobj["METADATA"].attrs["product_name"]
-=======
             # curr_product_name = xobj["METADATA"].attrs["product_name"]
->>>>>>> main
             curr_output_dict = xobj["METADATA"].attrs
             curr_alg_xarray = xobj["METADATA"]
             curr_fused_xarray_dict = xobj
         else:
             curr_prod_plugin = xobj.attrs["product_plugin"]
-<<<<<<< HEAD
-            curr_product_name = xobj.attrs["product_name"]
-=======
             # curr_product_name = xobj.attrs["product_name"]
->>>>>>> main
             curr_output_dict = xobj.attrs
             curr_alg_xarray = xobj
             curr_fused_xarray_dict = None
