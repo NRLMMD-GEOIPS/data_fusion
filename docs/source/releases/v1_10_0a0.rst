@@ -23,11 +23,7 @@ Refactoring Updates
 Update interface naming
 -----------------------
 
-<<<<<<< HEAD
-*From GEOIPS/data_fusion#5: 2023-04-21, Update interface naming, move to plugins dir*
-=======
 *From GEOIPS#5: 2023-04-21, Update interface naming, move to plugins dir*
->>>>>>> main
 
 * Moved interface_modules and yaml_configs to plugins directory.
 * Updated references to filename_format and output_format to filename_formatter

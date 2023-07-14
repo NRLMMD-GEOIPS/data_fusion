@@ -12,11 +12,7 @@ spec:
   products:
     - name: Blended-Infrared-Gray
       source_name: stitched
-<<<<<<< HEAD
-      family: algorithm_colormap
-=======
       family: algorithm_colormapper
->>>>>>> main
       docstring: "Blended infrared gray product for multiple GEO sensors"
       spec:
         display_name: Infrared-Gray
@@ -24,11 +20,7 @@ spec:
           plugin:
             name: stitched
             arguments: {}
-<<<<<<< HEAD
-        colormap:
-=======
         colormapper:
->>>>>>> main
           plugin:
             name: matplotlib_linear_norm
             arguments:

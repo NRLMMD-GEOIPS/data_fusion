@@ -22,11 +22,8 @@ Version 1.10
 .. toctree::
    :maxdepth: 1
 
-<<<<<<< HEAD
-=======
    v1_10_2
    v1_10_0
->>>>>>> main
    v1_10_0a2
    v1_10_0a1
    v1_10_0a0

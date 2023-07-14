@@ -28,11 +28,7 @@ entry-points = {file = ["entry-points.ini"]}
 [tool.setuptools_scm]
 "version_scheme" = "post-release"  # Use current version .postN vs incrementing
 "local_scheme" = "no-local-version"  # Don't include hash, or date, just postN
-<<<<<<< HEAD
-"write_to" = "data_fusion/version.py"  # Write an actual file
-=======
 "write_to" = "data_fusion/_version.py"  # Write an actual file
->>>>>>> main
 
 [project]
 name = "data_fusion"
