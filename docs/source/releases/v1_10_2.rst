@@ -20,6 +20,7 @@ Version 1.10.2 (2023-06-15)
   * Update setuptools_scm to write to _version.py
   * Update to standard README.md
 * Finalize test_all.sh - check_code, and $GEOIPS checks
+* Bug Fix: Handle potential empty list output from get_required_variables.
 
 Breaking Changes
 ================
@@ -121,3 +122,17 @@ Add 1.10.2 release note
 
     new file: docs/source/releases/v1_10_2.rst
     modified: docs/source/releases/index.rst
+
+Bug Fixes
+=========
+
+Allow get_required_variables to return empty list
+-------------------------------------------------
+
+*From issue GEOIPS#285: 2023-06-26, Support having no required variables*
+
+Handle potential empty list output from get_required_variables.
+
+::
+
+  data_fusion/plugins/modules/proclows/data_fusion.py

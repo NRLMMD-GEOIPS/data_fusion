@@ -233,7 +233,8 @@ def get_fused_xarray(area_def, fuse_data):
         # We are checking to see if there are any additional variables required
         # for this particular combined final_product_name for the current
         # source.
-        # This could be things like "SatZenith" for blending between satellites, etc.
+        # This could be things like "satellite_zenith_angle" for blending between
+        # satellites, etc.
         try:
             final_prod_plugin_for_curr_source = products.get_plugin(
                 source_name, final_product_name
@@ -242,9 +243,11 @@ def get_fused_xarray(area_def, fuse_data):
             # in product_inputs/<source_name>.yaml, Then append them to the
             # required_variables list here (if variables not specified, nothing
             # to add)
-            required_variables += list(
-                set(get_required_variables(final_prod_plugin_for_curr_source))
-            )
+            additional_vars = get_required_variables(final_prod_plugin_for_curr_source)
+            if additional_vars:
+                required_variables += list(set(additional_vars))
+            else:
+                raise PluginError
         except PluginError:
             LOG.info(
                 "No additional requirements for source %s / final product %s",

@@ -123,14 +123,19 @@ def call(xarray_dict, parallax_correction=True, satzen_correction=True):
             partial_data_array = np.ma.where(
                 currdata.mask == False, currdata, partial_data_array
             )
-        elif satzen_correction and "SatZenith" in curr_xarray.variables:
+        elif satzen_correction and "satellite_zenith_angle" in curr_xarray.variables:
             overlap_inds = np.ma.where(~currdata.mask & ~merged_data_array.mask)
             currdata_inds = np.ma.where(~currdata.mask & merged_data_array.mask)
             merged_data_array[currdata_inds] = currdata[currdata_inds]
             if overlap_inds[0].size > 0:
-                LOG.info("     Applying SatZenith correction to overlapping data")
+                LOG.info(
+                    "     Applying satellite_zenith_angle correction to "
+                    "overlapping data"
+                )
                 satzen_overlap = np.radians(
-                    curr_xarray["SatZenith"].to_masked_array()[overlap_inds]
+                    curr_xarray["satellite_zenith_angle"].to_masked_array()[
+                        overlap_inds
+                    ]
                 )
                 merged_data_array[overlap_inds] = (
                     np.cos(satzen_overlap) * currdata[overlap_inds]
@@ -138,17 +143,22 @@ def call(xarray_dict, parallax_correction=True, satzen_correction=True):
                 )
                 LOG.info("        Num overlap points: %s", len(overlap_inds[0]))
             else:
-                LOG.info("     No overlapping data, not applying SatZenith correction")
+                LOG.info(
+                    "     No overlapping data, "
+                    "not applying satellite_zenith_angle correction"
+                )
             LOG.info("        Num points: %s", len(currdata_inds[0]))
-            # satzen_array[currdata_inds] = np.radians(curr_xarray['SatZenith'
-            #                                 ].to_masked_array()[currdata_inds])
-            # satzen_array[overlap_inds] = np.radians(curr_xarray['SatZenith'
-            #                                 ].to_masked_array()[overlap_inds])
+            # satzen_array[currdata_inds] = np.radians(
+            #     curr_xarray['satellite_zenith_angle'
+            #     ].to_masked_array()[currdata_inds])
+            # satzen_array[overlap_inds] = np.radians(
+            #     curr_xarray['satellite_zenith_angle'
+            #     ].to_masked_array()[overlap_inds])
 
         else:
             LOG.info(
-                "     SatZenith array not defined or satzen_correction %s not "
-                "requested",
+                "     satellite_zenith_angle array not defined "
+                "or satzen_correction %s not requested",
                 satzen_correction,
             )
             merged_data_array = np.ma.where(
@@ -174,8 +184,9 @@ def call(xarray_dict, parallax_correction=True, satzen_correction=True):
     LOG.info("Merging partial array with full array")
     # overlap_inds = np.ma.where(~satzen_array.mask & ~partial_data_array.mask)
     # if overlap_inds[0].size > 0:
-    #     satzen_overlap = np.radians(curr_xarray['SatZenith'
-    #                                             ].to_masked_array()[overlap_inds])
+    #     satzen_overlap = np.radians(
+    #         curr_xarray['satellite_zenith_angle'
+    #         ].to_masked_array()[overlap_inds])
     #     merged_data_array[overlap_inds] = np.cos(satzen_overlap) * \
     #                                       merged_data_array[overlap_inds] \
     #                                       + (1 - np.cos(satzen_overlap)) * \
