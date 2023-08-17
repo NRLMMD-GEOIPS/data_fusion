@@ -11,10 +11,13 @@
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
 """
-Data Fusion is a GeoIPS-compatible plugin.
+The GeoIPS |unireg| data_fusion Package provides a Python 3 plugin to GeoIPS.
 
 The data_fusion plugin provides the capability for including an arbitrary number
 of data types within a single product or algorithm.
+
+.. |unireg|    unicode:: U+000AE .. REGISTERED SIGN
+
 """
 
 from ._version import __version__, __version_tuple__

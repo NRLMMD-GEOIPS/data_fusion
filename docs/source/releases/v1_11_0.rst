@@ -1,0 +1,89 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.11.0 (2023-08-08)
+***************************
+
+* Support documentation build and deployment to github pages.
+* Update test outputs for cartopy 0.22
+* Update test_all.sh build_docs.sh call to take repopath and pkgname
+
+Documentation Updates
+=====================
+
+Support documentation build and deployment to github pages.
+-----------------------------------------------------------
+
+*From GEOIPS#29 2023-08-01, support plugin for GitHub pages*
+*From GEOIPS#38 2023-08-01, support empty doc outline*
+
+* Update init file docstrings.
+* Include quotes in YAML source name lists.
+* Include empty documentation index pages for introduction and user's guide.
+* Include automated API documentation index (to work with geoips build_docs.sh)
+* Add html_only build_docs.sh call to tests/test_all.sh
+* Finalize .gitignore formatting (to ignore \*_docs)
+
+::
+
+    modified: .gitignore
+    modified: data_fusion/__init__.py
+    modified: data_fusion/commandline/__init__.py
+    modified: data_fusion/commandline/__init__.py
+    modified: data_fusion/plugins/__init__.py
+    modified: data_fusion/plugins/modules/__init__.py
+    modified: data_fusion/plugins/modules/algoithms/__init__.py
+    modified: data_fusion/plugins/modules/output_formatters/__init__.py
+    modified: data_fusion/plugins/modules/procflows/__init__.py
+    modified: data_fusion/plugins/yaml/products/abi.yaml
+    modified: data_fusion/plugins/yaml/products/ahi.yaml
+    modified: data_fusion/plugins/yaml/products/layered.yaml
+    modified: data_fusion/plugins/yaml/products/seviri.yaml
+    modified: data_fusion/plugins/yaml/products/stiched.yaml
+    added: docs/source/data_fusion_api/index.rst
+    added: docs/source/introdution/index.rst
+    added: docs/source/userguide/index.rst
+    modified: tests/test_all.sh
+
+Testing Updates
+===============
+
+Update test_all.sh build_docs.sh call to take repopath and pkgname
+------------------------------------------------------------------
+
+pkgname is now a required argument to build_docs.sh
+
+::
+
+  tests/test_all.sh
+
+Update test outputs for cartopy 0.22
+------------------------------------
+
+Note cartopy 0.21 is incompatible with geos 3.12.0 - caused segmentation faults in
+some matplotlib.savefig calls.
+
+cartopy 0.22 removed the reliance on the geos library, so updating geoips requirements
+to require cartopy 0.22.
+
+This update caused very slight non-visible changes to the annotated test image
+output.  Updating all test outputs accordingly.
+
+::
+
+  M tests/outputs/Infrared-Gray_image/20210929.000000.geo.stitched.Blended-Infrared-Gray.global.56p42.multi.20p0.png
+  M tests/outputs/Layered-Winds-Default_image/20220911.132830.multi.layered.Layered-Winds-Default.tc2022wp14muifa.41p03.multi.1p0.png
+  M tests/outputs/Layered-Winds-Horizontal-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Horizontal-Adjust.tc2022wp14muifa.41p03.multi.1p0.png
+  M tests/outputs/Layered-Winds-Horizontal-and-Vertical_image/20220911.132830.multi.layered.Layered-Winds-Horizontal-and-Vertical.tc2022wp14muifa.41p03.multi.1p0.png
+  M tests/outputs/Layered-Winds-Two-Colorbars_image/20220911.132830.multi.layered.Layered-Winds-Two-Colorbars.tc2022wp14muifa.41p03.multi.1p0.png
+  M tests/outputs/Layered-Winds-Vertical-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Adjust.tc2022wp14muifa.41p03.multi.1p0.png
+  M tests/outputs/Layered-Winds-Vertical-Default_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Default.tc2022wp14muifa.41p03.multi.1p0.png

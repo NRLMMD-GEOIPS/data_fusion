@@ -6,7 +6,7 @@ docstring: |
 spec:
   products:
     - name: Blended-Infrared-Gray
-      source_names: [seviri]
+      source_names: ["seviri"]
       docstring: |
         Blended-Infrared-Gray SEVIRI product for use in stitched imagery.
 

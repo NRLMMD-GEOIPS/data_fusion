@@ -6,7 +6,7 @@ docstring: |
 spec:
   products:
     - name: Layered-Winds-Default
-      source_names: [layered]
+      source_names: ["layered"]
       family: xarray_dict_to_output_format
       docstring: |
         Layered winds product using default colorbar placement.
@@ -15,10 +15,10 @@ spec:
           plugin:
             name: masked_arrays
             arguments:
-              varname: windspeed
-              alt_varname: wind_speed_kts
+              # Tell it to use the wind_speed_kts variable from the windspeed dataset.
+              variable_name: windspeed:wind_speed_kts
     - name: Layered-Winds-Two-Colorbars
-      source_names: [layered]
+      source_names: ["layered"]
       family: xarray_dict_to_output_format
       docstring: |
         Layered winds product using default 2 colorbar placement.
@@ -30,8 +30,8 @@ spec:
           plugin:
             name: masked_arrays
             arguments:
-              varname: windspeed
-              alt_varname: wind_speed_kts
+              # Tell it to use the wind_speed_kts variable from the windspeed dataset.
+              variable_name: windspeed:wind_speed_kts
         mpl_colors_info: # These use "dataset_id" as specified in command line call as keys,
           # and override defaults found in the product's colormapper specification
           windbarbs:
@@ -41,14 +41,14 @@ spec:
           ir:
             colorbar: True
     - name: Layered-Winds-Horizontal-Adjust
-      source_names: [layered]
+      source_names: ["layered"]
       product_defaults: Layered-Winds-Horizontal-Adjust
     - name: Layered-Winds-Vertical-Default
-      source_names: [layered]
+      source_names: ["layered"]
       product_defaults: Layered-Winds-Vertical-Default
     - name: Layered-Winds-Vertical-Adjust
-      source_names: [layered]
+      source_names: ["layered"]
       product_defaults: Layered-Winds-Vertical-Adjust
     - name: Layered-Winds-Horizontal-and-Vertical
-      source_names: [layered]
+      source_names: ["layered"]
       product_defaults: Layered-Winds-Horizontal-and-Vertical

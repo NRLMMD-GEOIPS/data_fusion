@@ -355,8 +355,39 @@ def get_fused_xarray(area_def, fuse_data):
                 f"{alg_product_types}, {interp_only_product_types}, or "
                 f"{noalg_product_types}"
             )
-        if "varname" in final_covg_args and final_covg_args["varname"] == dataset_name:
+
+        # Variable names can be specified as dataset:variable, so determine both
+        # dataset name and variable name for the coverage checker.
+        covg_dsname = None
+        covg_varname = final_covg_args.get("variable_name")
+
+        # If there is a ":" in the requested variable name, split out the dataset
+        # name and variable name.
+        if covg_varname and ":" in covg_varname:
+            covg_dsname, covg_varname = covg_varname.split(":")
+
+        # If this is the requested dataset name, use this dataset.
+        if covg_dsname == dataset_name:
+            LOG.info(
+                "Using requested dataset %s variable %s for coverage",
+                covg_dsname,
+                covg_varname,
+            )
             coverage_dataset = interp_xarrays[dataset_name]
+        # If no dataset name was requested, and this dataset includes the variable,
+        # use this dataset.
+        elif not covg_dsname and covg_varname in interp_xarrays[dataset_name]:
+            LOG.info(
+                "Now using dataset %s variable %s for coverage",
+                dataset_name,
+                covg_varname,
+            )
+            coverage_dataset = interp_xarrays[dataset_name]
+        else:
+            LOG.info(
+                "NOT using dataset %s for coverage",
+                dataset_name,
+            )
 
     # Set METADATA xarray object on interp_xarrays dictionary, for consistency
     interp_xarrays["METADATA"] = metadata_xobj
