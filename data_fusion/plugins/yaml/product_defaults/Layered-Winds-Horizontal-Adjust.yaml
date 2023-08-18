@@ -13,8 +13,7 @@ spec:
     plugin:
       name: masked_arrays
       arguments:
-        varname: windspeed
-        alt_varname: wind_speed_kts
+        variable_name: windspeed:wind_speed_kts
   mpl_colors_info: # These use "dataset_id" as specified in command line call as keys,
     # and override defaults found in the product's colormapper specification
     windbarbs:

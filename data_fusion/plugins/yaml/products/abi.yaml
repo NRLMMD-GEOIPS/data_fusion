@@ -6,7 +6,7 @@ docstring: |
 spec:
   products:
     - name: Blended-Infrared-Gray
-      source_names: [abi]
+      source_names: ["abi"]
       docstring: |
         Blended-Infrared-Gray ABI product for use in stitched imagery.
 

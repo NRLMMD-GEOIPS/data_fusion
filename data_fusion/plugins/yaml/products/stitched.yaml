@@ -11,7 +11,7 @@ docstring: |
 spec:
   products:
     - name: Blended-Infrared-Gray
-      source_names: [stitched]
+      source_names: ["stitched"]
       family: algorithm_colormapper
       docstring: "Blended infrared gray product for multiple GEO sensors"
       spec:
