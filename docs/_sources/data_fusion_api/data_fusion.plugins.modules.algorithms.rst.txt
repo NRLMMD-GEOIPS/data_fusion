@@ -1,0 +1,21 @@
+data\_fusion.plugins.modules.algorithms package
+===============================================
+
+Submodules
+----------
+
+data\_fusion.plugins.modules.algorithms.stitched module
+-------------------------------------------------------
+
+.. automodule:: data_fusion.plugins.modules.algorithms.stitched
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: data_fusion.plugins.modules.algorithms
+   :members:
+   :undoc-members:
+   :show-inheritance:

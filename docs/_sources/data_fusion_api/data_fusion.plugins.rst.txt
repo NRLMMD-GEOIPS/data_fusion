@@ -1,0 +1,18 @@
+data\_fusion.plugins package
+============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   data_fusion.plugins.modules
+
+Module contents
+---------------
+
+.. automodule:: data_fusion.plugins
+   :members:
+   :undoc-members:
+   :show-inheritance:

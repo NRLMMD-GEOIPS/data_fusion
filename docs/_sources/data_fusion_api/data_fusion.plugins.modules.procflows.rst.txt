@@ -1,0 +1,21 @@
+data\_fusion.plugins.modules.procflows package
+==============================================
+
+Submodules
+----------
+
+data\_fusion.plugins.modules.procflows.data\_fusion module
+----------------------------------------------------------
+
+.. automodule:: data_fusion.plugins.modules.procflows.data_fusion
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: data_fusion.plugins.modules.procflows
+   :members:
+   :undoc-members:
+   :show-inheritance:

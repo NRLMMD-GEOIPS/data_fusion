@@ -1,0 +1,19 @@
+data\_fusion package
+====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   data_fusion.commandline
+   data_fusion.plugins
+
+Module contents
+---------------
+
+.. automodule:: data_fusion
+   :members:
+   :undoc-members:
+   :show-inheritance:

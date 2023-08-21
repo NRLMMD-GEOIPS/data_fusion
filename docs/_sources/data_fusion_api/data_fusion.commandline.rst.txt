@@ -1,0 +1,29 @@
+data\_fusion.commandline package
+================================
+
+Submodules
+----------
+
+data\_fusion.commandline.args module
+------------------------------------
+
+.. automodule:: data_fusion.commandline.args
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+data\_fusion.commandline.data\_fusion\_procflow module
+------------------------------------------------------
+
+.. automodule:: data_fusion.commandline.data_fusion_procflow
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: data_fusion.commandline
+   :members:
+   :undoc-members:
+   :show-inheritance:

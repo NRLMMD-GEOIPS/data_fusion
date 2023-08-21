@@ -1,0 +1,21 @@
+data\_fusion.plugins.modules.output\_formatters package
+=======================================================
+
+Submodules
+----------
+
+data\_fusion.plugins.modules.output\_formatters.layered\_imagery module
+-----------------------------------------------------------------------
+
+.. automodule:: data_fusion.plugins.modules.output_formatters.layered_imagery
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: data_fusion.plugins.modules.output_formatters
+   :members:
+   :undoc-members:
+   :show-inheritance:
