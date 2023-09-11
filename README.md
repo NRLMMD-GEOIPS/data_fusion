@@ -53,7 +53,6 @@ Install data_fusion package
     # Ensure geoips Python environment is enabled.
     git clone https://github.com/NRLMMD-GEOIPS/data_fusion.git $GEOIPS_PACKAGES_DIR/data_fusion
     pip install -e $GEOIPS_PACKAGES_DIR/data_fusion
-    _exit $install_script
 ```
 
 Test data_fusion installation
