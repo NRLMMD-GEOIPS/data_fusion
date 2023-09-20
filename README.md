@@ -59,5 +59,7 @@ Test data_fusion installation
 -----------------------------
 ```bash
     # Ensure geoips Python environment is enabled.
+    $GEOIPS_PACKAGES_DIR/geoips/setup/check_system_requirements.sh test_data test_data_fusion
+
     $GEOIPS_PACKAGES_DIR/data_fusion/tests/test_all.sh
 ```
