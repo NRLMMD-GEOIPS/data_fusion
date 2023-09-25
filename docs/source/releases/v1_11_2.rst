@@ -1,0 +1,38 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.11.2 (2023-09-08)
+***************************
+
+* resolve PDF build error
+
+Bug Fixes
+=========
+
+resolve PDF build error
+-----------------------
+
+Build success with pdf build automatically completing and produces a PDF.
+Resolved so PDF and html builds BOTH return zero, which equates to
+error free.
+
+The PDF build errors were caused by slightly mis-formatted RST docstrings
+in some modules, mostly due to incorrectly formatted lists.  I am not
+entirely sure why the flake8 RST docstring linting and the sphinx html
+build both did not pick up on these formatting errors, but the sphinx
+pdf build did.
+
+::
+
+  modified: data_fusion/commandline/args.py
+  modified: data_fusion/plugins/modules/algorithms/stitched.py
+  modified: data_fusion/plugins/modules/procflows/data_fusion.py
