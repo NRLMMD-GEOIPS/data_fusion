@@ -30,16 +30,22 @@ def call(xarray_dict, parallax_correction=True, satzen_correction=True):
 
     Parameters
     ----------
-        xobj : xarray.dataset
-            * list of numpy.ndarray or numpy.MaskedArray of channel data,
-              in order of sensor "channels" list
-            * Degrees Kelvin
+    xobj : dict of xarray.Dataset
+        Dictionary of xarray datasets, one dataset for each satellite/sensor
+        that will be stitched into the final image.
+    parallax_correction : bool, default=True
+        Not currently implemented, will provide mechanism for reducing blurriness
+        between satellites.  Currently just turns off MSG-1 in favor of Himawari-8.
+    satzen_correction : bool, default=True
+        If True, implement satellite zenith correction between satellites, giving
+        precedence to the satellite that is closer to center of scan.  Without
+        parallax correction, this causes some blurriness in the overlap region
+        between satellites where there are high clouds.
 
     Returns
     -------
-        numpy.ndarray
-            * dstacked numpy.ndarrays or numpy.MaskedArrays containing:
-                * np.ma.dstack((pcb_mask, mod_mask, bt110, bt110_night)).squeeze()
+    xarray.Dataset
+        xarray Dataset containing the final stitched dataset.
     """
     # This will change when blending polar!!
     metadata_xobj = xarray_dict.pop("METADATA")

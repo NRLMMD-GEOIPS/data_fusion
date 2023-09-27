@@ -457,23 +457,25 @@ def call(fnames, command_line_args=None):
 
     Parameters
     ----------
-        fnames : list of strings
-            * List of strings specifying full paths to input file names to process
-        command_line_args (dict) :
-            * dictionary of command line arguments
-                * 'reader_name': Explicitly request reader
-                    * geoips*.readers.readername.readername
-                * Optional: 'sector_list': list of YAML sectorfiles
-                    * tc<YYYY><BASIN><NUM><NAME> for TCs,
-                      ie tc2020sh16gabekile
-                      If sectorfiles and sectorlist not included,
-                      looks in database
+    fnames : list of strings
+        List of strings specifying full paths to input file names to process
+    command_line_args : dict, default=None
+        dictionary of command line arguments
+
+          'reader_name': Explicitly request reader
+
+          *  geoips*.readers.readername.readername
+
+          Optional: 'sector_list': list of str sector names
+
+          * tc<YYYY><BASIN><NUM><NAME> for TCs,
+            ie tc2020sh16gabekile
 
     Returns
     -------
-        list
-            * Return list of strings specifying full paths to output products
-              that were produced.
+    list
+        Return list of strings specifying full paths to output products
+        that were produced.
     """
     from datetime import datetime
 
