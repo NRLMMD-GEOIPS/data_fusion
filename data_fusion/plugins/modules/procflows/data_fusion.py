@@ -619,10 +619,12 @@ def call(fnames, command_line_args=None):
         )
 
     retval = 0
-    from geoips.compare_outputs import compare_outputs
 
     if compare_path:
-        retval = compare_outputs(
+        from geoips.interfaces.module_based.output_checkers import output_checkers
+
+        output_checker = output_checkers.select_checker(final_products[0])
+        retval = output_checker.call(
             compare_path.replace("<product>", final_product_name).replace(
                 "<procflow>", "data_fusion"
             ),
