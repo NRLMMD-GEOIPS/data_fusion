@@ -26,21 +26,21 @@ def check_command_line_args(arglist, argdict):
 
     Parameters
     ----------
-        arglist : list
-            * List of desired command line arguments to check within
-              argdict for appropriate formatting
-        argdict : dict
-            * Dictionary of command line arguments
+    arglist : list of str
+        List of desired command line arguments to check within
+        argdict for appropriate formatting
+    argdict : dict
+        Dictionary of command line arguments
 
     Returns
     -------
-        bool
-            * Return True if all arguments are of appropriate formatting.
+    bool
+        Return True if all arguments are of appropriate formatting.
 
     Raises
     ------
-        TypeError
-            * Incorrect command line formatting
+    TypeError
+        Incorrect command line formatting
     """
     geoips_check = geoips_check_args(arglist, argdict)
 
@@ -172,16 +172,17 @@ def get_command_line_args(arglist=None, description=None):
 
     Parameters
     ----------
-        arglist list, default=None.
-            * list of requested arguments to add to the ArgumentParser
-                * if None, include all arguments
-        description str, default=None
-            * String description of arguments
+    arglist : list, default=None
+        list of requested arguments to add to the ArgumentParser
+
+        * if None, include all arguments
+    description : str, default=None
+        String description of arguments
 
     Returns
     -------
-        dict
-            * Dictionary of command line arguments
+    dict
+        Dictionary of command line arguments
     """
     return geoips_get_args(
         arglist,
@@ -197,15 +198,16 @@ def add_args(parser, arglist=None):
 
     Parameters
     ----------
-        parser : ArgumentParser
-            * argparse ArgumentParser to add appropriate arguments
-        arglist : list, default=None
-            * list of requested arguments to add to the ArgumentParser
-                * if None, include all arguments
+    parser : ArgumentParser
+        argparse ArgumentParser to add appropriate arguments
+    arglist : list, default=None
+        list of requested arguments to add to the ArgumentParser
+
+        * if None, include all arguments
 
     Returns
     -------
-        No return values (parser modified in place)
+    No return values (parser modified in place)
     """
     geoips_add_args(parser, arglist)
 
