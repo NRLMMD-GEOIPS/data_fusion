@@ -623,13 +623,15 @@ def call(fnames, command_line_args=None):
     if compare_path:
         from geoips.interfaces.module_based.output_checkers import output_checkers
 
-        output_checker = output_checkers.select_checker(final_products[0])
-        retval = output_checker.call(
-            compare_path.replace("<product>", final_product_name).replace(
-                "<procflow>", "data_fusion"
-            ),
-            final_products,
-        )
+        for output_product in final_products:
+            output_checker = output_checkers.get_plugin(output_product)
+            retval = output_checker(
+                output_checker,
+                compare_path.replace("<product>", final_product_name).replace(
+                    "<procflow>", "data_fusion"
+                ),
+                [output_product],
+            )
 
     from os.path import basename
 
