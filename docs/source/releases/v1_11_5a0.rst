@@ -13,7 +13,7 @@
 Version 1.11.5 (2023-10-01)
 ***************************
 
-* Refactor: Update data_fusion to use 'output_checkers' interface
+* Refactor: Update data_fusion to use 'output_checkers' interface.
 
 Refactoring Updates
 ===================
