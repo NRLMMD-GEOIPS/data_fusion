@@ -18,15 +18,15 @@ Version 1.11.5 (2023-10-01)
 Refactoring Updates
 ===================
 
-Update Recenter TC to use the 'output_checkers' interface
+Update Data Fusion to use the 'output_checkers' interface
 ---------------------------------------------------------
 
 *From GEOIPS#293: 2023-08-24, Create interface for compare outputs*
 
 GeoIPS currently compares output products by using the compare_outputs.py module. This
-needed to be converted into an interface so that we could easily compare different
-outputs, and eventually extend this functionality to other outputs if they are created
-in the future.
+needed to be converted into an output_checkers interface so that we could easily compare
+different outputs, and eventually extend this functionality to other outputs if they are
+created in the future.
 
 ::
 
