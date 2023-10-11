@@ -529,6 +529,11 @@ def call(fnames, command_line_args=None):
         command_line_args, {"METADATA": fuse_data["final"]["metadata_xobj"]}
     )
 
+    if command_line_args.get("image_compare_threshold") is not None:
+        image_compare_threshold = command_line_args["image_compare_threshold"]
+    else:
+        image_compare_threshold = None
+
     num_jobs = 0
 
     for area_def in area_defs:
@@ -627,13 +632,23 @@ def call(fnames, command_line_args=None):
 
         for output_product in final_products:
             output_checker = output_checkers.get_plugin(output_product)
-            retval = output_checker(
-                output_checker,
-                compare_path.replace("<product>", final_product_name).replace(
-                    "<procflow>", "data_fusion"
-                ),
-                [output_product],
-            )
+            if output_checker.name == "image":
+                retval = output_checker(
+                    output_checker,
+                    compare_path.replace("<product>", final_product_name).replace(
+                        "<procflow>", "data_fusion"
+                    ),
+                    [output_product],
+                    image_compare_threshold,
+                )
+            else:
+                retval = output_checker(
+                    output_checker,
+                    compare_path.replace("<product>", final_product_name).replace(
+                        "<procflow>", "data_fusion"
+                    ),
+                    [output_product],
+                )
 
     from os.path import basename
 
