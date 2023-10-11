@@ -11,7 +11,7 @@
  | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
 Version 1.11.7a0 (2023-10-06)
-***************************
+*****************************
 
 * Refactor: Update data_fusion to use 'output_checkers' interface.
 * Refactor: Update data_fusion to use the "image_compare_threshold" argument
