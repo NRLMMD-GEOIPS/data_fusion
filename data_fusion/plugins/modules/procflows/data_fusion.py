@@ -643,7 +643,7 @@ def call(fnames, command_line_args=None):
                     "<procflow>", "data_fusion"
                 ),
                 [output_product],
-                **output_checker_kwargs,
+                **output_checker_kwargs[output_checker.name],
             )
 
     from os.path import basename
