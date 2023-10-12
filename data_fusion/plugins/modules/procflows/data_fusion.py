@@ -627,7 +627,7 @@ def call(fnames, command_line_args=None):
 
         for output_product in final_products:
             output_checker = output_checkers.get_plugin(output_product)
-            retval = output_checker(
+            retval += output_checker(
                 output_checker,
                 compare_path.replace("<product>", final_product_name).replace(
                     "<procflow>", "data_fusion"
