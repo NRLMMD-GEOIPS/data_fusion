@@ -14,7 +14,7 @@ Version 1.11.7a0 (2023-10-06)
 *****************************
 
 * Refactor: Update data_fusion to use 'output_checkers' interface.
-* Refactor: Update data_fusion to use the "image_compare_threshold" argument
+* Refactor: Update data_fusion to use the "output_checker_kwargs" argument
 
 Refactoring Updates
 ===================
@@ -33,14 +33,16 @@ created in the future.
 
     modified: data_fusion/data_fusion/plugins/modules/procflows/data_fusion.py
 
-Update data_fusion to use the "image_compare_threshold" argument
+Update data_fusion to use the "output_checker_kwargs" argument
 ----------------------------------------------------------------
 
 *From GEOIPS#366: 2023-10-11, Create image_compare_threshold argument*
 
-GeoIPS needs to add functionality for image comparisons which allow for different
+GeoIPS needs to add functionality for image comparisons, as well as other types of
+comparions. Specifically for image comparisons, we need to allow for different
 thresholds between pixels. This threshold argument (the % difference between pixels),
 will benefit users comparing images with different needs of accuracy.
+This is implemented via the "output_checker_kwargs" argument.
 
 ::
 
