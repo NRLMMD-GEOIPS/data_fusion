@@ -10,59 +10,22 @@
  | # # # for more details. If you did not receive the license, for more information see:
  | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-.. _release_notes:
+Version 1.11.7a0 (2023-10-06)
+*****************************
 
-*************
-Release Notes
-*************
+* Refactor: Update data_fusion to use 'output_checkers' interface.
 
-Version 1.11
-------------
+Refactoring Updates
+===================
 
-.. toctree::
-   :maxdepth: 1
+Update Data Fusion to use the 'output_checkers' interface
+---------------------------------------------------------
 
-   v1_11_3
-   v1_11_3a0
-   v1_11_2
-   v1_11_1
-   v1_11_0
-   v1_11_7a0
+*From GEOIPS#293: 2023-08-24, Create interface for compare outputs*
 
-Version 1.10
-------------
+Update the data_fusion procflow to use the new geoips repo "output_checkers"
+interface rather than the deprecated "compare_outputs" module.
 
-.. toctree::
-   :maxdepth: 1
+::
 
-   v1_10_3
-   v1_10_2
-   v1_10_0
-   v1_10_0a2
-   v1_10_0a1
-   v1_10_0a0
-
-Version 1.9
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   v1_9_0
-
-Version 1.8
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   v1_8_1
-   v1_8_0
-
-Version 1.7
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   v1_7_0
+    modified: data_fusion/data_fusion/plugins/modules/procflows/data_fusion.py
