@@ -529,15 +529,7 @@ def call(fnames, command_line_args=None):
         command_line_args, {"METADATA": fuse_data["final"]["metadata_xobj"]}
     )
 
-    if command_line_args.get("output_checker_kwargs") is not None:
-        output_checker_kwargs = command_line_args["output_checker_kwargs"]
-    else:
-        output_checker_kwargs = {
-            "image": {"image_threshold": "medium"},
-            "geotiff": {},
-            "netcdf": {},
-            "text": {},
-        }
+    output_checker_kwargs = command_line_args.get("output_checker_kwargs", {})
 
     num_jobs = 0
 
