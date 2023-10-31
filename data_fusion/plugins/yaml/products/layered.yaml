@@ -42,13 +42,21 @@ spec:
             colorbar: True
     - name: Layered-Winds-Horizontal-Adjust
       source_names: ["layered"]
+      docstring: |
+        Layered winds product using horizontal adjust colorbar placement.
       product_defaults: Layered-Winds-Horizontal-Adjust
     - name: Layered-Winds-Vertical-Default
       source_names: ["layered"]
+      docstring: |
+        Layered winds product using Vertical Default colorbar placement.
       product_defaults: Layered-Winds-Vertical-Default
     - name: Layered-Winds-Vertical-Adjust
       source_names: ["layered"]
+      docstring: |
+        Layered winds product using Vertical Adjust colorbar placement.
       product_defaults: Layered-Winds-Vertical-Adjust
     - name: Layered-Winds-Horizontal-and-Vertical
       source_names: ["layered"]
+      docstring: |
+        Layered winds product using Horizontal and Vertical colorbar placement.
       product_defaults: Layered-Winds-Horizontal-and-Vertical
