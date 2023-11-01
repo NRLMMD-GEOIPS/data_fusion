@@ -14,6 +14,21 @@ Version 1.11.7a0 (2023-10-06)
 *****************************
 
 * Refactor: Update data_fusion to use 'output_checkers' interface.
+* Bug Fixes: Update layered.yaml to include docstrings for each product plugins
+
+Bug Fixes
+=========
+
+*Stems from issue GEOIPS#389: 2023-10-26, Make better use of the plugin registry*
+
+With testing now added to the PluginRegistry class, we found an error in data_fusion
+where the product plugin *layered.yaml* was missing docstrings for some of its
+sub-products. This update fixes that issue, and adds docstrings to the plugins that were
+missing them.
+
+::
+
+    modified: data_fusion/data_fusion/plugins/yaml/products/layered.yaml
 
 Refactoring Updates
 ===================
