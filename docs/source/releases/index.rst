@@ -16,18 +16,28 @@
 Release Notes
 *************
 
+Version 1.12
+------------
+
+.. toctree::
+   :maxdepth: 1
+
+   v1_12_0
+
 Version 1.11
 ------------
 
 .. toctree::
    :maxdepth: 1
 
+   v1_11_7
+   v1_11_7a0
+   v1_11_6
    v1_11_3
    v1_11_3a0
    v1_11_2
    v1_11_1
    v1_11_0
-   v1_11_7a0
 
 Version 1.10
 ------------
