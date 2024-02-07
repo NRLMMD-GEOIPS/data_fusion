@@ -210,7 +210,7 @@ def get_fused_xarray(area_def, fuse_data):
 
     final_product_name = fuse_data["final"]["product_name"]
     final_source_name = fuse_data["final"]["source_name"]
-    final_prod_plugin = products.get_plugin(final_source_name, final_product_name)
+    final_prod_plugin = products.get_plugin(f"{final_source_name}.{final_product_name}")
     final_covg_args = get_covg_args_from_product(final_prod_plugin)
 
     metadata_xobj = fuse_data["final"]["metadata_xobj"]
@@ -227,7 +227,7 @@ def get_fused_xarray(area_def, fuse_data):
         source_name = fuse_data[fuse_data_name]["source_name"]
         reader = fuse_data[fuse_data_name]["reader_func"]
         files = fuse_data[fuse_data_name]["files"]
-        prod_plugin = products.get_plugin(source_name, product_name)
+        prod_plugin = products.get_plugin(f"{source_name}.{product_name}")
         required_variables = get_required_variables(prod_plugin)
 
         # We are checking to see if there are any additional variables required
@@ -237,7 +237,7 @@ def get_fused_xarray(area_def, fuse_data):
         # satellites, etc.
         try:
             final_prod_plugin_for_curr_source = products.get_plugin(
-                source_name, final_product_name
+                f"{source_name}.{final_product_name}"
             )
             # If variables are specified within the "final_product" definition
             # in product_inputs/<source_name>.yaml, Then append them to the
@@ -259,7 +259,7 @@ def get_fused_xarray(area_def, fuse_data):
         # "fuse_product" within product_inputs/<source_name>.yaml,
         # then pad appropriately here.  If a product is missing some
         # data after reprojecting, you may need to pad.
-        prod_plugin = products.get_plugin(source_name, product_name)
+        prod_plugin = products.get_plugin(f"{source_name}.{product_name}")
 
         unsectored_product_types = [
             "unsectored_xarray_dict_to_output_format",
@@ -293,8 +293,7 @@ def get_fused_xarray(area_def, fuse_data):
 
         # Is this any different from the previous `prod_plugin?`
         prod_plugin = products.get_plugin(
-            pad_sect_xarrays["METADATA"].source_name,
-            product_name,
+            f"{pad_sect_xarrays['METADATA'].source_name}.{product_name}",
         )
         # dataset_name is {dataset_name} for uniqueness.
         dataset_name = fuse_data[fuse_data_name]["dataset_name"]
@@ -515,7 +514,7 @@ def call(fnames, command_line_args=None):
     fuse_data = unpack_fusion_arguments(command_line_args)
     final_product_name = fuse_data["final"]["product_name"]
     final_source_name = fuse_data["final"]["source_name"]
-    final_prod_plugin = products.get_plugin(final_source_name, final_product_name)
+    final_prod_plugin = products.get_plugin(f"{final_source_name}.{final_product_name}")
 
     # Set output_format and product_name in the command_line_args dict, used
     # throughout single_source code.
