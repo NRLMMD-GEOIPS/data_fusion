@@ -1,0 +1,38 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.12.0a0 (2024-02-07)
+*****************************
+
+* Refactor: Change products.get_plugin calls to reflect new product keys in registry
+
+Refactoring Updates
+===================
+
+Update Data Fusion to use the 'output_checkers' interface
+---------------------------------------------------------
+
+*From GEOIPS#428, 2024-02-05, Sub-Products sometimes encounter duplicate top level name*
+
+GeoIPS currently stores product plugins in the registry via a combination of their
+source_names and the actual sub-product name. For instance, the entry abi["Infrared"],
+is created not because of the top level name "abi", rather it's created by each of the
+sub-product's source_names. This led to duplicate plugins being found if a file added
+an entry for a certain source name, which was later found as the top level name of
+another product. We've changed the implementation of this, and now products are stored
+via a combination of their <source_name>.<product_name>, which allows for easier access,
+and unique keys throught the product plugin registry.
+
+::
+
+    modified: data_fusion/data_fusion/plugins/modules/procflows/data_fusion.py
+
