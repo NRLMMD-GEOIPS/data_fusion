@@ -42,13 +42,12 @@ from geoips.plugins.modules.procflows.single_source import (
 )
 
 from data_fusion.commandline.args import check_command_line_args
+from geoips.testing.context_manager import import_optional_dependences
 
-try:
-    from geoips_db.utils.database_writes import (
-        write_stats_to_database,
-    )
-except ImportError:
-    print("Please install geoips_db package if required")
+with import_optional_dependences(__file__):
+    """Attempt to import a package and print to LOG.info if the import fails."""
+    from geoips_db.utils.database_writes import write_stats_to_database
+
 from geoips.utils.memusg import print_mem_usage
 
 PMW_NUM_PIXELS_X = 1400
