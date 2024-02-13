@@ -1,0 +1,60 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.12.0 (2023-12-14)
+***************************
+
+* Bug fixes
+
+  * Call identify_checker and get_plugin separately for output_checkers
+
+Bug Fixes
+=========
+
+Call identify_checker and get_plugin separately for output_checkers
+-------------------------------------------------------------------
+
+*From GEOIPS#422: 2023-12-14, 1.12.0 release bug fixes*
+
+* Call identify checker and get_plugin separately from procflows
+
+  * Rather than having a special case in base.py get_plugin and
+    output_checkers get_plugin which allowed passing in full paths
+    to output products and automatically identifying the checker
+    name and opening it, just explicitly call ``identify_checker``
+    and ``get_plugin`` separately from the procflows.
+  * single_source, config_based, and data_fusion procflows all now
+    call ``identify_checker`` on the output product filename, and
+    ``get_plugin`` on the resulting checker plugin name.
+  * This simplified a lot of logic in both ``output_checkers`` and
+    ``interfaces/base.py``. Supporting passing a filename to
+    ``output_checkers.get_plugin()`` was unnecessarily complicated.
+
+::
+
+  M geoips/plugins/modules/procflows/data_fusion.py
+
+Release Process
+===============
+
+Add release note for v1.12.0
+----------------------------
+
+*From GEOIPS#422: 2023-12-14, 1.12.0 release process updates*
+
+All updates until the next release (v1.12.0) will be included in
+this release note.
+
+::
+
+  modified: docs/source/releases/v1_12_0.rst
+  modified: docs/source/releases/index.rst

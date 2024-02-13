@@ -1,6 +1,8 @@
 ####################################################
 # GeoIPS Environment specific .gitignore options:
 
+# auto-generated plugin registry file
+registered_plugins.json
 # auto-generated version file, created at run-time
 _version.py
 # auto-generated diff images for test outputs
