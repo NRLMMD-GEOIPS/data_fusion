@@ -39,19 +39,3 @@ workflow from now on.
     modified: data_fusion/tests/scripts/geo.sh
     modified: data_fusion/tests/scripts/layered.sh
     modified: data_fusion/pyproject.toml
-
-Release Process
-===============
-
-Add release note for v1.12.0
-----------------------------
-
-*From GEOIPS#422: 2023-12-14, 1.12.0 release process updates*
-
-All updates until the next release (v1.12.0) will be included in
-this release note.
-
-::
-
-  modified: docs/source/releases/v1_12_0.rst
-  modified: docs/source/releases/index.rst
