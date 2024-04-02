@@ -1,0 +1,57 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.12.2a0 (2024-04-02)
+***************************
+
+* Refactoring Updates
+
+  * Update Test Scripts and 'data_fusion_procflow' to use 'geoips run data_fusion'
+
+Refactoring Updates
+===================
+
+Update Test Scripts and 'data_fusion_procflow' to use 'geoips run data_fusion'
+------------------------------------------------------------------------------
+
+*From GEOIPS#455: 2024-03-21, CLI Stage Two*
+
+With the new addition of the GeoIPS CLI, we've changed how we call process workflows
+(procflows). While ``run_procflow`` and ``data_fusion_procflow`` will still work
+(we've supported backwards compatability for this update), we've updated the scripts
+to use ``geoips run data_fusion`` instead of ``data_fusion_procflow``. This removes
+``--procflow data_fusion`` from scripts as well. We've also modified
+``data_fusion_procflow`` to point towards
+``geoips.commandline.commandline_interface:main``, as that is how we start a process
+workflow from now on.
+
+::
+
+    modified: data_fusion/tests/scripts/geo.sh
+    modified: data_fusion/tests/scripts/layered.sh
+    modified: data_fusion/pyproject.toml
+
+Release Process
+===============
+
+Add release note for v1.12.0
+----------------------------
+
+*From GEOIPS#422: 2023-12-14, 1.12.0 release process updates*
+
+All updates until the next release (v1.12.0) will be included in
+this release note.
+
+::
+
+  modified: docs/source/releases/v1_12_0.rst
+  modified: docs/source/releases/index.rst
