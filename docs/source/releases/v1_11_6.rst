@@ -10,19 +10,22 @@
  | # # # for more details. If you did not receive the license, for more information see:
  | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-Version 1.11.3 (2023-09-20)
+Version 1.11.6 (2023-10-26)
 ***************************
 
-Release Updates
-===============
+* Allow returning a single TC storm time rather than full list
 
-Add 1.11.3 release note
------------------------
+Bug fixes
+=========
 
-*From issue GEOIPS#363: 2023-09-20, version update*
+Allow returning a single TC storm time rather than full list
+------------------------------------------------------------
+
+Add filter_time=True to the get_area_defs_from_command_line_args
+call.  This allows returning only a single TC storm time, rather
+than the full list (to mirror how TC sectors are handled in single
+source procflow).
 
 ::
 
-    modified: CHANGELOG.rst
-    new file: docs/source/releases/v1_11_3.rst
-    modified: docs/source/releases/index.rst
+  modified: data_fusion/plugins/modules/procflows/data_fusion.py

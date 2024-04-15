@@ -22,6 +22,7 @@ from geoips.errors import PluginError
 from geoips.interfaces import algorithms
 from geoips.interfaces import readers
 from geoips.interfaces import products
+from geoips.interfaces import output_checkers
 
 from geoips.filenames.duplicate_files import remove_duplicates
 
@@ -525,7 +526,9 @@ def call(fnames, command_line_args=None):
     # with the best-available information.
     # The METADATA will be updated once all algorithms/products have been applied.
     area_defs = get_area_defs_from_command_line_args(
-        command_line_args, {"METADATA": fuse_data["final"]["metadata_xobj"]}
+        command_line_args,
+        {"METADATA": fuse_data["final"]["metadata_xobj"]},
+        filter_time=True,
     )
 
     output_checker_kwargs = command_line_args.get("output_checker_kwargs", {})
@@ -624,10 +627,9 @@ def call(fnames, command_line_args=None):
     retval = 0
 
     if compare_path:
-        from geoips.interfaces.module_based.output_checkers import output_checkers
-
         for output_product in final_products:
-            output_checker = output_checkers.get_plugin(output_product)
+            plugin_name = output_checkers.identify_checker(output_product)
+            output_checker = output_checkers.get_plugin(plugin_name)
             kwargs = {}
             if output_checker.name in output_checker_kwargs:
                 kwargs = output_checker_kwargs[output_checker.name]
