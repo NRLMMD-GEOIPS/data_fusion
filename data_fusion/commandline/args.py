@@ -192,7 +192,7 @@ def get_command_line_args(arglist=None, description=None):
     )
 
 
-def add_args(parser, arglist=None):
+def add_args(parser, arglist=None, legacy=False):
     """
     List of available standard arguments for calling data file processing command line.
 
@@ -204,12 +204,14 @@ def add_args(parser, arglist=None):
         list of requested arguments to add to the ArgumentParser
 
         * if None, include all arguments
+    legacy : bool, optional
+        Represents whether or not a legacy 'data_fusion_procflow' was called
 
     Returns
     -------
     No return values (parser modified in place)
     """
-    geoips_add_args(parser, arglist)
+    geoips_add_args(parser, arglist, legacy)
 
     # Eventually we probably want all of these here - but we'll have to
     # consolidate the satval procflow first.
