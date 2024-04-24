@@ -1,0 +1,38 @@
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.13.0a0 (2024-04-24)
+*****************************
+
+* Refactoring Updates
+
+  * Replace all occurences of ``matplotlib_linear_norm`` to ``linear_norm``
+
+Refactoring Updates
+===================
+
+Replace all occurences of ``matplotlib_linear_norm`` to ``linear_norm``
+-----------------------------------------------------------------------
+
+*From GEOIPS#504 492 text based interface*
+
+This is a small refactoring PR that was needed due to changes included in #504. Jeremy
+and I decided that colormapper ``matplotlib_linear_norm`` wasn't the best name for that
+colormapper, as it just applies a ``linear_norm`` algorithm to colormap the data
+correctly. It is not inherently just matplotlib-based. We updated all occurences of this
+found within data_fusion.
+
+::
+
+    modified: data_fusion/plugins/yaml/products/stitched.yaml
+
+
