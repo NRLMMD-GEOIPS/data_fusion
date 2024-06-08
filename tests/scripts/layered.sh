@@ -17,10 +17,9 @@ for product_name in Layered-Winds-Default \
                     Layered-Winds-Vertical-Adjust \
                     Layered-Winds-Horizontal-and-Vertical; do
 
-data_fusion_procflow \
+geoips run data_fusion \
       --compare_path $GEOIPS_PACKAGES_DIR/data_fusion/tests/outputs/${product_name}_image \
       --filename_formatter geoips_fname \
-      --procflow data_fusion \
       --trackfile_parser bdeck_parser \
       --trackfiles $GEOIPS_PACKAGES_DIR/geoips/tests/sectors/tc_bdecks/bwp142022.dat \
       --fusion_final_product_name $product_name \
