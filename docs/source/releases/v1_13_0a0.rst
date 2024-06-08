@@ -16,6 +16,7 @@ Version 1.13.0a0 (2024-06-07)
 * Refactoring Updates
 
   * Replace all occurences of ``matplotlib_linear_norm`` to ``linear_norm``
+  * Update Test Scripts and 'data_fusion_procflow' to use 'geoips run data_fusion'
 
 Refactoring Updates
 ===================
@@ -35,4 +36,22 @@ found within data_fusion.
 
     modified: data_fusion/plugins/yaml/products/stitched.yaml
 
+Update Test Scripts and 'data_fusion_procflow' to use 'geoips run data_fusion'
+------------------------------------------------------------------------------
 
+*From GEOIPS#455: 2024-03-21, CLI Stage Two*
+
+With the new addition of the GeoIPS CLI, we've changed how we call process workflows
+(procflows). While ``run_procflow`` and ``data_fusion_procflow`` will still work
+(we've supported backwards compatability for this update), we've updated the scripts
+to use ``geoips run data_fusion`` instead of ``data_fusion_procflow``. This removes
+``--procflow data_fusion`` from scripts as well. We've also modified
+``data_fusion_procflow`` to point towards
+``geoips.commandline.commandline_interface:main``, as that is how we start a process
+workflow from now on.
+
+::
+
+    modified: data_fusion/tests/scripts/geo.sh
+    modified: data_fusion/tests/scripts/layered.sh
+    modified: data_fusion/pyproject.toml

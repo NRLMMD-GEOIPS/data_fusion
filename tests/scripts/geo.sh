@@ -16,8 +16,7 @@ else
     curr_product=$1
 fi
 
-data_fusion_procflow \
-      --procflow data_fusion \
+geoips run data_fusion \
       --compare_path $GEOIPS_PACKAGES_DIR/data_fusion/tests/outputs/${curr_product}_image \
       --filename_formatter geoips_fname \
       --sector_list global \
