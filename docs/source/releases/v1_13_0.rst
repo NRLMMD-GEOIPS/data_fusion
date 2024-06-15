@@ -1,0 +1,98 @@
+.. dropdown:: Distribution Statement
+
+ | # # # Distribution Statement A. Approved for public release. Distribution is unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.13.0 (2024-06-08)
+**************************************
+
+* Bug Fixes
+
+  * Remove CHANGELOG.md from the docs/source directory
+  * Switch linear_norm back to matplotlib_linear_norm
+* Installation Updates
+
+  * Update pyproject.toml to poetry
+* Testing Updates
+
+  * Update all test outputs for cartopy 0.23.0 and matplotlib 3.9.0
+* Release Updates
+
+  * Add 1.13.0 release note
+
+Bug Fixes
+=========
+
+Switch linear_norm back to matplotlib_linear_norm
+-------------------------------------------------
+
+The geoips repo pull request that updated ``matplotlib_linear_norm`` colormapper
+to ``linear_norm`` was actually closed without merge.  Until that update is
+made on the geoips repo, switching stitched.yaml back to ``matplotlib_linear_norm``.
+
+::
+
+  modified: data_fusion/plugins/yaml/products/stitched.yaml
+
+Remove CHANGELOG.md from the docs/source directory
+--------------------------------------------------
+
+Now that md files are allowed in the docs directory, must remove CHANGELOG.md
+from docs/source/releases since it is not properly formatted. Save for archival
+purposes.
+
+::
+
+  renamed:    docs/source/releases/CHANGELOG.md -> docs/archive/CHANGELOG.md
+
+Testing Updates
+===============
+
+Update all test outputs for cartopy 0.23.0 and matplotlib 3.9.0
+---------------------------------------------------------------
+
+Minor image changes caused by update to latest version of cartopy and matplotlib.
+
+::
+
+  modified: tests/outputs/Infrared-Gray_image/20210929.000000.geo.stitched.Blended-Infrared-Gray.global.56p52.multi.20p0.png
+  modified: tests/outputs/Layered-Winds-Default_image/20220911.132830.multi.layered.Layered-Winds-Default.tc2022wp14muifa.41p03.multi.1p0.png
+  modified: tests/outputs/Layered-Winds-Horizontal-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Horizontal-Adjust.tc2022wp14muifa.41p03.multi.1p0.png
+  modified: tests/outputs/Layered-Winds-Horizontal-and-Vertical_image/20220911.132830.multi.layered.Layered-Winds-Horizontal-and-Vertical.tc2022wp14muifa.41p03.multi.1p0.png
+  modified: tests/outputs/Layered-Winds-Two-Colorbars_image/20220911.132830.multi.layered.Layered-Winds-Two-Colorbars.tc2022wp14muifa.41p03.multi.1p0.png
+  modified: tests/outputs/Layered-Winds-Vertical-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Adjust.tc2022wp14muifa.41p03.multi.1p0.png
+  modified: tests/outputs/Layered-Winds-Vertical-Default_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Default.tc2022wp14muifa.41p03.multi.1p0.png
+
+Installation Updates
+====================
+
+Update pyproject.toml to poetry
+-------------------------------
+
+::
+
+  modified: pyproject.toml
+  new file: data_fusion/_version.py
+
+Release Updates
+===============
+
+Add 1.13.0 release note
+---------------------------
+
+*From issue GEOIPS#513: 2024-06-08, version update*
+
+::
+
+    modified: CHANGELOG.rst
+    new file: docs/source/releases/v1_13_0.rst
+    modified: docs/source/releases/index.rst
