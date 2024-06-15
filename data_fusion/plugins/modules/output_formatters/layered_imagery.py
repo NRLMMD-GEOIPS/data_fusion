@@ -1,4 +1,4 @@
-# # # Distribution Statement A. Approved for public release. Distribution unlimited.
+# # # Distribution Statement A. Approved for public release. Distribution is unlimited.
 # # #
 # # # Author:
 # # # Naval Research Laboratory, Marine Meteorology Division
@@ -345,8 +345,8 @@ def call(
     area_def,
     product_name,
     output_fnames,
-    boundaries_info=None,
-    gridlines_info=None,
+    feature_annotator=None,
+    gridline_annotator=None,
     title_format=None,
     title_copyright=None,
 ):
@@ -407,8 +407,8 @@ def call(
         mapobj,
         main_ax,
         area_def,
-        feature_annotator=boundaries_info,
-        gridline_annotator=gridlines_info,
+        feature_annotator=feature_annotator,
+        gridline_annotator=gridline_annotator,
         features_zorder=3,
         gridlines_zorder=3,
     )

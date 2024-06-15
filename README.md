@@ -1,4 +1,4 @@
-    # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+    # # # Distribution Statement A. Approved for public release. Distribution is unlimited.
     # # #
     # # # Author:
     # # # Naval Research Laboratory, Marine Meteorology Division
@@ -33,7 +33,7 @@ contact geoips@nrlmry.navy.mil.
 System Requirements
 ---------------------
 
-* geoips >= 1.10.0
+* geoips >= 1.13.0
 * Test data repos contained in $GEOIPS_TESTDATA_DIR for tests to pass.
   * test_data_fusion
   * test_data_scat

@@ -1,4 +1,4 @@
-# # # Distribution Statement A. Approved for public release. Distribution unlimited.
+# # # Distribution Statement A. Approved for public release. Distribution is unlimited.
 # # #
 # # # Author:
 # # # Naval Research Laboratory, Marine Meteorology Division
@@ -161,6 +161,8 @@ def unpack_fusion_arguments(argdict):
             curr_fuse_dict["sectored_read"] = fusion_sectored_reads[curr_num]
         if fusion_resampled_reads:
             curr_fuse_dict["resampled_read"] = fusion_resampled_reads[curr_num]
+        if "fuse_reader_kwargs" in argdict and argdict["fuse_reader_kwargs"]:
+            curr_fuse_dict["reader_kwargs"] = argdict["fuse_reader_kwargs"][curr_num]
         # Populate each individual fused dataset
         requested_fusion[fusion_dataset_name] = curr_fuse_dict
         curr_num = curr_num + 1
@@ -279,10 +281,18 @@ def get_fused_xarray(area_def, fuse_data):
         else:
             pad_area_def = area_def
 
+        if "reader_kwargs" in fuse_data[fuse_data_name]:
+            reader_kwargs = fuse_data[fuse_data_name]["reader_kwargs"]
+        else:
+            reader_kwargs = {}
         # Read the padded area definition (ensure we have enough data to cover
         # the entire sector after reprojecting
         reader_out = reader(
-            files, metadata_only=False, chans=required_variables, area_def=pad_area_def
+            files,
+            metadata_only=False,
+            chans=required_variables,
+            area_def=pad_area_def,
+            **reader_kwargs,
         )
 
         if prod_plugin.family not in unsectored_product_types:
