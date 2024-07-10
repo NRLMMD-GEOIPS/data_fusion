@@ -17,6 +17,7 @@ Version 1.13.0a0 (2024-06-07)
 
   * Replace all occurences of ``matplotlib_linear_norm`` to ``linear_norm``
   * Update Test Scripts and 'data_fusion_procflow' to use 'geoips run data_fusion'
+  * Refactor: Clean up optional dependencies throughout code
 
 Refactoring Updates
 ===================
@@ -55,3 +56,20 @@ workflow from now on.
     modified: data_fusion/tests/scripts/geo.sh
     modified: data_fusion/tests/scripts/layered.sh
     modified: data_fusion/pyproject.toml
+
+Clean Up Optional Dependencies
+------------------------------
+
+*From GEOIPS#338: 2023-07-19, Clean up optional dependencies*
+
+Some GeoIPS readers include optional dependency statements that are required to read
+certain file formats. While keeping these imports as optional is ok, we should clean up
+the manner in which this is implemented. To do so, we've created a separate
+geoips.testing.context_manager.py script which can handle optional imports scattered
+throughout the GeoIPS codebase. This is essentially replacing our old manner of optional
+dependencies with a new method that keeps things clean.
+
+
+::
+
+    modified: geoips/plugins/modules/procflows/data_fusion.py
