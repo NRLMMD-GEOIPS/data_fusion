@@ -1,4 +1,4 @@
-# # # Distribution Statement A. Approved for public release. Distribution is unlimited.
+# # # Distribution Statement A. Approved for public release. Distribution unlimited.
 # # #
 # # # Author:
 # # # Naval Research Laboratory, Marine Meteorology Division
@@ -10,4 +10,7 @@
 # # # for more details. If you did not receive the license, for more information see:
 # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-"""data_fusion.plugins.modules init file."""
+# DO NOT EDIT
+# managed by poetry-dynamic-versioning
+__version__ = "0.0.0"
+__version_tuple__ = (0, 0, 0)
