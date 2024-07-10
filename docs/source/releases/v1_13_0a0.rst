@@ -12,65 +12,22 @@
  | # # # for more details. If you did not receive the license, for more information see:
  | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-Version 1.13.0a0 (2024-06-07)
+Version 1.13.0a0 (2024-07-10)
 *****************************
 
-* Refactoring Updates
+ * *Refactor*: Clean Up Optional Dependencies
 
-  * Replace all occurences of ``matplotlib_linear_norm`` to ``linear_norm``
-  * Update Test Scripts and 'data_fusion_procflow' to use 'geoips run data_fusion'
-  * Refactor: Clean up optional dependencies throughout code
-
-Refactoring Updates
-===================
-
-Replace all occurences of ``matplotlib_linear_norm`` to ``linear_norm``
------------------------------------------------------------------------
-
-*From GEOIPS#504 492 text based interface*
-
-This is a small refactoring PR that was needed due to changes included in #504. Jeremy
-and I decided that colormapper ``matplotlib_linear_norm`` wasn't the best name for that
-colormapper, as it just applies a ``linear_norm`` algorithm to colormap the data
-correctly. It is not inherently just matplotlib-based. We updated all occurences of this
-found within data_fusion.
-
-::
-
-    modified: data_fusion/plugins/yaml/products/stitched.yaml
-
-Update Test Scripts and 'data_fusion_procflow' to use 'geoips run data_fusion'
-------------------------------------------------------------------------------
-
-*From GEOIPS#455: 2024-03-21, CLI Stage Two*
-
-With the new addition of the GeoIPS CLI, we've changed how we call process workflows
-(procflows). While ``run_procflow`` and ``data_fusion_procflow`` will still work
-(we've supported backwards compatability for this update), we've updated the scripts
-to use ``geoips run data_fusion`` instead of ``data_fusion_procflow``. This removes
-``--procflow data_fusion`` from scripts as well. We've also modified
-``data_fusion_procflow`` to point towards
-``geoips.commandline.commandline_interface:main``, as that is how we start a process
-workflow from now on.
-
-::
-
-    modified: data_fusion/tests/scripts/geo.sh
-    modified: data_fusion/tests/scripts/layered.sh
-    modified: data_fusion/pyproject.toml
+Refactor
+========
 
 Clean Up Optional Dependencies
 ------------------------------
 
-*From GEOIPS#338: 2023-07-19, Clean up optional dependencies*
-
-Some GeoIPS readers include optional dependency statements that are required to read
-certain file formats. While keeping these imports as optional is ok, we should clean up
-the manner in which this is implemented. To do so, we've created a separate
-geoips.testing.context_manager.py script which can handle optional imports scattered
-throughout the GeoIPS codebase. This is essentially replacing our old manner of optional
-dependencies with a new method that keeps things clean.
-
+Some GeoIPS readers include optional dependency statements that are required to read certain file formats. While keeping
+these imports as optional is ok, we should clean up the manner in which this is implemented. To do so, we've created a
+separate geoips.testing.context_manager.py script which can handle optional imports scattered throughout the GeoIPS
+codebase. This is essentially replacing our old manner of optional dependencies with a new method that keeps things
+clean.
 
 ::
 
