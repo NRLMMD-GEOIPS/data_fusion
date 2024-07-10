@@ -1,0 +1,54 @@
+.. dropdown:: Distribution Statement
+
+ | # # # Distribution Statement A. Approved for public release. Distribution is unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.12.4 (2024-05-30)
+***************************
+
+* Documentation Updates
+
+  * Added clear documentation on command line arguments
+* Release Updates
+
+  * Add release note for v1.12.4
+
+Dcoumentation Updates
+=====================
+
+Command Line Documentation 
+--------------------------
+
+Added documentation to help provide clarity for required data
+fusion command line arguments and sub-arguments. Migrated notes
+and comments from the template fusion package.
+
+::
+
+  modified: docs/source/releases/v1_12_4.rst
+  modified: docs/source/releases/index.rst
+  modified: tests/scripts/layered.sh
+  modified: docs/source/userguide/procflow_guide.rst
+
+Release Process
+===============
+
+Add release note for v1.12.4
+----------------------------
+
+All updates until the next release (v1.12.4) will be included in
+this release note.
+
+::
+
+  modified: docs/source/releases/v1_12_4.rst
+  modified: docs/source/releases/index.rst

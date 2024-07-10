@@ -1,0 +1,95 @@
+.. dropdown:: Distribution Statement
+
+ | # # # Distribution Statement A. Approved for public release. Distribution is unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version 1.12.3 (2024-04-04)
+***************************
+
+* Bug fixes
+
+  * Replace boundaries_info and gridlines_info kwargs with feature_annotator and
+    gridline_annotator in layered_imagery output formatter plugin
+  * Add reader keyword arguments to reader call
+* Test Output Updates
+
+  * Expanded AHI coverage due to masking update
+* Release Updates
+
+  * Add release note for v1.12.3
+
+Bug Fixes
+=========
+
+Update kwargs to layerd_imagery output formatter plugin
+-------------------------------------------------------
+
+Replace boundaries_info and gridlines_info kwargs with feature_annotator and
+gridline_annotator in layered_imagery output formatter plugin.
+
+* This allows users to control the feature and gridline annotators
+  from the command line
+
+::
+
+    modified: data_fusion/plugins/modules/output_formatters/layered_imagery.py
+
+Add reader keyword arguments to reader call
+-------------------------------------------
+
+Allow call to reader to support reader keyword arguments.
+
+::
+
+  modified: data_fusion/plugins/modules/procflows/data_fusion.py
+
+Test Output Updates
+===================
+
+Expanded AHI coverage due to masking update
+-------------------------------------------
+
+GEOIPS/geoips#479 update to AHI geolocation variable masking caused AHI
+coverage to expand very slightly.  So this image changed from 56.42 to 56.52%
+coverage.
+
+::
+
+  renamed/modified: tests/outputs/Infrared-Gray_image/20210929.000000.geo.stitched.Blended-Infrared-Gray.global.56p52.multi.20p0.png <-- 56.42%
+
+Release Process
+===============
+
+Add release note for v1.12.3
+----------------------------
+
+*From GEOIPS#458: 2024-02-17, 1.12.1 release*
+
+All updates until the next release (v1.12.3) will be included in
+this release note.
+
+::
+
+  modified: docs/source/releases/v1_12_3.rst
+  modified: docs/source/releases/index.rst
+
+Update 'update_this_release_note'
+---------------------------------
+
+*From GEOIPS#458: 2024-02-17, 1.12.1 release process updates*
+
+All updates until the next release (v1.12.3) will be included in
+the release note specified in this file.
+
+::
+
+  modified: update_this_release_note
