@@ -6,7 +6,22 @@
 Version 1.14.0a0 (2024-07-14)
 *****************************
 
-* Add release note for v1.14.0a0
+* Documentation Updates
+
+  * Add create_plugin_registries and missing test data to README
+* Release Updates
+
+  * Add release note for v1.14.0a0
+
+Documentation Updates
+=====================
+
+Add create_plugin_registries and missing test data to README
+------------------------------------------------------------
+
+::
+
+  modified: README.md
 
 Release Process
 ===============
