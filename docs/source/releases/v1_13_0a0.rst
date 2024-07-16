@@ -15,20 +15,4 @@
 Version 1.13.0a0 (2024-07-10)
 *****************************
 
- * *Refactor*: Clean Up Optional Dependencies
-
-Refactor
-========
-
-Clean Up Optional Dependencies
-------------------------------
-
-Some GeoIPS readers include optional dependency statements that are required to read certain file formats. While keeping
-these imports as optional is ok, we should clean up the manner in which this is implemented. To do so, we've created a
-separate geoips.testing.context_manager.py script which can handle optional imports scattered throughout the GeoIPS
-codebase. This is essentially replacing our old manner of optional dependencies with a new method that keeps things
-clean.
-
-::
-
-    modified: geoips/plugins/modules/procflows/data_fusion.py
+No updates.

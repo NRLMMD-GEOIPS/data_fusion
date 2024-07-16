@@ -1,0 +1,36 @@
+.. dropdown:: Distribution Statement
+
+ | # # # Distribution Statement A. Approved for public release. Distribution unlimited.
+ | # # #
+ | # # # Author:
+ | # # # Naval Research Laboratory, Marine Meteorology Division
+ | # # #
+ | # # # This program is free software: you can redistribute it and/or modify it under
+ | # # # the terms of the NRLMMD License included with this program. This program is
+ | # # # distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ | # # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the included license
+ | # # # for more details. If you did not receive the license, for more information see:
+ | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
+
+Version v1_14_0a0 (2024-07-16)
+******************************
+
+ * *Refactor*: Clean Up Optional Dependencies
+
+Refactor
+========
+
+Clean Up Optional Dependencies
+------------------------------
+
+Some GeoIPS readers include optional dependency statements that are required to read
+certain file formats. While keeping these imports as optional is ok, we should clean
+up the manner in which this is implemented. To do so, we've created a separate
+geoips.testing.context_manager.py script which can handle optional imports scattered
+throughout the GeoIPS codebase. This is essentially replacing our old manner of
+optional dependencies with a new method that keeps things clean.
+
+
+::
+
+    modified: geoips/plugins/modules/procflows/data_fusion.py
