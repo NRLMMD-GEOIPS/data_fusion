@@ -18,6 +18,14 @@
 Release Notes
 *************
 
+Version 1.14
+------------
+
+.. toctree::
+   :maxdepth: 1
+
+   v1_14_0a0
+
 Version 1.13
 ------------
 
@@ -35,6 +43,7 @@ Version 1.12
 
    v1_12_4
    v1_12_3
+   v1_12_0a0
    v1_12_0
 
 Version 1.11
