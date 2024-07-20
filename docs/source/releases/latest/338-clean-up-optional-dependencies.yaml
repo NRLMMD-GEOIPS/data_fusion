@@ -8,4 +8,4 @@ refactor:
     optional dependencies with a new method that keeps things clean.
   title: 'Clean Up Optional Dependencies'
   files:
-    - modified: ['geoips/plugins/modules/procflows/data_fusion.py']
+    modified: ['geoips/plugins/modules/procflows/data_fusion.py']
