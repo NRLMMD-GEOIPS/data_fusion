@@ -4,6 +4,5 @@ documentation:
   title: 'Add create_plugin_registries and missing test data to README'
   related-issue:
     number: 666
-    url: 'https://github.com/NRLMMD-GEOIPS/geoips'
   files:
     modified: ['README.md']
