@@ -1,0 +1,8 @@
+documentation:
+- description: |
+    Add create_plugin_registries and missing test data to README
+  title: 'Add create_plugin_registries and missing test data to README'
+  related-issue:
+    number: 666
+  files:
+    modified: ['README.md']
