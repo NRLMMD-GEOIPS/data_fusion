@@ -1,0 +1,20 @@
+Refactoring Updates:
+- description: |
+    *From GEOIPS#647: 2024-06-19, Automating ``create_plugin_registries``*
+
+    Updates a portion of
+    data_fusion.plugins.modules.procflows.data_fusion:get_fused_xarray which
+    purposefully calls products.get_plugin with a source, product name tuple that may or
+    may not actually exist. This initially resulted in duplicated creations of
+    plugin registries which slowed down data_fusion procflows by a decent amount. We
+    updated this functionality to force no creation of the registries, and to fail
+    quickly instead. Now, the data fusion procflow operates as it would previously,
+    only rebuilding registries for plugins which we expect to exist.
+  files:
+    modified:
+      - data_fusion/plugins/modules/procflows/data_fusion.py
+  related-issue:
+    number: 647
+    repo_url: https://github.com/NRLMMD-GEOIPS/geoips/
+  title: Force No Registry Automation
+
