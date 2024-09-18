@@ -238,8 +238,11 @@ def get_fused_xarray(area_def, fuse_data):
         # This could be things like "satellite_zenith_angle" for blending between
         # satellites, etc.
         try:
+            # Attempt to load a product plugin that may or may not exist. Use
+            # call_number=-1, as this denotes that we should fail quickly and not
+            # rebuild the plugin registry if this plugin cannot be found
             final_prod_plugin_for_curr_source = products.get_plugin(
-                source_name, final_product_name
+                source_name, final_product_name, call_number=-1
             )
             # If variables are specified within the "final_product" definition
             # in product_inputs/<source_name>.yaml, Then append them to the
