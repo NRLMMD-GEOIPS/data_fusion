@@ -36,8 +36,7 @@ files = ["*/_version.py"]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
 build-backend = "poetry_dynamic_versioning.backend"                          # object used to perform the build process
 
-[tool.poetry.dependencies] # must download to run
-python = ">=3.10"       # mandatory to declare the required python version
+python = ">=3.9"       # mandatory to declare the required python version
 
 # [tool.poetry.dependencies] # Include any python dependencies here
 # "matplotlib" = "*"

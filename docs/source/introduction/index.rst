@@ -12,19 +12,9 @@
  | # # # for more details. If you did not receive the license, for more information see:
  | # # # https://github.com/U-S-NRL-Marine-Meteorology-Division/
 
-Version 1.11.7 (2023-11-07)
-***************************
+************
+Introduction
+************
 
-Release Updates
-===============
-
-Add 1.11.7 release note
------------------------
-
-*From issue GEOIPS#393: 2023-11-07, version update*
-
-::
-
-    modified: CHANGELOG.rst
-    new file: docs/source/releases/v1_11_7.rst
-    modified: docs/source/releases/index.rst
+.. toctree::
+   :maxdepth: 2
