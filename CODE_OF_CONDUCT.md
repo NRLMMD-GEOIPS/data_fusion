@@ -3,8 +3,6 @@
 
 # Contributor Covenant Code of Conduct
 
-Code of Conduct only applicable for github.com.
-
 This Code of Conduct is maintained and enforced by our community collaborators,
 and not the Federal Government and its employees.
 

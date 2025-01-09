@@ -1,0 +1,10 @@
+enhancement:
+- description:  |
+    Remove hard coded value used for padding an area definition. Still defaults
+    to old value, but can now be specified upstream in product spec.
+  files:
+    modified:
+    - data_fusion/plugins/modules/procflows/data_fusion.py
+  related-issue:
+    number: 42
+  title: Make area definition padding configurable

@@ -265,8 +265,10 @@ def get_fused_xarray(area_def, fuse_data):
             and "pad_area_definition" in prod_plugin["spec"]
             and prod_plugin["spec"]["pad_area_definition"]
         ):
+            xscale = prod_plugin["spec"].get("pad_x_scale_factor", 1.5)
+            yscale = prod_plugin["spec"].get("pad_y_scale_factor", 1.5)
             pad_area_def = pad_area_definition(
-                area_def, force_pad=True, x_scale_factor=1.5, y_scale_factor=1.5
+                area_def, force_pad=True, x_scale_factor=xscale, y_scale_factor=yscale
             )
         else:
             pad_area_def = area_def
