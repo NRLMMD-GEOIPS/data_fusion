@@ -1,0 +1,18 @@
+breaking change:
+  - title: "Turn off matplotlib interpolation, and update all test outputs"
+    description: |
+      Update all test image output that had changes resulting from turning off
+      matplotlib image interpolation.
+
+      If we make image interpolation configurable in the future, it still
+      makes sense to default to no interpolation for better test output consistency
+      between matplotlib versions.
+    files:
+      modified:
+        - tests/outputs/Infrared-Gray_image/20210929.000000.geo.stitched.Blended-Infrared-Gray.global.56p52.multi.20p0.png
+    related-issue:
+      number: 753
+      repo_url: "GEOIPS/geoips"
+    date:
+      start: 2025-04-03
+      finish: 2025-04-03

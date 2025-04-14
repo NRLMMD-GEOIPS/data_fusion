@@ -1,4 +1,4 @@
-# # # This source code is protected under the license referenced at
+# # # This source code is subject to the license referenced at
 # # # https://github.com/NRLMMD-GEOIPS.
 
 """Driver for standard single channel products."""
@@ -191,7 +191,7 @@ def unpack_fusion_arguments(argdict):
     return requested_fusion
 
 
-def get_fused_xarray(area_def, fuse_data):
+def get_fused_xarray(area_def, fuse_data, command_line_args):
     """
     Get the fused xarray.
 
@@ -252,7 +252,9 @@ def get_fused_xarray(area_def, fuse_data):
         # "fuse_product" within product_inputs/<source_name>.yaml,
         # then pad appropriately here.  If a product is missing some
         # data after reprojecting, you may need to pad.
-        prod_plugin = products.get_plugin(source_name, product_name)
+        prod_plugin = products.get_plugin(
+            source_name, product_name, command_line_args["product_spec_override"]
+        )
 
         unsectored_product_types = [
             "unsectored_xarray_dict_to_output_format",
@@ -542,7 +544,7 @@ def call(fnames, command_line_args=None):
         process_datetimes[area_def.name] = {}
         process_datetimes[area_def.name]["start"] = datetime.utcnow()
         # This returns xarray.Dataset, or dict of xarray.Datasets
-        fused_xarray = get_fused_xarray(area_def, fuse_data)
+        fused_xarray = get_fused_xarray(area_def, fuse_data, command_line_args)
 
         if fused_xarray is not None:
             # If it is a dict, set alg_xarray to xarray_dict['METADATA']
