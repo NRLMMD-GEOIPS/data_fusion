@@ -1,4 +1,4 @@
-    # # # This source code is protected under the license referenced at
+    # # # This source code is subject to the license referenced at
     # # # https://github.com/NRLMMD-GEOIPS.
 
 ## NRLMMD-GEOIPS/geoips#69: 2023-02-06, update for interface class module plugins
