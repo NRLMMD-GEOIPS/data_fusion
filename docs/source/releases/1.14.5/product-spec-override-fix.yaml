@@ -1,0 +1,12 @@
+bug fix:
+- title: 'Add product-spec-override to get_plugin call'
+  description: |
+    Add product-spec-override to the get_plugin call so that product
+    specifications, such as area definition padding, can be overriden at the
+    command line call. This matches what was already being done in single_source.
+  files:
+    modified:
+    - 'data_fusion/plugins/modules/procflows/data_fusion.py'
+  date:
+    start: 12-18-2024
+    finish: 12-18-2024
