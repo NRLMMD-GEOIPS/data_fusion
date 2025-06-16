@@ -1,0 +1,24 @@
+enhancement:
+- title: 'Write data fusion products to database'
+  description: |
+    Add hooks for writing products to the database! The schema name, table name, and
+    classifications are defined in a procflow output config file! Eventually this output
+    config file will actually specify the outputs, but for now only enables the database
+    hooks! This setup also allows us to re-use the same function used in the
+    config_based procflow for writing products to the database!
+
+    Also add support for writing the list of products created by the procflow to a file!
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - 'data_fusion/plugins/modules/procflows/data_fusion.py'
+  related-issue:
+    number: GEOIPS#73
+  date:
+    start: 2025-05-02
+    finish: 2025-05-07
