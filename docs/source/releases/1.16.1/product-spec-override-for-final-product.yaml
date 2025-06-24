@@ -1,0 +1,16 @@
+bug fix:
+- title: 'Add product-spec-override to final product get_plugin call'
+  description: |
+    Add product-spec-override to the get_plugin call for the fusion final
+    product so that the final product's specifications, such as algorithm
+    arguments, can be overridden at the command line call. This matches what
+
+    was already being done in single_source. Note that this was previously
+    implemented for the individual products; this implementation is for the
+    final product.
+  files:
+    modified:
+    - 'data_fusion/plugins/modules/procflows/data_fusion.py'
+  date:
+    start: 05-28-2025
+    finish: 05-28-2025

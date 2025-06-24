@@ -1,0 +1,23 @@
+bug fix:
+- title: 'Add basic hooks for resource tracking and skip area defs with no spatial data'
+  description: |
+    Add the required hooks for enabling tracking resource usage at specified
+    checkpoints. Checkpoints have not been added to the data_fusion procflow, but the
+    basic hooks are required for the write_stats_to_database function.
+
+    Also check if the pad_sect_xarrays is an empty dict under get_fused_xarray. This
+    occurs when no spatial data exists for the given sector.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - 'data_fusion/plugins/modules/procflows/data_fusion.py'
+  related-issue:
+    internal: GEOIPS#160
+  date:
+    start: 2025-05-21
+    finish: 2025-05-21

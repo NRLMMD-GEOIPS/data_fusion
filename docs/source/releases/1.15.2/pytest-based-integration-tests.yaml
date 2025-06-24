@@ -1,0 +1,21 @@
+testing:
+- title: 'Add pytest-based integration tests for all packages'
+  description: |
+    To allow running pytest-based integration tests across the full geoips installation,
+    setup up pytest-based integration tests on all packages. Remove deprecated
+    test_all.sh, and call via pytest -m integration
+  files:
+    deleted:
+    - 'tests/test_all.sh'
+    moved:
+    - ''
+    added:
+    - 'tests/integration_tests/test_[package_name].py'
+    modified:
+    - ''
+  related-issue:
+    number: 753
+    repo_url: "GEOIPS/geoips"
+  date:
+    start: 2025-04-14
+    finish: 2025-04-14

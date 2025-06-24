@@ -4,7 +4,7 @@
 """Driver for standard single channel products."""
 
 import logging
-from os import getenv
+from os import getenv, getpid
 
 import xarray
 
@@ -33,12 +33,21 @@ from geoips.plugins.modules.procflows.single_source import (
     get_output_formatter_kwargs,
 )
 
+# Direct import from config_based procflow
+from geoips.plugins.modules.procflows.config_based import get_config_dict
+
 from data_fusion.commandline.args import check_command_line_args
+from geoips.filenames.base_paths import PATHS as gpaths
+from geoips.geoips_utils import replace_geoips_paths
 from geoips.utils.context_managers import import_optional_dependencies
+from geoips.utils.memusg import PidLog
 
 with import_optional_dependencies(loglevel="info"):
     """Attempt to import a package and print to LOG.info if the import fails."""
-    from geoips_db.utils.database_writes import write_stats_to_database
+    from geoips_db.utils.database_writes import (
+        write_to_database,
+        write_stats_to_database,
+    )
 
 from geoips.utils.memusg import print_mem_usage
 
@@ -52,6 +61,14 @@ LOG = logging.getLogger(__name__)
 interface = "procflows"
 family = "standard"
 name = "data_fusion"
+
+
+# get geoips version
+try:
+    geoips_version = gpaths["GEOIPS_VERS"]
+except KeyError:
+    LOG.warning("No geoips system defined, setting geoips version to 0.0.0")
+    geoips_version = "0.0.0"
 
 
 def get_overall_start_datetime(fuse_dict):
@@ -203,7 +220,11 @@ def get_fused_xarray(area_def, fuse_data, command_line_args):
 
     final_product_name = fuse_data["final"]["product_name"]
     final_source_name = fuse_data["final"]["source_name"]
-    final_prod_plugin = products.get_plugin(final_source_name, final_product_name)
+    final_prod_plugin = products.get_plugin(
+        final_source_name,
+        final_product_name,
+        command_line_args["product_spec_override"],
+    )
     final_covg_args = get_covg_args_from_product(final_prod_plugin)
 
     metadata_xobj = fuse_data["final"]["metadata_xobj"]
@@ -293,6 +314,10 @@ def get_fused_xarray(area_def, fuse_data, command_line_args):
             pad_sect_xarrays = sector_xarrays(
                 reader_out, pad_area_def, required_variables
             )
+            # pad_sect_xarrays will be an empty dictionary if there is no spatial data
+            # for the requested area definition
+            if not pad_sect_xarrays:
+                continue
         else:
             pad_sect_xarrays = reader_out
 
@@ -482,11 +507,15 @@ def call(fnames, command_line_args=None):
         Return list of strings specifying full paths to output products
         that were produced.
     """
+    ss_pid = getpid()
+    pid_track = PidLog(ss_pid, logstr="MEMUSG")
+
     from datetime import datetime
 
     process_datetimes = {}
     process_datetimes["overall_start"] = datetime.utcnow()
     final_products = []
+    database_writes = []
     removed_products = []
     saved_products = []
 
@@ -501,21 +530,26 @@ def call(fnames, command_line_args=None):
         "fuse_files",
         "fuse_reader_name",
         "fuse_product_name",
-        "product_db",
+        "procflow_config",
+        "output_file_list_fname",
     ]
 
     check_command_line_args(check_args, command_line_args)
 
     compare_path = command_line_args["compare_path"]
 
-    if "product_db" in command_line_args and command_line_args["product_db"]:
-        product_db = command_line_args["product_db"]
+    output_config = command_line_args.get("output_config", None)
+    output_file_list_fname = command_line_args.get("output_file_list_fname", None)
+    if output_config:
+        config_dict = get_config_dict(output_config)
+        store_checkpoint_stats = config_dict.get("store_checkpoint_statistics", False)
+        product_db = config_dict.get("product_db", False)
     else:
         product_db = False
 
     if product_db:
-        if not getenv("GEOIPS_DB_USER") or not getenv("GEOIPS_DB_PASS"):
-            raise ValueError("Need to set both $GEOIPS_DB_USER and $GEOIPS_DB_PASS")
+        if not getenv("GEOIPS_DB_URI"):
+            raise ValueError("Need to set both $GEOIPS_DB_URI")
 
     fuse_data = unpack_fusion_arguments(command_line_args)
     final_product_name = fuse_data["final"]["product_name"]
@@ -580,9 +614,26 @@ def call(fnames, command_line_args=None):
             )
 
             if isinstance(curr_products, dict):
-                final_products += curr_products.keys()
+                curr_products_list = curr_products.keys()
             else:
-                final_products += curr_products
+                curr_products_list = curr_products
+            final_products += curr_products_list
+            if product_db:
+                output_dict = config_dict["outputs"]["data_fusion"]
+                output_dict["output_formatter"] = command_line_args["output_formatter"]
+                for fprod in curr_products_list:
+                    product_added = write_to_database(
+                        fprod,
+                        final_product_name,
+                        fused_xarray,
+                        config_dict["available_sectors"],
+                        output_dict,
+                        geoips_version,
+                        config_dict=config_dict,
+                        area_def=area_def,
+                        # coverage=coverage, # not exactly sure how to get the covg here
+                    )
+                    database_writes.append(product_added)
 
             curr_removed_products, curr_saved_products = remove_duplicates(
                 curr_products, remove_files=True
@@ -614,20 +665,32 @@ def call(fnames, command_line_args=None):
         ):
             sector_type = "static_and_dynamic_tc"
         elif command_line_args.get("tcdb") or command_line_args.get("trackfiles"):
-            sector_type = "dynamic_tc"
+            sector_type = "data_fusion_dynamic_tc"
         else:
-            sector_type = "static"
-        write_stats_to_database(
-            procflow_name="data_fusion",
-            platform=fuse_data["final"]["platform_name"],
-            source=fuse_data["final"]["source_name"],
-            product=final_product_name,
-            sector_type=sector_type,
-            process_times=process_datetimes,
-            num_products_created=len(final_products),
-            num_products_deleted=len(removed_products),
-            resource_usage_dict=mem_usage_stats,
-        )
+            sector_type = "data_fusion_static"
+        procflow_id = pid_track.own_pid
+        if store_checkpoint_stats:
+            checkpoint_stats = pid_track.checkpoint_usage_stats()
+        else:
+            checkpoint_stats = None
+        try:
+            write_stats_to_database(
+                procflow_name="data_fusion",
+                platform=fuse_data["final"]["platform_name"],
+                geoips_vers=geoips_version,
+                source=fuse_data["final"]["source_name"],
+                product=final_product_name,
+                sector_type=sector_type,
+                process_times=process_datetimes,
+                num_products_created=len(final_products),
+                num_products_deleted=len(removed_products),
+                resource_usage_dict=mem_usage_stats,
+                output_config=command_line_args["output_config"],
+                procflow_id=procflow_id,
+                checkpoints_resource_usage_dict=checkpoint_stats,
+            )
+        except KeyError as resp:
+            LOG.warning("Could not write stats to database:\n%s", resp)
 
     retval = 0
 
@@ -654,5 +717,13 @@ def call(fnames, command_line_args=None):
     )
     for output_product in final_products:
         LOG.info("    DATAFUSIONSUCCESS %s", output_product)
+    for db_write in database_writes:
+        LOG.info("    DATABASESUCCESS %s", db_write)
+    if output_file_list_fname and len(final_products) > 0:
+        LOG.info("Writing successful outputs to %s", output_file_list_fname)
+        with open(output_file_list_fname, "w", encoding="utf8") as fobj:
+            for output_product in final_products:
+                LOG.info("  WRITING %s to output file list", output_product)
+                fobj.write(f"{replace_geoips_paths(output_product)}\n")
 
     return retval
