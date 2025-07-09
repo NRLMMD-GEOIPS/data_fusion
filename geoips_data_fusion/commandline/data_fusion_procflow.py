@@ -8,7 +8,7 @@ MUST call with --procflow
 """
 
 from geoips.commandline.run_procflow import main as geoips_main
-from data_fusion.commandline.args import get_command_line_args
+from geoips_data_fusion.commandline.args import get_command_line_args
 
 
 def main():
