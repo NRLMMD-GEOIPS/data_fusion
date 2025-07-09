@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "data_fusion"  # package available at the root of the project
+name = "geoips_data_fusion"  # package available at the root of the project
 version = "0.0.0"
 description = "Data Fusion GeoIPS Plugin Package"
 authors = []
