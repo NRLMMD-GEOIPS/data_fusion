@@ -36,7 +36,7 @@ from geoips.plugins.modules.procflows.single_source import (
 # Direct import from config_based procflow
 from geoips.plugins.modules.procflows.config_based import get_config_dict
 
-from data_fusion.commandline.args import check_command_line_args
+from geoips_data_fusion.commandline.args import check_command_line_args
 from geoips.filenames.base_paths import PATHS as gpaths
 from geoips.geoips_utils import replace_geoips_paths
 from geoips.utils.context_managers import import_optional_dependencies

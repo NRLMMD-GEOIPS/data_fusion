@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "data_fusion"  # package available at the root of the project
+name = "geoips_data_fusion"  # package available at the root of the project
 version = "0.0.0"
 description = "Data Fusion GeoIPS Plugin Package"
 authors = []
@@ -47,7 +47,7 @@ python = ">=3.10"       # mandatory to declare the required python version
 # during the plugin registry process.
 
 [tool.poetry.plugins."geoips.plugin_packages"]
-"data_fusion" = "data_fusion"
+"geoips_data_fusion" = "geoips_data_fusion"
 
 [tool.poetry.scripts]
 data_fusion_procflow = "geoips.commandline.commandline_interface:main"
