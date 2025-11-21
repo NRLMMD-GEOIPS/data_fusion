@@ -6,19 +6,24 @@
 import os
 import pytest
 
-from tests.integration_tests.test_integration import full_setup  # noqa: F401
+# Only use base_setup, because full_setup requires ALL test data repositories.
+from tests.integration_tests.test_integration import base_setup  # noqa: F401
 
 from tests.integration_tests.test_integration import (
     run_script_with_bash,
     setup_environment as setup_geoips_environment,
 )
 
-# Full test running just geoips on existing CLAVR-x outputs
+# Single base test to ensure plugin repo works.
+base_integ_test_calls = [
+    "$repopath/tests/scripts/layered.sh",
+]
+
+# Exhaustive test of all remaining functionality in this repo (excluding base test).
 full_integ_test_calls = [
     "$geoips_repopath/tests/utils/check_code.sh all $repopath",
     "$geoips_repopath/docs/build_docs.sh $repopath $pkgname html_only",
     "$repopath/tests/scripts/geo.sh Infrared-Gray",
-    "$repopath/tests/scripts/layered.sh",
 ]
 
 
@@ -45,12 +50,32 @@ def setup_environment():
     os.environ["pkgname"] = "data_fusion"
 
 
-# This still needs the "full_setup" because full indicates non-geoips repos in the
-# main test_integration.py.  Might want different naming / marking.
+@pytest.mark.base
+@pytest.mark.integration
+@pytest.mark.parametrize("script", base_integ_test_calls)
+def test_integ_base_test_script(base_setup: None, script: str):  # noqa: F811
+    """
+    Run integration test scripts by executing specified shell commands.
+
+    Parameters
+    ----------
+    script : str
+        Shell command to execute as part of the integration test. The command may
+        contain environment variables which will be expanded before execution.
+
+    Raises
+    ------
+    subprocess.CalledProcessError
+        If the shell command returns a non-zero exit status.
+    """
+    setup_environment()
+    run_script_with_bash(script)
+
+
 @pytest.mark.full
 @pytest.mark.integration
 @pytest.mark.parametrize("script", full_integ_test_calls)
-def test_integ_full_test_script(full_setup: None, script: str):  # noqa: F811
+def test_integ_full_test_script(base_setup: None, script: str):  # noqa: F811
     """
     Run integration test scripts by executing specified shell commands.
 

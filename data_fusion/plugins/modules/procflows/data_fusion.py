@@ -695,8 +695,11 @@ def call(fnames, command_line_args=None):
     retval = 0
 
     if compare_path:
+        checker_override = command_line_args.get("output_checker_name")
         for output_product in final_products:
-            plugin_name = output_checkers.identify_checker(output_product)
+            plugin_name = output_checkers.identify_checker(
+                output_product, checker_override
+            )
             output_checker = output_checkers.get_plugin(plugin_name)
             kwargs = {}
             if output_checker.name in output_checker_kwargs:
