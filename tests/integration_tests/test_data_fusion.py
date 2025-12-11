@@ -19,10 +19,14 @@ base_integ_test_calls = [
     "$repopath/tests/scripts/layered.sh",
 ]
 
-# Exhaustive test of all remaining functionality in this repo (excluding base test).
-full_integ_test_calls = [
+# Linting integration tests, ensure code and documentation are correctly formatted.
+lint_integ_test_calls = [
     "$geoips_repopath/tests/utils/check_code.sh all $repopath",
     "$geoips_repopath/docs/build_docs.sh $repopath $pkgname html_only",
+]
+
+# Exhaustive test of all remaining functionality in this repo (excluding base+lint).
+full_integ_test_calls = [
     "$repopath/tests/scripts/geo.sh Infrared-Gray",
 ]
 
@@ -46,7 +50,9 @@ def setup_environment():
     # Setup base geoips environment
     setup_geoips_environment()
     # Setup current repo's environment
-    os.environ["repopath"] = os.path.join(os.path.dirname(__file__), "..", "..")
+    os.environ["repopath"] = os.path.realpath(
+        os.path.join(os.path.dirname(__file__), "..", "..")
+    )
     os.environ["pkgname"] = "data_fusion"
 
 
@@ -54,6 +60,28 @@ def setup_environment():
 @pytest.mark.integration
 @pytest.mark.parametrize("script", base_integ_test_calls)
 def test_integ_base_test_script(base_setup: None, script: str):  # noqa: F811
+    """
+    Run integration test scripts by executing specified shell commands.
+
+    Parameters
+    ----------
+    script : str
+        Shell command to execute as part of the integration test. The command may
+        contain environment variables which will be expanded before execution.
+
+    Raises
+    ------
+    subprocess.CalledProcessError
+        If the shell command returns a non-zero exit status.
+    """
+    setup_environment()
+    run_script_with_bash(script)
+
+
+@pytest.mark.lint
+@pytest.mark.integration
+@pytest.mark.parametrize("script", lint_integ_test_calls)
+def test_integ_lint_test_script(base_setup: None, script: str):  # noqa: F811
     """
     Run integration test scripts by executing specified shell commands.
 

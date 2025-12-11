@@ -1,0 +1,23 @@
+testing:
+- title: 'Separate build_docs and check_code into separate lint pytest marker'
+  description: |
+    To allow quickly running code and documentation formatting checks across a
+    repository, separate out build_docs and check_code into a separate 'lint' pytest
+    marker.  Linting still runs from full 'integration' marker, but can now run
+    directly with lint marker.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - 'pytest.ini'
+    - 'tests/integration_tests/test_repo.py'
+  related-issue:
+    internal: geoips#959 - 1.17.2 updates
+  date:
+    start: 2025-12-11
+    finish: 2025-12-11
+

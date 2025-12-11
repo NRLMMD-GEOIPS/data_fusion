@@ -1,0 +1,32 @@
+testing:
+- title: Move TC outputs to include storm time in filenames
+  description: |
+    With the update to include storm time in the area_id (and use sector_info["storm_id"]
+    for filtering), geoips_fname outputs for TC sectors now includes the storm time
+    in the filenames.
+
+    tc_fname outputs are unchanged, because they did not include the sector name directly,
+    but specific fields from the storm name/basin/etc.
+
+    Each filename updated from
+
+    * tc2022wp14muifa to tc2022wp14muifa20220911T1200
+
+    Note since these were explicitly using the geoips_fname (which uses the
+    general area_id rather than anything storm specific), we updated the outputs
+    to use the very specific StormidStartdatetime area_id. tc_fname filename
+    formatter we updated to use sector_info["storm_id"], since it is TC specific,
+    and we don't generally want to include storm start datetime in TC filenames.
+  files:
+    moved:
+    - "renamed:    tests/outputs/Layered-Winds-Horizontal-and-Vertical_image/20220911.132830.multi.layered.Layered-Winds-Horizontal-and-Vertical.tc2022wp14muifa.41p03.multi.1p0.png -> tests/outputs/Layered-Winds-Horizontal-and-Vertical_image/20220911.132830.multi.layered.Layered-Winds-Horizontal-and-Vertical.tc2022wp14muifa20220911T1200.41p03.multi.1p0.png"
+    - "renamed:    Layered-Winds-Default_image/20220911.132830.multi.layered.Layered-Winds-Default.tc2022wp14muifa.41p03.multi.1p0.png -> Layered-Winds-Default_image/20220911.132830.multi.layered.Layered-Winds-Default.tc2022wp14muifa20220911T1200.41p03.multi.1p0.png"
+    - "renamed:    Layered-Winds-Horizontal-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Horizontal-Adjust.tc2022wp14muifa.41p03.multi.1p0.png -> Layered-Winds-Horizontal-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Horizontal-Adjust.tc2022wp14muifa20220911T1200.41p03.multi.1p0.png"
+    - "renamed:    Layered-Winds-Two-Colorbars_image/20220911.132830.multi.layered.Layered-Winds-Two-Colorbars.tc2022wp14muifa.41p03.multi.1p0.png -> Layered-Winds-Two-Colorbars_image/20220911.132830.multi.layered.Layered-Winds-Two-Colorbars.tc2022wp14muifa20220911T1200.41p03.multi.1p0.png"
+    - "renamed:    Layered-Winds-Vertical-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Adjust.tc2022wp14muifa.41p03.multi.1p0.png -> Layered-Winds-Vertical-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Adjust.tc2022wp14muifa20220911T1200.41p03.multi.1p0.png"
+    - "renamed:    Layered-Winds-Vertical-Default_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Default.tc2022wp14muifa.41p03.multi.1p0.png -> Layered-Winds-Vertical-Default_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Default.tc2022wp14muifa20220911T1200.41p03.multi.1p0.png"
+  date:
+    start: 2025-11-17
+    finish: 2025-11-17
+  related-issue:
+    internal: geoips#959 - 1.17.2 updates
