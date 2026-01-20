@@ -4,6 +4,7 @@ continuous integration:
   files:
     added:
     modified:
+    - data_fusion/plugins/modules/procflows/data_fusion.py
     deleted:
     moved:
   related-issue:
