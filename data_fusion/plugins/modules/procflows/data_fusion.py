@@ -17,7 +17,6 @@ from geoips.interfaces import output_checkers
 
 from geoips.filenames.duplicate_files import remove_duplicates
 
-
 # Old interfaces (YAML, not updated to classes yet!)
 from geoips.dev.product import (
     get_required_variables,
