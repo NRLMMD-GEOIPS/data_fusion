@@ -3,7 +3,7 @@ continuous integration:
   description: 'Please make sure you update your local Black install as old versions will produce different results.'
   files:
     added: []
-    modified: []
+    modified:
     - data_fusion/plugins/modules/procflows/data_fusion.py
     deleted: []
     moved: []
