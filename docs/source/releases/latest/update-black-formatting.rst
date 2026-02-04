@@ -2,11 +2,11 @@ continuous integration:
 - title: 'Update code base for Black 2026 style - see Black 26.1.0 release notes for details.'
   description: 'Please make sure you update your local Black install as old versions will produce different results.'
   files:
-    added:
-    modified:
+    added: []
+    modified: []
     - data_fusion/plugins/modules/procflows/data_fusion.py
-    deleted:
-    moved:
+    deleted: []
+    moved: []
   related-issue:
     number: null
     repo_url: ''
