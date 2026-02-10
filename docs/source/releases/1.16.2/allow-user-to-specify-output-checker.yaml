@@ -1,0 +1,17 @@
+bug fix:
+- title: 'Allow user to override output checker name'
+  description: |
+    Add an argument to the output checker call that allows the user to manually
+    request use of the certain output checker (overriding its automatic
+    determination by file extension).
+
+    You must use .get() since output_checker does not have to be in the command
+    line args dictionary.
+  files:
+    modified:
+    - 'data_fusion/plugins/modules/procflows/data_fusion.py'
+  related-issue:
+    number: 845
+  date:
+    start: 2025-06-27
+    finish: 2025-06-27

@@ -1,0 +1,17 @@
+testing:
+- title: 'Add single base test'
+  description: 'Include a single test for basic plugin testing. All other tests are under full marker'
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - 'tests/integration_tests/test_pluginname.py'
+  related-issue:
+    internal: geoips#959 - 1.17.0 updates*
+  date:
+    start: 2025-10-21
+    finish: 2025-10-21
