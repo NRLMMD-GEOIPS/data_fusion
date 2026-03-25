@@ -1,0 +1,19 @@
+bug fix:
+- title: 'Update imports for memusg to memusg.memusg_tracker, GEOIPS_VERSION, validation integration tests'
+  description: |
+    * Ensure all memusg imports are updated for new organization
+    * NONE Update all instances of GEOIPS_VERS with GEOIPS_VERSION
+    * Update integration tests to import both lint and validation test script lists.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - 'data_fusion/plugins/modules/procflows/data_fusion.py'
+    - 'tests/integration_tests/test_reponame.py'
+  date:
+    start: 2026-02-27
+    finish: 2026-02-27

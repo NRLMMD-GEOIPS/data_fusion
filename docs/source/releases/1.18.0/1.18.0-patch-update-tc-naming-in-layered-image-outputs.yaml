@@ -1,0 +1,14 @@
+bug fix:
+- title: Rename Layered-Winds output images with updated TC naming conventions
+  description: |
+    Updated TC naming to wp142022-2022091112 in output test image filename.
+  files:
+    moved:
+    - "renamed: tests/outputs/Layered-Winds-Vertical-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Adjust.tc2022wp14muifa20220911T1200.41p03.multi.1p0.png -> tests/outputs/Layered-Winds-Vertical-Adjust_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Adjust.wp142022-2022091112.41p03.multi.1p0.png"
+    - "renamed: tests/outputs/Layered-Winds-Vertical-Default_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Default.tc2022wp14muifa20220911T1200.41p03.multi.1p0.png -> tests/outputs/Layered-Winds-Vertical-Default_image/20220911.132830.multi.layered.Layered-Winds-Vertical-Default.wp142022-2022091112.41p03.multi.1p0.png"
+  related-issue:
+    internal: geoips#1029 - 1.18.0 updates*
+  date:
+    start: 2026-03-09
+    finish: 2026-03-09
+
