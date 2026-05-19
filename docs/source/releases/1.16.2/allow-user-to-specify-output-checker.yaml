@@ -11,7 +11,8 @@ bug fix:
     modified:
     - 'data_fusion/plugins/modules/procflows/data_fusion.py'
   related-issue:
-    number: 845
+    internal: geoips#845
   date:
     start: 2025-06-27
     finish: 2025-06-27
+

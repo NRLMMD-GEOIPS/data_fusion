@@ -1,0 +1,13 @@
+bug fix:
+- title: Fix memusg import
+  description: |
+    Moved all memusg modules to a subpackage in geoips repo, update imports
+    appropriately
+  files:
+    modified:
+    - data_fusion/plugins/modules/procflows/data_fusion.py
+  related-issue:
+    internal: geoips#1029 - 1.18.0 updates*
+  date:
+    start: 2026-03-05
+    finish: 2026-03-09

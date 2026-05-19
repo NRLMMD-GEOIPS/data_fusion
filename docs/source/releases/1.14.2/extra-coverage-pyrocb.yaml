@@ -6,5 +6,5 @@ enhancement:
     modified:
     - data_fusion/plugins/modules/procflows/data_fusion.py
   related-issue:
-    number: 42
+    internal: geoips#42
   title: Make area definition padding configurable

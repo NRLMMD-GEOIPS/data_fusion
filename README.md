@@ -24,11 +24,10 @@ contact geoips@nrlmry.navy.mil.
 System Requirements
 ---------------------
 
-* geoips >= 1.13.0
+* geoips >= 1.18.0
 * Test data repos contained in $GEOIPS_TESTDATA_DIR for tests to pass.
   * test_data_fusion
   * test_data_scat
-  * NOTE: Must obtain appropriate ABI, AHI test datasets via NOAA AWS
 
 IF REQUIRED: Install base geoips package
 ------------------------------------------------------------
@@ -44,15 +43,17 @@ Install data_fusion package
     # Ensure geoips Python environment is enabled.
     git clone https://github.com/NRLMMD-GEOIPS/data_fusion.git $GEOIPS_PACKAGES_DIR/data_fusion
     pip install -e $GEOIPS_PACKAGES_DIR/data_fusion
-    create_plugin_registries
+
+    geoips config create-registries
 ```
 
 Test data_fusion installation
 -----------------------------
 ```bash
     # Ensure geoips Python environment is enabled.
-    $GEOIPS_PACKAGES_DIR/geoips/setup/check_system_requirements.sh test_data test_data_fusion
-    $GEOIPS_PACKAGES_DIR/geoips/setup/check_system_requirements.sh test_data test_data_scat
+    geoips config install test_data_fusion
+    geoips config install test_data_scat
 
-    $GEOIPS_PACKAGES_DIR/data_fusion/tests/test_all.sh
+    cd $GEOIPS_PACKAGES_DIR/data_fusion
+    pytest
 ```

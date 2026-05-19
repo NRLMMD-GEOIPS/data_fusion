@@ -39,7 +39,7 @@ from data_fusion.commandline.args import check_command_line_args
 from geoips.filenames.base_paths import PATHS as gpaths
 from geoips.geoips_utils import replace_geoips_paths
 from geoips.utils.context_managers import import_optional_dependencies
-from geoips.utils.memusg import PidLog
+from geoips.utils.memusg.memusg_tracker import PidLog
 
 with import_optional_dependencies(loglevel="info"):
     """Attempt to import a package and print to LOG.info if the import fails."""
@@ -48,7 +48,7 @@ with import_optional_dependencies(loglevel="info"):
         write_stats_to_database,
     )
 
-from geoips.utils.memusg import print_mem_usage
+from geoips.utils.memusg.memusg_tracker import print_mem_usage
 
 PMW_NUM_PIXELS_X = 1400
 PMW_NUM_PIXELS_Y = 1400
@@ -704,7 +704,6 @@ def call(fnames, command_line_args=None):
             if output_checker.name in output_checker_kwargs:
                 kwargs = output_checker_kwargs[output_checker.name]
             retval += output_checker(
-                output_checker,
                 compare_path.replace("<product>", final_product_name).replace(
                     "<procflow>", "data_fusion"
                 ),
