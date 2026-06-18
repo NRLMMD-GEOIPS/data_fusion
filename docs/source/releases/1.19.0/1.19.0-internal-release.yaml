@@ -1,0 +1,12 @@
+Release Process:
+- title: Add 1.19.0 release note
+  description: |
+    Currently tagged internal version 1.18.2.
+  files:
+    added:
+    - docs/source/releases/1.19.0/1.19.0-internal-release.yaml
+  related-issue:
+    internal: data_fusion#1067 - 1.19.0 updates
+  date:
+    start: 2026-05-26
+    finish: 2026-05-26
